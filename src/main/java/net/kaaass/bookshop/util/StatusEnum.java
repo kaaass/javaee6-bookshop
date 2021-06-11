@@ -1,13 +1,26 @@
 package net.kaaass.bookshop.util;
 
+import java8.util.function.Function;
+import java8.util.function.Predicate;
+import java8.util.stream.StreamSupport;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import java.util.stream.Stream;
+import java8.util.stream.Stream;
 
+import java.util.Arrays;
+import java.util.Collections;
+
+/**
+ * 错误号
+ * @author kaaass
+ */
 @Getter
 @AllArgsConstructor
 public enum StatusEnum {
+    /**
+     * 成功
+     */
     SUCCESS(200, ""), // 成功则不返回message段
 
     BAD_REQUEST(400, "请求错误"),
@@ -24,10 +37,20 @@ public enum StatusEnum {
         return code == StatusEnum.SUCCESS.code;
     }
 
-    public static String descriptionFor(int code) {
-        return Stream.of(StatusEnum.values())
-                .filter((cur) -> cur.code == code)
-                .map((cur) -> cur.description)
+    public static String descriptionFor(final int code) {
+        return StreamSupport.stream(Arrays.asList(values()))
+                .filter(new Predicate<StatusEnum>() {
+                    @Override
+                    public boolean test(StatusEnum cur) {
+                        return cur.code == code;
+                    }
+                })
+                .map(new Function<StatusEnum, String>() {
+                    @Override
+                    public String apply(StatusEnum cur) {
+                        return cur.description;
+                    }
+                })
                 .findAny().orElse(Constants.UNKNOWN);
     }
 }

@@ -18,14 +18,17 @@ war {
     archiveFileName = "web.war"
 }
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
 
 dependencies {
     compileOnly('javax:javaee-api:8.0.1')
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
+
+    // Stream support
+    implementation 'net.sourceforge.streamsupport:streamsupport:1.7.3'
 
     // Lombok
     compileOnly 'org.projectlombok:lombok:1.18.16'
