@@ -15,10 +15,6 @@ import javax.ws.rs.ext.Provider;
 public class ExceptionHandler implements ExceptionMapper<BaseException> {
     @Override
     public Response toResponse(BaseException exception) {
-        return Response
-                .ok()
-                // .status(Response.Status.fromStatusCode(status.getCode()))
-                .entity(GlobalResponse.fail(exception.getStatus(), exception.getMessage()))
-                .build();
+        return GlobalResponse.fail(exception).toResponse();
     }
 }

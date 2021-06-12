@@ -1,7 +1,12 @@
 package net.kaaass.bookshop.exception;
 
+import java8.util.function.Supplier;
 import lombok.Getter;
+import lombok.SneakyThrows;
+import lombok.val;
 import net.kaaass.bookshop.util.StatusEnum;
+
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * 坏请求错误

@@ -3,7 +3,12 @@ package net.kaaass.bookshop.controller;
 import net.kaaass.bookshop.controller.response.GlobalResponse;
 import net.kaaass.bookshop.exception.BadRequestException;
 import net.kaaass.bookshop.exception.BaseException;
+import net.kaaass.bookshop.security.Secured;
+import net.kaaass.bookshop.security.SecurityIdentity;
 
+import javax.inject.Inject;
+import javax.validation.Validator;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -12,10 +17,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Path("/test")
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
 public class TestController extends BaseController {
 
+    @Inject
+    private SecurityIdentity identity;
+
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
     public GlobalResponse<List<String>> sayHello() {
         List<String> jsonList = new ArrayList<>();
         jsonList.add("Hello World");
@@ -25,8 +34,14 @@ public class TestController extends BaseController {
     }
 
     @GET
+    @Path("/logged")
+    @Secured
+    public String logged() {
+        return "You're logged in! " + identity.getUserAuthDto();
+    }
+
+    @GET
     @Path("/exception")
-    @Produces(MediaType.APPLICATION_JSON)
     public GlobalResponse<List<String>> exception() throws BaseException {
         throw new BadRequestException("???");
     }

@@ -4,14 +4,15 @@ public class Constants {
     public static final String ID_GENERATOR = "idGenerator";
     public static final String UUID = "uuid";
 
+    public static final String HEADER_AUTH = "Authorization";
+
+    public static final String SESS_USER_AUTH = "SESS_USER_AUTH";
+
     public static final String KEY_STATUS = "code";
     public static final String KEY_MESSAGE = "message";
     public static final String KEY_DATA = "data";
 
     public static final String UNKNOWN = "unknown";
-
-    public static final String ROLE_USER = "ROLE_USER";
-    public static final String ROLE_SELLER = "ROLE_SELLER";
 
     public static final String MEDIA_TYPE_IMAGE = "image";
 
