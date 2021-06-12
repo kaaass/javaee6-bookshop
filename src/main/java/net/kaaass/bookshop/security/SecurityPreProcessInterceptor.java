@@ -41,13 +41,6 @@ public class SecurityPreProcessInterceptor implements PreProcessInterceptor {
     @Override
     public ServerResponse preProcess(HttpRequest request, ResourceMethod method)
             throws Failure, WebApplicationException {
-        // 不知道为什么 @Inject 不起作用，手工查询
-        try {
-            val ctx = new InitialContext();
-            service = (AuthService) ctx.lookup("java:module/AuthServiceImpl");
-        } catch (NamingException e) {
-            log.error("AuthService 查询失败", e);
-        }
         // 获得注解
         val annotate = method.getMethod().getAnnotation(Secured.class);
         if (annotate == null) {
