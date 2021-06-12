@@ -7,6 +7,7 @@ import net.kaaass.bookshop.dto.UserAuthDto;
 import net.kaaass.bookshop.exception.ForbiddenException;
 import net.kaaass.bookshop.service.AuthService;
 import net.kaaass.bookshop.util.Constants;
+import net.kaaass.bookshop.util.StatusEnum;
 import org.jboss.resteasy.annotations.interception.SecurityPrecedence;
 import org.jboss.resteasy.annotations.interception.ServerInterceptor;
 import org.jboss.resteasy.core.ResourceMethod;
@@ -15,14 +16,10 @@ import org.jboss.resteasy.spi.Failure;
 import org.jboss.resteasy.spi.HttpRequest;
 import org.jboss.resteasy.spi.interception.PreProcessInterceptor;
 
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import javax.servlet.http.HttpSession;
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.ext.Provider;
 
 /**
@@ -63,6 +60,10 @@ public class SecurityPreProcessInterceptor implements PreProcessInterceptor {
         }
         // 需要登录时，获取登录令牌
         val headers = request.getHttpHeaders().getRequestHeader(Constants.HEADER_AUTH);
+        if (headers == null || headers.isEmpty()) {
+            return ServerResponse.copyIfNotServerResponse(
+                    GlobalResponse.fail(StatusEnum.FORBIDDEN, "接口需要鉴权").toResponse());
+        }
         val authToken = headers.get(0);
         // 校验
         UserAuthDto authDto;

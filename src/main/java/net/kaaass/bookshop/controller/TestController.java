@@ -45,4 +45,15 @@ public class TestController extends BaseController {
     public GlobalResponse<List<String>> exception() throws BaseException {
         throw new BadRequestException("???");
     }
+
+    @GET
+    @Path("/exception2")
+    public GlobalResponse<List<String>> exception2() {
+        throw new NullPointerException("???");
+    }
+
+    @GET
+    @Path("/void")
+    public void getVoid() {
+    }
 }

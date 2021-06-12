@@ -8,11 +8,11 @@ import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 /**
- * 异常响应处理
+ * 程序异常响应处理
  * @author kaaass
  */
 @Provider
-public class ExceptionHandler implements ExceptionMapper<BaseException> {
+public class AppExceptionHandler implements ExceptionMapper<BaseException> {
     @Override
     public Response toResponse(BaseException exception) {
         return GlobalResponse.fail(exception).toResponse();
