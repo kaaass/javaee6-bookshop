@@ -1,0 +1,38 @@
+package net.kaaass.bookshop.dao.repository;
+
+import java8.util.Optional;
+import net.kaaass.bookshop.dao.BaseRepository;
+import net.kaaass.bookshop.dao.Pageable;
+import net.kaaass.bookshop.dao.entity.CommentEntity;
+
+import java.util.List;
+
+/**
+ * 评论 DAO
+ */
+public class CommentRepository extends BaseRepository<CommentEntity, String> {
+
+    /**
+     * 按评论时间倒序查所有评论
+     */
+    public List<CommentEntity> findAllByOrderByCommentTimeDesc(Pageable page) {
+        String sql = "SELECT u FROM CommentEntity u order by u.commentTime desc";
+        return findAllBySql(sql, page, CommentEntity.class);
+    }
+
+    /**
+     * 查找商品评论
+     */
+    public List<CommentEntity> findAllByProductIdOrderByRateDescCommentTimeDesc(String productId, Pageable page) {
+        String sql = "SELECT u FROM CommentEntity u where u.productId = ?0 order by u.rate desc, u.commentTime desc";
+        return findAllBySql(sql, page, CommentEntity.class, productId);
+    }
+
+    /**
+     * 商品平均评分
+     */
+    public Optional<Float> averageRateByProductId(String productId) {
+        String sql = "select avg(c.rate) from CommentEntity c where c.productId = ?0";
+        return findOneBySql(sql, Float.class, productId);
+    }
+}

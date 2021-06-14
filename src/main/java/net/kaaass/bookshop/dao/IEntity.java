@@ -1,4 +1,4 @@
-package net.kaaass.bookshop.dao.entity;
+package net.kaaass.bookshop.dao;
 
 /**
  * 实体接口

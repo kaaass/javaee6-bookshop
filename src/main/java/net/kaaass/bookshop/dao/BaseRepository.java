@@ -1,16 +1,13 @@
-package net.kaaass.bookshop.dao.repository;
+package net.kaaass.bookshop.dao;
 
 import java8.util.Optional;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import net.kaaass.bookshop.dao.entity.IEntity;
 import net.kaaass.bookshop.util.GenericUtils;
 
 import javax.ejb.Stateless;
-import javax.ejb.TransactionManagement;
-import javax.ejb.TransactionManagementType;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
@@ -170,5 +167,49 @@ public class BaseRepository<T extends IEntity<ID>, ID> implements IRepository<T,
         for (val entity : entities) {
             delete(entity);
         }
+    }
+
+    /**
+     * 通过 SQL 查询一个结果
+     */
+    protected <R> Optional<R> findOneBySql(String sql, Class<R> resultClz, Object ...args) {
+        val manager = getEntityManager();
+        val query = manager.createQuery(sql, resultClz);
+        for (int i = 0; i < args.length; i++) {
+            query.setParameter(i, args[i]);
+        }
+        query.setFirstResult(0);
+        query.setMaxResults(1);
+        val list = query.getResultList();
+        if (list.isEmpty()) {
+            return Optional.empty();
+        }
+        return Optional.of(list.get(0));
+    }
+
+    /**
+     * 通过 SQL 查询全部
+     */
+    protected <R> List<R> findAllBySql(String sql, Class<R> resultClz, Object ...args) {
+        val manager = getEntityManager();
+        val query = manager.createQuery(sql, resultClz);
+        for (int i = 0; i < args.length; i++) {
+            query.setParameter(i, args[i]);
+        }
+        return query.getResultList();
+    }
+
+    /**
+     * 通过 SQL 查询全部
+     */
+    protected <R> List<R> findAllBySql(String sql, Pageable page, Class<R> resultClz, Object ...args) {
+        val manager = getEntityManager();
+        val query = manager.createQuery(sql, resultClz);
+        for (int i = 0; i < args.length; i++) {
+            query.setParameter(i, args[i]);
+        }
+        query.setFirstResult(page.getOffset());
+        query.setMaxResults(page.getPageSize());
+        return query.getResultList();
     }
 }

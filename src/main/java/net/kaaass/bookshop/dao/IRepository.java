@@ -1,6 +1,4 @@
-package net.kaaass.bookshop.dao.repository;
-
-import net.kaaass.bookshop.dao.entity.IEntity;
+package net.kaaass.bookshop.dao;
 
 /**
  * DAO 接口

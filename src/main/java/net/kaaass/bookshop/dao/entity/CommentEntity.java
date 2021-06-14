@@ -12,35 +12,32 @@ import java.sql.Timestamp;
 
 @Entity
 @Data
-@Table(name = "user_auth")
-public class UserAuthEntity implements IEntity<String> {
+@Table(name = "comments")
+public class CommentEntity implements IEntity<String> {
     @Id
     @GenericGenerator(name = Constants.ID_GENERATOR, strategy = Constants.UUID)
     @GeneratedValue(generator = Constants.ID_GENERATOR)
     private String id;
 
-    @Column(name = "phone",
-            length = 20,
-            unique = true)
-    private String phone;
+    @Column(name = "uid")
+    private String uid; // TODO 改为ManyToOne
 
-    @Column(name = "password")
-    private String password;
+    @Column(name = "order_id")
+    private String orderId;
 
-    @Column(name = "role")
-    private String role;
+    @Column(name = "product_id")
+    private String productId;
 
-    @Column(name = "auth_token")
-    private String authToken;
+    @Column(name = "rate")
+    private int rate;
 
-    @Column(name = "register_time",
+    @Column(name = "content")
+    private String content;
+
+    @Column(name = "comment_time",
             columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP",
             insertable = false,
             updatable = false)
     @Generated(GenerationTime.INSERT)
-    private Timestamp registerTime;
-
-    @Column(name = "last_login_time",
-            columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private Timestamp lastLoginTime;
+    private Timestamp commentTime;
 }

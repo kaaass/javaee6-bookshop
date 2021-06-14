@@ -5,7 +5,22 @@
              version="2.2">
     <persistence-unit name="Bookshop" transaction-type="JTA">
         <jta-data-source>java:jboss/datasources/sampleDS</jta-data-source>
+        <class>net.kaaass.bookshop.dao.entity.CartEntity</class>
+        <class>net.kaaass.bookshop.dao.entity.CategoryEntity</class>
+        <class>net.kaaass.bookshop.dao.entity.CommentEntity</class>
+        <class>net.kaaass.bookshop.dao.entity.MediaEntity</class>
+        <class>net.kaaass.bookshop.dao.entity.MetadataEntity</class>
+        <class>net.kaaass.bookshop.dao.entity.OrderEntity</class>
+        <class>net.kaaass.bookshop.dao.entity.OrderItemEntity</class>
+        <class>net.kaaass.bookshop.dao.entity.PluginEntity</class>
+        <class>net.kaaass.bookshop.dao.entity.ProductEntity</class>
+        <class>net.kaaass.bookshop.dao.entity.ProductMetadataEntity</class>
+        <class>net.kaaass.bookshop.dao.entity.ProductStorageEntity</class>
+        <class>net.kaaass.bookshop.dao.entity.PromoteStrategyEntity</class>
+        <class>net.kaaass.bookshop.dao.entity.SellerInfoEntity</class>
+        <class>net.kaaass.bookshop.dao.entity.UserAddressEntity</class>
         <class>net.kaaass.bookshop.dao.entity.UserAuthEntity</class>
+        <class>net.kaaass.bookshop.dao.entity.UserInfoEntity</class>
 
         <properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5Dialect"/>
