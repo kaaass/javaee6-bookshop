@@ -18,7 +18,7 @@ define([], function () {
         TEMPLATE_PATH: BASE_URL + '/templates/',
         TEMPLATE_SUFFIX: '.hbs',
 
-        TITLE_SUFFIX: " - KMall",
+        TITLE_SUFFIX: " - KBook",
 
         orderRequestType: {
             SINGLE: 'SINGLE',
