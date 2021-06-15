@@ -8,7 +8,7 @@ define(['jquery', 'module/functions', 'module/constants', 'axios'], function ($,
     let forbiddenHandler = (data) => {
         let json = JSON.parse(data);
         if (json.status === 403) {
-            functions.modal("错误", "您的登录已过期！正在跳转至登录页面");
+            functions.modal("错误", "该功能需要登录！正在跳转至登录页面");
             storage.removeItem(constants.KEY_AUTH);
             functions.jumpTo("/auth/login.html", 3000);
         }
@@ -18,7 +18,7 @@ define(['jquery', 'module/functions', 'module/constants', 'axios'], function ($,
     let forbiddenAdminHandler = (data) => {
         let json = JSON.parse(data);
         if (json.status === 403) {
-            functions.modal("错误", "您的登录已过期！正在跳转至登录页面");
+            functions.modal("错误", "该功能需要登录！正在跳转至登录页面");
             storage.removeItem(constants.KEY_ADMIN_AUTH);
             functions.jumpTo("/admin/login.html", 3000);
         }

@@ -99,24 +99,28 @@ public class ProductController extends BaseController {
 
     @GET
     @Path("/search/")
+    @Secured(SecurityRole.LOGGED)
     public List<ProductDto> search(@QueryParam("keyword") String keyword) {
         return productService.search(keyword, pageInfo.getPageable());
     }
 
     @GET
     @Path("/search/isbn/")
+    @Secured(SecurityRole.LOGGED)
     public List<ProductDto> searchByIsbn(@QueryParam("isbn") String isbn, Pageable pageable) {
         return productService.searchByIsbn(isbn, pageInfo.getPageable());
     }
 
     @GET
     @Path("/search/author/")
+    @Secured(SecurityRole.LOGGED)
     public List<ProductDto> searchByAuthor(@QueryParam("author") String author, Pageable pageable) {
         return productService.searchByAuthor(author, pageInfo.getPageable());
     }
 
     @GET
     @Path("/search/date/")
+    @Secured(SecurityRole.LOGGED)
     public List<ProductDto> searchByPublishDate(@QueryParam("start") long start,
                                                 @QueryParam("end") long end, Pageable pageable) {
         return productService.searchByPublishDate(new Date(start * 1000), new Date(end * 1000), pageInfo.getPageable());
@@ -124,6 +128,7 @@ public class ProductController extends BaseController {
 
     @GET
     @Path("/search/price/")
+    @Secured(SecurityRole.LOGGED)
     public List<ProductDto> searchByPrice(@QueryParam("low") float low,
                                           @QueryParam("high") float high, Pageable pageable) {
         return productService.searchByPrice(low, high, pageInfo.getPageable());
@@ -131,6 +136,7 @@ public class ProductController extends BaseController {
 
     @GET
     @Path("/category/{categoryId}/")
+    @Secured(SecurityRole.LOGGED)
     public List<ProductDto> getAllProductsByCategory(@PathParam("categoryId") String categoryId) throws NotFoundException {
         return productService.getAllByCategory(categoryId, pageInfo.getPageable());
     }
