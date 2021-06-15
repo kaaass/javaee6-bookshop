@@ -26,6 +26,13 @@ public class ProductDto {
 
     private CategoryDto category;
 
+    private String isbn;
+
+    private String author;
+
+    @JsonSerialize(using = DateToLongSerializer.class)
+    private Date publishDate;
+
     private int indexOrder;
 
     private ProductStorageDto storage;

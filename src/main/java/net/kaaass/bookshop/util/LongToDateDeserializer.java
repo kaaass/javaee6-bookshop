@@ -11,6 +11,6 @@ import java.util.Date;
 public class LongToDateDeserializer extends JsonDeserializer<Date> {
     @Override
     public Date deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
-        return new Date(jp.getValueAsLong());
+        return new Date(jp.getValueAsLong() * 1000);
     }
 }

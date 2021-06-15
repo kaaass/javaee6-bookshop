@@ -109,6 +109,7 @@ define(['jquery', 'module/functions', 'module/auth'], function ($, functions, au
             product.extra = await getExtra(product.id);
             // 销售提示
             product.startSellTimeReadable = functions.dateFormatTs(product.startSellTime, 'Y-m-d H:i:s');
+            product.publishDateReadable = functions.dateFormatTs(product.publishDate, 'Y-m-d H:i:s');
             if (product.startSellTime > now) {
                 let time = functions.dateFormatTs(product.startSellTime, 'm月d日 H:i:s');
                 product.buyTips = `${time} 开售`;

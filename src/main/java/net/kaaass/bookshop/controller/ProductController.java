@@ -3,6 +3,7 @@ package net.kaaass.bookshop.controller;
 import net.kaaass.bookshop.controller.page.PageInfo;
 import net.kaaass.bookshop.controller.request.ProductAddRequest;
 import net.kaaass.bookshop.controller.response.ProductCommentResponse;
+import net.kaaass.bookshop.dao.Pageable;
 import net.kaaass.bookshop.dto.ProductDto;
 import net.kaaass.bookshop.exception.BadRequestException;
 import net.kaaass.bookshop.exception.InternalErrorExeption;
@@ -17,6 +18,7 @@ import javax.inject.Inject;
 import javax.validation.Validator;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.util.Date;
 import java.util.List;
 
 @Path("/product")
@@ -99,6 +101,32 @@ public class ProductController extends BaseController {
     @Path("/search/")
     public List<ProductDto> search(@QueryParam("keyword") String keyword) {
         return productService.search(keyword, pageInfo.getPageable());
+    }
+
+    @GET
+    @Path("/search/isbn/")
+    public List<ProductDto> searchByIsbn(@QueryParam("isbn") String isbn, Pageable pageable) {
+        return productService.searchByIsbn(isbn, pageInfo.getPageable());
+    }
+
+    @GET
+    @Path("/search/author/")
+    public List<ProductDto> searchByAuthor(@QueryParam("author") String author, Pageable pageable) {
+        return productService.searchByAuthor(author, pageInfo.getPageable());
+    }
+
+    @GET
+    @Path("/search/date/")
+    public List<ProductDto> searchByPublishDate(@QueryParam("start") long start,
+                                                @QueryParam("end") long end, Pageable pageable) {
+        return productService.searchByPublishDate(new Date(start * 1000), new Date(end * 1000), pageInfo.getPageable());
+    }
+
+    @GET
+    @Path("/search/price/")
+    public List<ProductDto> searchByPrice(@QueryParam("low") float low,
+                                          @QueryParam("high") float high, Pageable pageable) {
+        return productService.searchByPrice(low, high, pageInfo.getPageable());
     }
 
     @GET

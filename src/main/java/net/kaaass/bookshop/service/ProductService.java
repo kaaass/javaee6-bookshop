@@ -1,5 +1,6 @@
 package net.kaaass.bookshop.service;
 
+import java.util.Date;
 import java.util.List;
 import java8.util.Optional;
 import net.kaaass.bookshop.controller.request.ProductAddRequest;
@@ -46,4 +47,12 @@ public interface ProductService {
     ProductCommentResponse getComments(String id, Pageable pageable);
 
     List<ProductDto> search(String keyword, Pageable pageable);
+
+    List<ProductDto> searchByIsbn(String isbn, Pageable pageable);
+
+    List<ProductDto> searchByAuthor(String author, Pageable pageable);
+
+    List<ProductDto> searchByPublishDate(Date start, Date end, Pageable pageable);
+
+    List<ProductDto> searchByPrice(float low, float high, Pageable pageable);
 }

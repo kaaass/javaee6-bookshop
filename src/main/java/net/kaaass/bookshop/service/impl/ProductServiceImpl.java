@@ -276,6 +276,57 @@ public class ProductServiceImpl implements ProductService, Serializable {
                 .collect(Collectors.<ProductDto>toList());
     }
 
+    @Override
+    public List<ProductDto> searchByIsbn(String isbn, Pageable pageable) {
+        return StreamSupport.stream(productRepository.searchByIsbn(isbn, pageable))
+                .map(new Function<ProductEntity, ProductDto>() {
+                    @Override
+                    public ProductDto apply(ProductEntity productEntity) {
+                        return ProductMapper.INSTANCE.productEntityToDto(productEntity);
+                    }
+                })
+                .collect(Collectors.<ProductDto>toList());
+    }
+
+    @Override
+    public List<ProductDto> searchByAuthor(String author, Pageable pageable) {
+        return StreamSupport.stream(productRepository.searchByAuthor("%" + author + "%", pageable))
+                .map(new Function<ProductEntity, ProductDto>() {
+                    @Override
+                    public ProductDto apply(ProductEntity productEntity) {
+                        return ProductMapper.INSTANCE.productEntityToDto(productEntity);
+                    }
+                })
+                .collect(Collectors.<ProductDto>toList());
+    }
+
+    @Override
+    public List<ProductDto> searchByPublishDate(Date start, Date end, Pageable pageable) {
+        return StreamSupport.stream(productRepository.searchByPublishDate(
+                TimeUtils.dateToTimestamp(start),
+                TimeUtils.dateToTimestamp(end),
+                pageable))
+                .map(new Function<ProductEntity, ProductDto>() {
+                    @Override
+                    public ProductDto apply(ProductEntity productEntity) {
+                        return ProductMapper.INSTANCE.productEntityToDto(productEntity);
+                    }
+                })
+                .collect(Collectors.<ProductDto>toList());
+    }
+
+    @Override
+    public List<ProductDto> searchByPrice(float low, float high, Pageable pageable) {
+        return StreamSupport.stream(productRepository.searchByPrice(low, high, pageable))
+                .map(new Function<ProductEntity, ProductDto>() {
+                    @Override
+                    public ProductDto apply(ProductEntity productEntity) {
+                        return ProductMapper.INSTANCE.productEntityToDto(productEntity);
+                    }
+                })
+                .collect(Collectors.<ProductDto>toList());
+    }
+
     /**
      * 获取商品单月销售
      */

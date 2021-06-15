@@ -45,6 +45,15 @@ public class ProductEntity implements IEntity<String> {
             columnDefinition = "INT DEFAULT -1")
     private int indexOrder = -1;
 
+    @Column(name = "isbn")
+    private String isbn;
+
+    @Column(name = "author")
+    private String author;
+
+    @Column(name = "publish_date")
+    private Timestamp publishDate;
+
     // TODO 添加belongTo字段，以实现商品选择不同颜色种类
 
     @OneToOne(targetEntity = ProductStorageEntity.class,
