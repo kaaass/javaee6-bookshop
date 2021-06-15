@@ -25,4 +25,6 @@ public class Constants {
     public static final String SCRIPT_TYPE_JAVASCRIPT = "javascript";
 
     public static final String PLUGIN_PATH_CONFIG = "config.json";
+
+    public static final String TOPIC_DESTINATION = "topic/test";
 }

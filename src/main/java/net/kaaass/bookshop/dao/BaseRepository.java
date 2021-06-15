@@ -10,6 +10,7 @@ import net.kaaass.bookshop.util.GenericUtils;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +21,7 @@ import java.util.List;
  */
 @Slf4j
 @Stateless
-public class BaseRepository<T extends IEntity<ID>, ID> implements IRepository<T, ID> {
+public class BaseRepository<T extends IEntity<ID>, ID> implements IRepository<T, ID>, Serializable {
 
     @Getter(AccessLevel.PROTECTED)
     @PersistenceContext
@@ -80,6 +81,19 @@ public class BaseRepository<T extends IEntity<ID>, ID> implements IRepository<T,
     }
 
     /**
+     * TODO 分页获得所有对象
+     */
+    public List<T> findAll(Pageable page) {
+        val criteriaBuilder = this.entityManager.getCriteriaBuilder();
+        val criteriaQuery = criteriaBuilder.createQuery(this.entityClass);
+        val root = criteriaQuery.from(this.entityClass);
+        criteriaQuery.select(root);
+
+        val query = this.entityManager.createQuery(criteriaQuery);
+        return query.getResultList();
+    }
+
+    /**
      * 保存对象
      */
     public <S extends T> S save(S object) {
@@ -87,13 +101,13 @@ public class BaseRepository<T extends IEntity<ID>, ID> implements IRepository<T,
 
         val id = object.getId();
         if (id != null) {
-            log.debug("合并已存在对象 {}, ID = {}", this.entityClass.getName(), id);
+            log.info("合并已存在对象 {}, ID = {}", this.entityClass.getName(), id);
             savedObject = this.entityManager.merge(object);
         } else {
-            log.debug("对象不存在，持久化 {}", this.entityClass.getName());
+            log.info("对象不存在，持久化 {}", this.entityClass.getName());
             this.entityManager.persist(object);
             savedObject = object;
-            log.debug("持久化结果 ID = {}", savedObject.getId());
+            log.info("持久化结果 ID = {}", savedObject.getId());
         }
 
         return savedObject;
@@ -143,7 +157,7 @@ public class BaseRepository<T extends IEntity<ID>, ID> implements IRepository<T,
      */
     public void delete(T entity) {
         this.entityManager.remove(entity);
-        log.debug("删除对象 {}, ID = {}", this.entityClass.getName(), entity.getId());
+        log.info("删除对象 {}, ID = {}", this.entityClass.getName(), entity.getId());
     }
 
     /**

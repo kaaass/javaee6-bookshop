@@ -52,6 +52,9 @@ dependencies {
     compile 'org.mapstruct:mapstruct:1.2.0.Final'
     annotationProcessor "org.mapstruct:mapstruct-processor:1.2.0.Final"
     testAnnotationProcessor "org.mapstruct:mapstruct-processor:1.2.0.Final"
+
+    // ASM
+    compile 'org.ow2.asm:asm:5.0'
 }
 
 test {

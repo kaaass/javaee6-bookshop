@@ -6,7 +6,9 @@ import lombok.val;
 import net.kaaass.bookshop.controller.request.RegisterRequest;
 import net.kaaass.bookshop.controller.response.LoginResponse;
 import net.kaaass.bookshop.dao.entity.UserAuthEntity;
+import net.kaaass.bookshop.dao.entity.UserInfoEntity;
 import net.kaaass.bookshop.dao.repository.UserAuthRepository;
+import net.kaaass.bookshop.dao.repository.UserInfoRepository;
 import net.kaaass.bookshop.dto.UserAuthDto;
 import net.kaaass.bookshop.exception.BaseException;
 import net.kaaass.bookshop.exception.ForbiddenException;
@@ -20,6 +22,7 @@ import net.kaaass.bookshop.vo.AuthTokenVo;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.NoSuchElementException;
@@ -31,10 +34,13 @@ import java.util.UUID;
  */
 @Stateless
 @Slf4j
-public class AuthServiceImpl implements AuthService {
+public class AuthServiceImpl implements AuthService, Serializable {
 
     @Inject
     private UserAuthRepository repository;
+
+    @Inject
+    private UserInfoRepository infoRepository;
 
     @Override
     public Optional<UserAuthDto> register(RegisterRequest request) {
@@ -55,10 +61,10 @@ public class AuthServiceImpl implements AuthService {
         } catch (Exception e) {
             return Optional.empty();
         }
-        // TODO 用户信息
-//        UserInfoEntity infoEntity = new UserInfoEntity();
-//        infoEntity.setAuth(authEntity);
-//        infoRepository.save(infoEntity);
+        // 用户信息
+        UserInfoEntity infoEntity = new UserInfoEntity();
+        infoEntity.setAuth(authEntity);
+        infoRepository.save(infoEntity);
         // 拼接结果
         return Optional.of(UserMapper.INSTANCE.userAuthEntityToDto(authEntity));
     }
@@ -107,7 +113,7 @@ public class AuthServiceImpl implements AuthService {
     public void remove(String id) throws NotFoundException {
         val entity = repository.findById(id)
                 .orElseThrow(BaseException.supplier(NotFoundException.class, "未找到该用户！"));
-        // TODO infoRepository.deleteAllByAuth(entity);
+        infoRepository.deleteAllByAuth(entity);
         repository.delete(entity);
     }
 }

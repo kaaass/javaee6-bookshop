@@ -63,11 +63,11 @@ public class SecurityPreProcessInterceptor implements PreProcessInterceptor {
         try {
             authDto = service.validate(authToken);
         } catch (ForbiddenException e) {
-            log.debug("鉴权失败！AT = {}", authToken);
+            log.info("鉴权失败！AT = {}", authToken);
             return ServerResponse.copyIfNotServerResponse(GlobalResponse.fail(e).toResponse());
         }
         // 设定请求中有效的鉴权信息
-        log.debug("鉴权成功！ID = {}", authDto.getId());
+        log.info("鉴权成功！ID = {}", authDto.getId());
         identity.setUserAuthDto(authDto);
         return null;
     }
