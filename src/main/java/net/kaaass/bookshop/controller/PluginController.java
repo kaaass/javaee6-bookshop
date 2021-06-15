@@ -37,14 +37,16 @@ public class PluginController extends BaseController {
     @POST
     @Path("/{id}/disable/")
     @Secured(SecurityRole.ADMIN)
-    public void disable(@PathParam("id") String id) throws NotFoundException, BadRequestException {
+    public boolean disable(@PathParam("id") String id) throws NotFoundException, BadRequestException {
         pluginService.disable(id);
+        return true;
     }
 
     @DELETE
     @Path("/{id}/")
     @Secured(SecurityRole.ADMIN)
-    public void remove(@PathParam("id") String id) throws NotFoundException {
+    public boolean remove(@PathParam("id") String id) throws NotFoundException {
         pluginService.remove(id);
+        return true;
     }
 }

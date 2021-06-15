@@ -26,5 +26,7 @@ public class GlobalResponseInterceptor implements PostProcessInterceptor {
 
         val wrapperResp = GlobalResponse.success(resp);
         response.setEntity(wrapperResp);
+        response.setResourceClass(wrapperResp.getClass());
+        response.setGenericType(wrapperResp.getClass().getGenericSuperclass());
     }
 }

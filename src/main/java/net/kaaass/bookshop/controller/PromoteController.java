@@ -49,14 +49,16 @@ public class PromoteController extends BaseController {
     @GET
     @Path("/{promoteId}/check/")
     @Secured(SecurityRole.ADMIN)
-    public void checkConfigure(@PathParam("promoteId") String promoteId) throws NotFoundException, BadRequestException {
+    public boolean checkConfigure(@PathParam("promoteId") String promoteId) throws NotFoundException, BadRequestException {
         promoteService.checkConfigure(promoteId);
+        return true;
     }
 
     @DELETE
     @Path("/{promoteId}/")
     @Secured(SecurityRole.ADMIN)
-    public void deleteById(@PathParam("promoteId") String promoteId) throws NotFoundException {
+    public boolean deleteById(@PathParam("promoteId") String promoteId) throws NotFoundException {
         this.promoteService.deleteById(promoteId);
+        return true;
     }
 }

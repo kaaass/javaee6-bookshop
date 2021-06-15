@@ -31,8 +31,8 @@ public class CommentRepository extends BaseRepository<CommentEntity, String> {
     /**
      * 商品平均评分
      */
-    public Optional<Float> averageRateByProductId(String productId) {
+    public Optional<Double> averageRateByProductId(String productId) {
         String sql = "select avg(c.rate) from CommentEntity c where c.productId = ?1";
-        return findOneBySql(sql, Float.class, productId);
+        return findOneBySql(sql, Double.class, productId);
     }
 }

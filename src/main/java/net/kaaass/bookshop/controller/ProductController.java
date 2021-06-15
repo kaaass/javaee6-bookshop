@@ -55,8 +55,9 @@ public class ProductController extends BaseController {
     @DELETE
     @Path("/{id}/")
     @Secured(SecurityRole.ADMIN)
-    public void removeProduct(@PathParam("id") String id) {
+    public boolean removeProduct(@PathParam("id") String id) {
         productService.removeProduct(id);
+        return true;
     }
 
     @GET
@@ -109,6 +110,7 @@ public class ProductController extends BaseController {
     @GET
     @Path("/{id}/comments/")
     public ProductCommentResponse getComments(@PathParam("id") String id) {
+        // TODO 评论用户头像
         return productService.getComments(id, pageInfo.getPageable());
     }
 }

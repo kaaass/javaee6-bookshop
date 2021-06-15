@@ -92,7 +92,7 @@ public class ResourceController extends BaseController {
 
         var entity = new MediaEntity();
         entity.setType(Constants.MEDIA_TYPE_IMAGE);
-        entity.setUrl("/upload/" + newFileName);
+        entity.setUrl(Constants.UPLOAD_URL_PREFIX + newFileName);
         entity.setUploaderUid(getUid(identity));
 
         var result = mediaRepository.save(entity);

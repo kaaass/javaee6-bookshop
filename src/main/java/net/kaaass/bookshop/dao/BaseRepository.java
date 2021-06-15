@@ -198,7 +198,7 @@ public class BaseRepository<T extends IEntity<ID>, ID> implements IRepository<T,
         if (list.isEmpty()) {
             return Optional.empty();
         }
-        return Optional.of(list.get(0));
+        return Optional.ofNullable(list.get(0));
     }
 
     /**
@@ -208,7 +208,7 @@ public class BaseRepository<T extends IEntity<ID>, ID> implements IRepository<T,
         val manager = getEntityManager();
         val query = manager.createQuery(sql, resultClz);
         for (int i = 0; i < args.length; i++) {
-            query.setParameter(i, args[i]);
+            query.setParameter(i + 1, args[i]);
         }
         return query.getResultList();
     }
@@ -220,7 +220,7 @@ public class BaseRepository<T extends IEntity<ID>, ID> implements IRepository<T,
         val manager = getEntityManager();
         val query = manager.createQuery(sql, resultClz);
         for (int i = 0; i < args.length; i++) {
-            query.setParameter(i, args[i]);
+            query.setParameter(i + 1, args[i]);
         }
         query.setFirstResult(page.getOffset());
         query.setMaxResults(page.getPageSize());

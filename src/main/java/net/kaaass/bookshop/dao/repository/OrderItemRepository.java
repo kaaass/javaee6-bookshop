@@ -16,8 +16,8 @@ public class OrderItemRepository extends BaseRepository<OrderItemEntity, String>
     /**
      * 统计销售数量
      */
-    public Optional<Integer> sumCountByIdBetween(ProductEntity productEntity, Timestamp st, Timestamp ed) {
+    public Optional<Long> sumCountByIdBetween(ProductEntity productEntity, Timestamp st, Timestamp ed) {
         String sql = "select sum(e.count) from OrderItemEntity e where e.product = ?1 and e.createTime >= ?2 and e.createTime < ?3";
-        return findOneBySql(sql, Integer.class, productEntity, st, ed);
+        return findOneBySql(sql, Long.class, productEntity, st, ed);
     }
 }

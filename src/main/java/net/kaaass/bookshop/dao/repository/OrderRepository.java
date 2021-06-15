@@ -1,6 +1,7 @@
 package net.kaaass.bookshop.dao.repository;
 
 import java8.util.Optional;
+import java8.util.function.Function;
 import net.kaaass.bookshop.dao.BaseRepository;
 import net.kaaass.bookshop.dao.Pageable;
 import net.kaaass.bookshop.dao.entity.OrderEntity;
@@ -42,7 +43,13 @@ public class OrderRepository extends BaseRepository<OrderEntity, String> {
 
     public Optional<Integer> countAllByUidAndType(String uid, OrderType type) {
         String sql = "select count(c.id) from OrderEntity c where c.uid = ?1 and c.type = ?2";
-        return findOneBySql(sql, Integer.class, uid, type);
+        return findOneBySql(sql, Long.class, uid, type)
+                .map(new Function<Long, Integer>() {
+                    @Override
+                    public Integer apply(Long aLong) {
+                        return aLong.intValue();
+                    }
+                });
     }
 
     public List<OrderEntity> findAllByTypeOrderByCreateTimeDesc(OrderType type, Pageable page) {

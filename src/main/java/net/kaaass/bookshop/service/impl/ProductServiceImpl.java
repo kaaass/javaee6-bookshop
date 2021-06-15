@@ -243,10 +243,10 @@ public class ProductServiceImpl implements ProductService, Serializable {
                 })
                 .collect(Collectors.<CommentVo>toList());
         val rate = commentRepository.averageRateByProductId(id)
-                .map(new Function<Float, Float>() {
+                .map(new Function<Double, Float>() {
                     @Override
-                    public Float apply(Float aFloat) {
-                        return NumericUtils.rateRound(aFloat);
+                    public Float apply(Double aFloat) {
+                        return NumericUtils.rateRound(aFloat.floatValue());
                     }
                 })
                 .orElse(null);
@@ -284,7 +284,7 @@ public class ProductServiceImpl implements ProductService, Serializable {
         Timestamp end = TimeUtils.nowTimestamp();
         log.info("查询与日期 {} 与 {} 之间", start, end);
         return orderItemRepository.sumCountByIdBetween(productEntity, start, end)
-                .orElse(0);
+                .orElse(0L).intValue();
     }
 
     /**

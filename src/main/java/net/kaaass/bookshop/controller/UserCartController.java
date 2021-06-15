@@ -45,14 +45,16 @@ public class UserCartController extends BaseController {
     @DELETE
     @Path("/{id}/")
     @Secured(SecurityRole.USER)
-    public void removeFromCart(@PathParam("id") String id) throws NotFoundException, ForbiddenException {
+    public boolean removeFromCart(@PathParam("id") String id) throws NotFoundException, ForbiddenException {
         cartService.removeFromCart(getUid(identity), id);
+        return true;
     }
 
     @POST
     @Path("/{id}/count/")
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Secured(SecurityRole.USER)
-    public CartDto modifyItemCount(@PathParam("id") String id, @QueryParam("count") int count) throws BadRequestException, NotFoundException, ForbiddenException {
+    public CartDto modifyItemCount(@PathParam("id") String id, @FormParam("count") int count) throws BadRequestException, NotFoundException, ForbiddenException {
         if (count < 1) {
             throw new BadRequestException("数量必须大于等于1！");
         }

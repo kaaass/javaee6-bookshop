@@ -12,7 +12,7 @@ import java.util.List;
 public class PromoteStrategyRepository extends BaseRepository<PromoteStrategyEntity, String> {
 
     public List<PromoteStrategyEntity> findAllByEnabledTrueOrderByOrderAscLastUpdateTimeDesc() {
-        String sql = "SELECT u FROM PromoteStrategyEntity u where u.enabled = true order by u.order asc, u.lastUpdateTime desc";
-        return findAllBySql(sql, PromoteStrategyEntity.class);
+        String sql = "SELECT u FROM PromoteStrategyEntity u where u.enabled = ?1 order by u.order asc, u.lastUpdateTime desc";
+        return findAllBySql(sql, PromoteStrategyEntity.class, true);
     }
 }
