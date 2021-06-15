@@ -1,6 +1,10 @@
 package net.kaaass.bookshop.eventhandle;
 
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
+import net.kaaass.bookshop.script.ScriptSource;
+import net.kaaass.bookshop.script.StandardScriptEvaluator;
+import net.kaaass.bookshop.util.Constants;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -19,32 +23,31 @@ public class JavaScriptEventHandler implements IEventListener {
 
     @Override
     public void invoke(Event event) {
-        // TODO
-//        StandardScriptEvaluator evaluator = new StandardScriptEvaluator();
-//        evaluator.setLanguage(Constants.SCRIPT_TYPE_JAVASCRIPT);
-//        val arguments = new HashMap<String, Object>();
-//        arguments.put("event", event);
-//        // 执行脚本
-//        Object result = null;
-//        try {
-//            result = evaluator.evaluate(new StaticScriptSource(codeStr), arguments);
-//        } catch (Exception e) {
-//            log.warn("事件执行脚本错误：", e);
-//        }
-//        if (result == null) {
-//            return;
-//        }
-//        log.info("代码执行成功 {}", result);
-//        // 结果赋值
-//        try {
-//            Field[] fields = event.getClass().getFields();
-//            for (val field : fields) {
-//                Object value = field.get(result);
-//                field.set(event, value);
-//            }
-//        } catch (IllegalAccessException e) {
-//            log.warn("结果赋值失败", e);
-//        }
-//        log.info("结果赋值成功 {}", event);
+        StandardScriptEvaluator evaluator = new StandardScriptEvaluator();
+        evaluator.setLanguage(Constants.SCRIPT_TYPE_JAVASCRIPT);
+        val arguments = new HashMap<String, Object>();
+        arguments.put("event", event);
+        // 执行脚本
+        Object result = null;
+        try {
+            result = evaluator.evaluate(new ScriptSource(codeStr), arguments);
+        } catch (Exception e) {
+            log.warn("事件执行脚本错误：", e);
+        }
+        if (result == null) {
+            return;
+        }
+        log.info("代码执行成功 {}", result);
+        // 结果赋值
+        try {
+            Field[] fields = event.getClass().getFields();
+            for (val field : fields) {
+                Object value = field.get(result);
+                field.set(event, value);
+            }
+        } catch (IllegalAccessException e) {
+            log.warn("结果赋值失败", e);
+        }
+        log.info("结果赋值成功 {}", event);
     }
 }

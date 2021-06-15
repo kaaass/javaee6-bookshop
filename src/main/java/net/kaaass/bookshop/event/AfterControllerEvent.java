@@ -15,7 +15,5 @@ import net.kaaass.bookshop.eventhandle.Event;
 @ToString
 public class AfterControllerEvent extends Event {
 
-    private Object[] args;
-
     private Object controllerResult;
 }

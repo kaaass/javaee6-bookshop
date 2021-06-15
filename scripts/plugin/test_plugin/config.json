@@ -1,0 +1,7 @@
+{
+    "listeners" : [{
+        "event" : "net.kaaass.bookshop.event.AfterControllerEvent",
+        "priority" : "LOWEST",
+        "file" : "after_controller.js"
+    }]
+}

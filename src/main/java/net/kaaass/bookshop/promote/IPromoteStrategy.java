@@ -68,5 +68,9 @@ public interface IPromoteStrategy<S extends OrderPromoteContext, T extends Order
         public Result(ResultType resultType) {
             this.resultType = resultType;
         }
+
+        public static <T extends OrderPromoteContext> Result<T> of(ResultType resultType, T context) {
+            return new Result<>(resultType, context);
+        }
     }
 }
