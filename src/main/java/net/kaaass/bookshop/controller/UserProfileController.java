@@ -2,14 +2,13 @@ package net.kaaass.bookshop.controller;
 
 import java8.util.function.Function;
 import java8.util.function.Predicate;
+import java8.util.stream.Collectors;
 import java8.util.stream.StreamSupport;
 import lombok.var;
 import net.kaaass.bookshop.controller.request.UserInfoModifyRequest;
 import net.kaaass.bookshop.controller.response.UserProfileResponse;
 import net.kaaass.bookshop.dao.entity.UserAddressEntity;
-import net.kaaass.bookshop.dao.entity.UserAuthEntity;
 import net.kaaass.bookshop.dao.repository.UserAddressRepository;
-import net.kaaass.bookshop.dao.repository.UserAuthRepository;
 import net.kaaass.bookshop.dao.repository.UserInfoRepository;
 import net.kaaass.bookshop.dto.UserAddressDto;
 import net.kaaass.bookshop.dto.UserInfoDto;
@@ -30,7 +29,6 @@ import javax.validation.Validator;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
-import java8.util.stream.Collectors;
 
 @Path("/user/profile")
 @Consumes(MediaType.APPLICATION_JSON)
