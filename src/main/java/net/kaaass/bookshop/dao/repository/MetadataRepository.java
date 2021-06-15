@@ -14,7 +14,7 @@ public class MetadataRepository extends BaseRepository<MetadataEntity, String> {
      * 查询元数据
      */
     public Optional<MetadataEntity> findByKey(String key) {
-        String sql = "select c from MetadataEntity c where c.key = ?0";
+        String sql = "select c from MetadataEntity c where c.key = ?1";
         return findOneBySql(sql, MetadataEntity.class, key);
     }
 }

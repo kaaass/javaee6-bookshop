@@ -1,6 +1,7 @@
 package net.kaaass.bookshop.controller.request;
 
 import lombok.Data;
+import net.kaaass.bookshop.constraints.Uuid;
 import org.codehaus.jackson.annotate.JsonSubTypes;
 import org.codehaus.jackson.annotate.JsonTypeInfo;
 
@@ -20,5 +21,6 @@ import org.codehaus.jackson.annotate.JsonTypeInfo;
 })
 public abstract class OrderCreateRequest {
 
+    @Uuid(message = "addressId格式不正确")
     private String addressId;
 }

@@ -5,6 +5,7 @@ import net.kaaass.bookshop.exception.BadRequestException;
 import net.kaaass.bookshop.exception.BaseException;
 import net.kaaass.bookshop.security.Secured;
 import net.kaaass.bookshop.security.SecurityIdentity;
+import net.kaaass.bookshop.security.SecurityRole;
 
 import javax.inject.Inject;
 import javax.validation.Validator;
@@ -35,7 +36,7 @@ public class TestController extends BaseController {
 
     @GET
     @Path("/logged")
-    @Secured
+    @Secured(SecurityRole.ADMIN)
     public String logged() {
         return "You're logged in! " + identity.getUserAuthDto();
     }

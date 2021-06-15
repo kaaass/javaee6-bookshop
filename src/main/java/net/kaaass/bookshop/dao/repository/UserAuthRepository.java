@@ -15,7 +15,7 @@ public class UserAuthRepository extends BaseRepository<UserAuthEntity, String> {
      * 通过手机查询
      */
     public Optional<UserAuthEntity> findByPhone(String phone) {
-        String sql = "SELECT u FROM UserAuthEntity u where u.phone = ?0";
+        String sql = "SELECT u FROM UserAuthEntity u where u.phone = ?1";
         return findOneBySql(sql, UserAuthEntity.class, phone);
     }
 
@@ -23,7 +23,7 @@ public class UserAuthRepository extends BaseRepository<UserAuthEntity, String> {
      * 通过鉴权令牌查询
      */
     public Optional<UserAuthEntity> findByAuthToken(String authToken) {
-        String sql = "SELECT u FROM UserAuthEntity u where u.authToken = :authToken";
+        String sql = "SELECT u FROM UserAuthEntity u where u.authToken = ?1";
         return findOneBySql(sql, UserAuthEntity.class, authToken);
     }
 }

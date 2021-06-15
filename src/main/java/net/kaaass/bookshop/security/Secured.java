@@ -15,5 +15,5 @@ import static java.lang.annotation.ElementType.TYPE;
 @Retention(value = RetentionPolicy.RUNTIME)
 public @interface Secured {
 
-    SecurityRole role() default SecurityRole.LOGGED;
+    SecurityRole value() default SecurityRole.LOGGED;
 }

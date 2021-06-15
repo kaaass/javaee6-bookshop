@@ -17,8 +17,6 @@ import org.jboss.resteasy.spi.HttpRequest;
 import org.jboss.resteasy.spi.interception.PreProcessInterceptor;
 
 import javax.inject.Inject;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.ext.Provider;
 
@@ -47,7 +45,7 @@ public class SecurityPreProcessInterceptor implements PreProcessInterceptor {
             return null;
         }
         // 如果不需要登录
-        val requiredRole = annotate.role();
+        val requiredRole = annotate.value();
         if (requiredRole.lowThan(SecurityRole.LOGGED)) {
             return null;
         }

@@ -13,7 +13,7 @@ import java.util.List;
 public class PluginRepository extends BaseRepository<PluginEntity, String> {
 
     public Optional<PluginEntity> findFirstByFilename(String filename) {
-        String sql = "select c from PluginEntity c where c.filename = ?0";
+        String sql = "select c from PluginEntity c where c.filename = ?1";
         return findOneBySql(sql, PluginEntity.class, filename);
     }
 

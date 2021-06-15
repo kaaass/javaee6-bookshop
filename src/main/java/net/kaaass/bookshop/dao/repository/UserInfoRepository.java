@@ -13,7 +13,7 @@ import net.kaaass.bookshop.dao.entity.UserInfoEntity;
 public class UserInfoRepository extends BaseRepository<UserInfoEntity, String> {
 
     public UserInfoEntity findByAuth(UserAuthEntity auth) {
-        String sql = "select c from UserInfoEntity c where c.auth = ?0";
+        String sql = "select c from UserInfoEntity c where c.auth = ?1";
         return findOneBySql(sql, UserInfoEntity.class, auth).get();
     }
 

@@ -13,12 +13,12 @@ import java.util.List;
 public class ProductMetadataRepository extends BaseRepository<ProductMetadataEntity, String> {
 
     public Optional<ProductMetadataEntity> findByProductIdAndKey(String productId, String key) {
-        String sql = "select c from ProductMetadataEntity c where c.productId = ?0 and c.key = ?1";
+        String sql = "select c from ProductMetadataEntity c where c.productId = ?1 and c.key = ?2";
         return findOneBySql(sql, ProductMetadataEntity.class, productId, key);
     }
 
     public List<ProductMetadataEntity> findAllByProductId(String productId) {
-        String sql = "SELECT u FROM ProductMetadataEntity u where u.productId = ?0";
+        String sql = "SELECT u FROM ProductMetadataEntity u where u.productId = ?1";
         return findAllBySql(sql, ProductMetadataEntity.class);
     }
 }

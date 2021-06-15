@@ -24,7 +24,7 @@ public class CommentRepository extends BaseRepository<CommentEntity, String> {
      * 查找商品评论
      */
     public List<CommentEntity> findAllByProductIdOrderByRateDescCommentTimeDesc(String productId, Pageable page) {
-        String sql = "SELECT u FROM CommentEntity u where u.productId = ?0 order by u.rate desc, u.commentTime desc";
+        String sql = "SELECT u FROM CommentEntity u where u.productId = ?1 order by u.rate desc, u.commentTime desc";
         return findAllBySql(sql, page, CommentEntity.class, productId);
     }
 
@@ -32,7 +32,7 @@ public class CommentRepository extends BaseRepository<CommentEntity, String> {
      * 商品平均评分
      */
     public Optional<Float> averageRateByProductId(String productId) {
-        String sql = "select avg(c.rate) from CommentEntity c where c.productId = ?0";
+        String sql = "select avg(c.rate) from CommentEntity c where c.productId = ?1";
         return findOneBySql(sql, Float.class, productId);
     }
 }

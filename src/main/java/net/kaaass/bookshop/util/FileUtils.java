@@ -1,7 +1,6 @@
 package net.kaaass.bookshop.util;
 
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 
 public class FileUtils {
 
@@ -14,5 +13,22 @@ public class FileUtils {
         }
         fr.close();
         return stringBuilder.toString();
+    }
+
+    public static void saveToFile(InputStream uploadedInputStream, File file) {
+        try {
+            OutputStream out = null;
+            int read = 0;
+            byte[] bytes = new byte[1024];
+
+            out = new FileOutputStream(file);
+            while ((read = uploadedInputStream.read(bytes)) != -1) {
+                out.write(bytes, 0, read);
+            }
+            out.flush();
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -6,8 +6,10 @@ import java8.util.stream.Collectors;
 import java8.util.stream.StreamSupport;
 import lombok.extern.slf4j.Slf4j;
 import net.kaaass.bookshop.dao.entity.UserAddressEntity;
+import net.kaaass.bookshop.dao.entity.UserAuthEntity;
 import net.kaaass.bookshop.dao.entity.UserInfoEntity;
 import net.kaaass.bookshop.dao.repository.UserAddressRepository;
+import net.kaaass.bookshop.dao.repository.UserAuthRepository;
 import net.kaaass.bookshop.dao.repository.UserInfoRepository;
 import net.kaaass.bookshop.dto.UserAddressDto;
 import net.kaaass.bookshop.dto.UserInfoDto;
@@ -30,6 +32,15 @@ public class UserServiceImpl implements UserService, Serializable {
 
     @Inject
     private UserInfoRepository userInfoRepository;
+
+    @Inject
+    private UserAuthRepository userAuthRepository;
+
+    @Override
+    public UserAuthEntity getAuthEntityById(String uid) throws NotFoundException {
+        return userAuthRepository.findById(uid)
+                .orElseThrow(BaseException.supplier(NotFoundException.class, "未找到用户！"));
+    }
 
     @Override
     public UserAddressEntity getAddressEntityById(String id) throws NotFoundException {

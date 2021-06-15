@@ -27,4 +27,12 @@ public class Constants {
     public static final String PLUGIN_PATH_CONFIG = "config.json";
 
     public static final String TOPIC_DESTINATION = "topic/test";
+
+    public static final String PARAM_PAGE = "page";
+
+    public static final String PARAM_SIZE = "size";
+
+    public static final String DEFAULT_PAGE_SIZE = "10";
+
+    public static final String UPLOAD_FOLDER = "/upload";
 }

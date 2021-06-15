@@ -190,7 +190,7 @@ public class BaseRepository<T extends IEntity<ID>, ID> implements IRepository<T,
         val manager = getEntityManager();
         val query = manager.createQuery(sql, resultClz);
         for (int i = 0; i < args.length; i++) {
-            query.setParameter(i, args[i]);
+            query.setParameter(i + 1, args[i]);
         }
         query.setFirstResult(0);
         query.setMaxResults(1);

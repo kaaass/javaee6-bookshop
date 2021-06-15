@@ -2,6 +2,7 @@ package net.kaaass.bookshop.controller;
 
 import lombok.val;
 import net.kaaass.bookshop.exception.BadRequestException;
+import net.kaaass.bookshop.security.SecurityIdentity;
 
 import javax.validation.Validator;
 
@@ -24,5 +25,9 @@ public abstract class BaseController {
             }
             throw new BadRequestException(reason.toString());
         }
+    }
+
+    public String getUid(SecurityIdentity identity) {
+        return identity.getUserAuthDto().getId();
     }
 }

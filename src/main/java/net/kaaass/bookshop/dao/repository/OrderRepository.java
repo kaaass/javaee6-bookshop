@@ -16,42 +16,42 @@ import java.util.List;
 public class OrderRepository extends BaseRepository<OrderEntity, String> {
 
     public boolean existsByRequestId(String requestId) {
-        String sql = "select 1 from OrderEntity where exist(select c from OrderEntity c where c.requestId = ?0)";
+        String sql = "select 1 from OrderEntity where exist(select c from OrderEntity c where c.requestId = ?1)";
         return findOneBySql(sql, Integer.class, requestId).isPresent();
     }
 
     public Optional<OrderEntity> findByRequestId(String requestId) {
-        String sql = "select c from OrderEntity c where c.requestId = ?0";
+        String sql = "select c from OrderEntity c where c.requestId = ?1";
         return findOneBySql(sql, OrderEntity.class, requestId);
     }
 
     public List<OrderEntity> findAllByTypeIsNotOrderByCreateTimeDesc(OrderType type, Pageable page) {
-        String sql = "SELECT u FROM OrderEntity u where u.type != ?0 order by u.createTime desc";
+        String sql = "SELECT u FROM OrderEntity u where u.type != ?1 order by u.createTime desc";
         return findAllBySql(sql, page, OrderEntity.class, type);
     }
 
     public List<OrderEntity> findAllByUidAndTypeIsNotOrderByCreateTimeDesc(String uid, OrderType type, Pageable page) {
-        String sql = "SELECT u FROM OrderEntity u where u.uid = ?0 and u.type != ?1 order by u.createTime desc";
+        String sql = "SELECT u FROM OrderEntity u where u.uid = ?1 and u.type != ?2 order by u.createTime desc";
         return findAllBySql(sql, page, OrderEntity.class, uid, type);
     }
 
     public Optional<OrderEntity> findFirstByCreateTimeBetweenOrderByCreateTimeDesc(Timestamp start, Timestamp end) {
-        String sql = "select c from OrderEntity c where c.createTime between ?0 and ?1 order by c.createTime desc";
+        String sql = "select c from OrderEntity c where c.createTime between ?1 and ?2 order by c.createTime desc";
         return findOneBySql(sql, OrderEntity.class, start, end);
     }
 
     public Optional<Integer> countAllByUidAndType(String uid, OrderType type) {
-        String sql = "select count(c.id) from OrderEntity c where c.uid = ?0 and c.type = ?1";
+        String sql = "select count(c.id) from OrderEntity c where c.uid = ?1 and c.type = ?2";
         return findOneBySql(sql, Integer.class, uid, type);
     }
 
     public List<OrderEntity> findAllByTypeOrderByCreateTimeDesc(OrderType type, Pageable page) {
-        String sql = "SELECT u FROM OrderEntity u where u.type = ?0 order by u.createTime desc";
+        String sql = "SELECT u FROM OrderEntity u where u.type = ?1 order by u.createTime desc";
         return findAllBySql(sql, page, OrderEntity.class, type);
     }
 
     public List<OrderEntity> findAllByUidAndTypeOrderByCreateTimeDesc(String uid, OrderType type, Pageable page) {
-        String sql = "SELECT u FROM OrderEntity u where u.uid = ?0 and u.type = ?1 order by u.createTime desc";
+        String sql = "SELECT u FROM OrderEntity u where u.uid = ?1 and u.type = ?2 order by u.createTime desc";
         return findAllBySql(sql, page, OrderEntity.class, uid, type);
     }
 }

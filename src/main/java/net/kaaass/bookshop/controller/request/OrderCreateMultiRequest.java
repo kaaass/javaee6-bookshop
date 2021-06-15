@@ -1,6 +1,7 @@
 package net.kaaass.bookshop.controller.request;
 
 import lombok.Data;
+import net.kaaass.bookshop.constraints.Uuid;
 
 import java.util.List;
 
@@ -15,6 +16,8 @@ public class OrderCreateMultiRequest extends OrderCreateRequest {
 
     @Data
     public static class CartItem {
+
+        @Uuid(message = "id格式不正确")
         private String id;
     }
 
