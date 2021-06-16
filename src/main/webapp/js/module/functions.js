@@ -27,9 +27,11 @@ define([
          * 弹出模态框
          * @param title
          * @param body
+         * @param hideAll
          */
-        let modal = (title, body) => {
-            $('.modal').modal('hide');
+        let modal = (title, body, hideAll = true) => {
+            if (hideAll)
+                $('.modal').modal('hide');
             $('#msgModalTitle').html(title);
             $('#msgModalBody').html(body);
             $('#msgModal').modal('show');
@@ -135,7 +137,7 @@ define([
                 return value;
             };
 
-            var myDate = timestamp ? new Date(timestamp * 1000) : new Date();
+            var myDate = timestamp ? new Date((timestamp - constants.TIME_AREA * 60 * 60) * 1000) : new Date();
 
             var year = myDate.getFullYear();
             var month = zero(myDate.getMonth() + 1);
@@ -165,7 +167,7 @@ define([
         let dateToTs = (date) => {
             date = date.substring(0, 19);
             date = date.replace(/-/g, '/');
-            return new Date(date).getTime() / 1000;
+            return new Date(date).getTime() / 1000 + constants.TIME_AREA * 60 * 60;
         };
 
         // 添加模态框

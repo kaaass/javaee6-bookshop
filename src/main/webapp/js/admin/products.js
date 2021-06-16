@@ -14,6 +14,7 @@ require([
 
     let $list = $('.table-responsive'),
         $add = $('#btn-add'),
+        $checkIsbn = $('#btn-check'),
         // Form
         $name = $('#name'),
         $thumbnailId = $('#thumbnailId'),
@@ -33,6 +34,10 @@ require([
         $('#categoryId').val(product ? product.category.id : "");
         $('#startSellTime').val(product ? product.startSellTimeReadable : "");
         $('#rest').val(product ? product.storage.rest : "");
+        $('#author').val(product ? product.author : "");
+        $('#isbn').val(product ? product.isbn : "");
+        $('#publishDate').val(product ? product.publishDateReadable : "");
+        $('#indexOrder').val(product ? product.indexOrder : "");
     };
 
     let getParam = () => {
@@ -45,7 +50,11 @@ require([
             buyLimit: $buyLimit.val(),
             categoryId: $categoryId.val(),
             startSellTime: functions.dateToTs($startSellTime.val()),
-            rest: $rest.val()
+            rest: $rest.val(),
+            author: $('#author').val(),
+            isbn: $('#isbn').val(),
+            publishDate: functions.dateToTs($('#publishDate').val()),
+            indexOrder: $('#indexOrder').val()
         };
     };
 
@@ -107,5 +116,16 @@ require([
                     render();
                 });
         });
+    });
+
+    // 检查 ISBN
+    $checkIsbn.unbind('click');
+    $checkIsbn.click(() => {
+        let isbn = $('#isbn').val();
+        product.checkIsbn(isbn)
+            .then(result => {
+                if (result)
+                    alert("格式正确！格式化：" + result);
+            });
     });
 });

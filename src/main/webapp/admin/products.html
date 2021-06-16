@@ -143,6 +143,21 @@
                         <input type="text" class="form-control" id="thumbnailId"/>
                     </div>
                     <div class="form-group">
+                        <label for="author">作者</label>
+                        <input type="text" class="form-control" id="author" value="-1"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="isbn">ISBN号（格式：保持紧凑，如 9787121317255）</label>
+                        <input type="text" class="form-control" id="isbn" value="-1"/>
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" id="btn-check" type="button">检查</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="publishDate">出版日期（格式：2021-06-10 00:00:00）</label>
+                        <input type="text" class="form-control" id="publishDate" value="-1"/>
+                    </div>
+                    <div class="form-group">
                         <label for="price">原价</label>
                         <input type="text" class="form-control" id="price"/>
                     </div>
@@ -155,11 +170,15 @@
                         <input type="text" class="form-control" id="buyLimit" value="-1"/>
                     </div>
                     <div class="form-group">
+                        <label for="indexOrder">首页展示顺序（-1为不展示）</label>
+                        <input type="text" class="form-control" id="indexOrder" value="-1"/>
+                    </div>
+                    <div class="form-group">
                         <label for="categoryId">分类</label>
                         <input type="text" class="form-control" id="categoryId"/>
                     </div>
                     <div class="form-group">
-                        <label for="startSellTime">开售时间（格式：2019-11-20 00:00:00）</label>
+                        <label for="startSellTime">开售时间（格式：2021-06-10 00:00:00）</label>
                         <input type="text" class="form-control" id="startSellTime"/>
                     </div>
                     <div class="form-group">

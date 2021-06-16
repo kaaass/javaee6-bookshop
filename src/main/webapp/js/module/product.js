@@ -203,6 +203,26 @@ define(['jquery', 'module/functions', 'module/auth'], function ($, functions, au
         return true;
     };
 
+    /**
+     * 检查 ISBN 格式
+     * @param isbn
+     * @returns {Promise<void>}
+     */
+    let checkIsbn = async (isbn) => {
+        let response = await adminRequest.get(`/validate/isbn?id=${isbn}`)
+            .catch((e) => {
+                console.error("检查ISBN格式失败：", isbn, e);
+                functions.modal("错误", "检查ISBN格式失败！请检查网络连接。");
+            });
+        let data = response.data;
+        if (data.status !== 200) {
+            console.error("ISBN格式错误：", isbn, data);
+            alert(data.message);
+            return null;
+        }
+        return data.data;
+    };
+
     return {
         categories: categories,
         productCache: productCache,
@@ -215,6 +235,7 @@ define(['jquery', 'module/functions', 'module/auth'], function ($, functions, au
         getComments: getComments,
         addProduct: addProduct,
         editProduct: editProduct,
-        removeProduct: removeProduct
+        removeProduct: removeProduct,
+        checkIsbn: checkIsbn,
     };
 });

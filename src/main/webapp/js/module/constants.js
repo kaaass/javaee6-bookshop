@@ -27,5 +27,7 @@ define([], function () {
 
         BASE_URL: BASE_URL,
         API_BASE_URL: API_BASE_URL,
+
+        TIME_AREA: +8,
     };
 });

@@ -82,11 +82,7 @@ public class ProductServiceImpl implements ProductService, Serializable {
     @Override
     public Optional<ProductDto> addProduct(ProductAddRequest productToAdd) {
         val entity = new ProductEntity();
-        entity.setName(productToAdd.getName());
-        entity.setPrice(productToAdd.getPrice());
-        entity.setMailPrice(productToAdd.getMailPrice());
-        entity.setBuyLimit(productToAdd.getBuyLimit());
-        entity.setStartSellTime(TimeUtils.dateToTimestamp(productToAdd.getStartSellTime()));
+        requestToEntity(productToAdd, entity);
         val storage = new ProductStorageEntity();
         storage.setRest(productToAdd.getRest());
         entity.setStorage(storage);
@@ -108,26 +104,41 @@ public class ProductServiceImpl implements ProductService, Serializable {
         }
     }
 
-    @Override
-    public ProductDto editProduct(String id, ProductAddRequest productToAdd) throws NotFoundException, InternalErrorExeption {
-        val entity = productRepository.findById(id)
-                .orElseThrow(BaseException.supplier(NotFoundException.class, "未找到此商品！"));
+    /**
+     * 产品请求转换为添加，不包括 rest、略缩图、分类
+     */
+    private void requestToEntity(ProductAddRequest productToAdd, ProductEntity entity) {
         entity.setName(productToAdd.getName());
         entity.setPrice(productToAdd.getPrice());
         entity.setMailPrice(productToAdd.getMailPrice());
         entity.setBuyLimit(productToAdd.getBuyLimit());
         entity.setStartSellTime(TimeUtils.dateToTimestamp(productToAdd.getStartSellTime()));
+        entity.setAuthor(productToAdd.getAuthor());
+        entity.setIsbn(productToAdd.getIsbn());
+        entity.setPublishDate(TimeUtils.dateToTimestamp(productToAdd.getPublishDate()));
+        entity.setIndexOrder(productToAdd.getIndexOrder());
+    }
+
+    @Override
+    public ProductDto editProduct(String id, ProductAddRequest productToAdd) throws NotFoundException, InternalErrorExeption {
+        val entity = productRepository.findById(id)
+                .orElseThrow(BaseException.supplier(NotFoundException.class, "未找到此商品！"));
+        requestToEntity(productToAdd, entity);
         entity.getStorage().setRest(productToAdd.getRest());
         try {
             if (!productToAdd.getThumbnailId().equals(entity.getThumbnail().getId())) {
-                val thumbnail = resourceManager.getEntity(productToAdd.getThumbnailId()).orElseThrow();
+                val thumbnail = resourceManager.getEntity(productToAdd.getThumbnailId())
+                        .orElseThrow(BaseException.supplier(NotFoundException.class, "略缩图不存在！"));
                 entity.setThumbnail(thumbnail);
             }
             if (!productToAdd.getCategoryId().equals(entity.getCategory().getId())) {
-                val category = categoryRepository.findById(productToAdd.getCategoryId()).orElseThrow();
+                val category = categoryRepository.findById(productToAdd.getCategoryId())
+                        .orElseThrow(BaseException.supplier(NotFoundException.class, "分类不存在！"));
                 entity.setCategory(category);
             }
             return ProductMapper.INSTANCE.productEntityToDto(productRepository.save(entity));
+        } catch (BaseException e) {
+            throw e;
         } catch (Exception e) {
             log.info("插入时发生错误", e);
             throw new InternalErrorExeption("发生未知错误！", e);
