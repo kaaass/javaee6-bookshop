@@ -49,6 +49,12 @@ public class PagePreProcessInterceptor implements PreProcessInterceptor {
             }
         }
 
+        // 不传入参数则忽视
+        if (page == null && size == null) {
+            pageInfo.setPageable(null);
+            return null;
+        }
+
         if (page == null) {
             page = "0";
         }
