@@ -100,4 +100,10 @@ public class CategoryServiceImpl implements CategoryService, Serializable {
         }
         return result;
     }
+
+    @Override
+    public void deleteById(String id) throws NotFoundException {
+        val entity = getEntityById(id);
+        categoryRepository.delete(entity);
+    }
 }

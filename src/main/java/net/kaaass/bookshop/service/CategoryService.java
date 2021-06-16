@@ -32,4 +32,6 @@ public interface CategoryService {
      * 寻找某个分类的所有子结点
      */
     List<CategoryEntity> getAllSubs(CategoryEntity root);
+
+    void deleteById(String id) throws NotFoundException;
 }

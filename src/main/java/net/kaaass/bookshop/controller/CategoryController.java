@@ -43,6 +43,13 @@ public class CategoryController extends BaseController {
         return categoryService.getById(id);
     }
 
+    @DELETE
+    @Path("/{id}/")
+    public boolean deleteCategoryById(@PathParam("id") String id) throws NotFoundException {
+        categoryService.deleteById(id);
+        return true;
+    }
+
     @GET
     @Path("/")
     public List<CategoryDto> getAllProducts() {

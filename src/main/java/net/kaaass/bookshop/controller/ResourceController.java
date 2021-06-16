@@ -24,10 +24,12 @@ import net.kaaass.bookshop.util.FileUtils;
 import net.kaaass.bookshop.util.StringUtils;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
+@Stateless
 @Path("/resource")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
@@ -59,7 +61,8 @@ public class ResourceController extends BaseController {
     @POST
     @Path("/")
     @Secured(SecurityRole.ADMIN)
-    public MediaDto addNetworkResource(@QueryParam("url") String url, @QueryParam("type") String type) {
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public MediaDto addNetworkResource(@FormParam("url") String url, @FormParam("type") String type) {
         var entity = new MediaEntity();
         entity.setType(type);
         entity.setUrl(url);

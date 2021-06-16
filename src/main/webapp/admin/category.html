@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
 
-    <title>销售情况 - KBook管理后台</title>
+    <title>分类管理 - KBook管理后台</title>
 
     <!-- Bootstrap core CSS -->
     <link href="../css/bootstrap.min.css" rel="stylesheet">
@@ -53,9 +53,9 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="stats.html">
-                            <span data-feather="dollar-sign"></span>
-                            销售情况
+                        <a class="nav-link active" href="category.html">
+                            <span data-feather="folder"></span>
+                            分类管理
                         </a>
                     </li>
                     <li class="nav-item">
@@ -107,7 +107,12 @@
 
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4 py-5">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                <h1 class="h2">销售情况</h1>
+                <h1 class="h2">分类管理</h1>
+                <div class="btn-toolbar mb-2 mb-md-0">
+                    <button type="button" id="btn-create" class="btn btn-sm btn-outline-success">
+                        新增分类
+                    </button>
+                </div>
             </div>
 
             <div class="table-responsive">
@@ -117,9 +122,39 @@
     </div>
 </div>
 
+<!-- 新增分类模态框 -->
+<div class="modal fade" id="categoryModal" tabindex="-1" role="dialog" aria-labelledby="productModalTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="productModalTitle">新增分类</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="productModalBody">
+                <div class="plugin-form">
+                    <div class="form-group">
+                        <label for="name">分类名</label>
+                        <input type="text" class="form-control" id="name"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="parentId">父类</label>
+                        <input type="text" class="form-control" id="parentId" value="-1"/>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="btn-add" type="button" class="btn btn-primary" data-dismiss="modal">完成</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script>
 <script src="https://cdn.bootcss.com/require.js/2.3.6/require.min.js"></script>
 <script src="../js/config.js"></script>
-<script src="../js/admin/stats.js"></script>
+<script src="../js/admin/category.js"></script>
 </body>
 </html>

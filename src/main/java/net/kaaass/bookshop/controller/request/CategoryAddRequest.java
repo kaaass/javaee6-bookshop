@@ -19,6 +19,6 @@ public class CategoryAddRequest {
     )
     private String name;
 
-    @Uuid(message = "parentId格式错误")
+    @Uuid(message = "父类格式错误", nullable = true)
     private String parentId;
 }

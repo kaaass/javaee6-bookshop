@@ -16,10 +16,10 @@ define(['jquery', 'module/functions', 'module/auth'], function ($, functions, au
         adminRequest = auth.getAxiosInstance(true);
 
     /**
-     * 获得商品分类
+     * 获得层次化商品分类
      * @returns {Promise<[]>} 商品分类数据
      */
-    let getCategories = async () => {
+    let getHierarchyCategories = async () => {
         let response = await request.get('/category/');
         let result = [];
         for (const category of response.data.data) {
@@ -27,7 +27,10 @@ define(['jquery', 'module/functions', 'module/auth'], function ($, functions, au
             if (category.parent == null) {
                 category.subs = [];
                 result.push(category);
-            } else {
+            }
+        }
+        for (const category of response.data.data) {
+            if (category.parent !== null) {
                 let father = category.parent.id;
                 for (const item of result) {
                     if (item.id === father) {
@@ -223,11 +226,70 @@ define(['jquery', 'module/functions', 'module/auth'], function ($, functions, au
         return data.data;
     };
 
+    /**
+     * 获得商品分类
+     * @returns {Promise<[]>} 商品分类数据
+     */
+    let getCategories = async () => {
+        let response = await request.get('/category/')
+            .catch((e) => {
+                console.error("获得商品分类失败：", e);
+                functions.modal("错误", "获得商品分类失败！请检查网络连接。");
+            });
+        let data = response.data;
+        if (data.status !== 200) {
+            console.error("获取商品分类错误：", data);
+            functions.modal("错误", data.message);
+            return null;
+        }
+        return data.data;
+    };
+
+    /**
+     * 增加商品分类
+     * @param param
+     * @returns {Promise<null|*>}
+     */
+    let addCategory = async (param) => {
+        let response = await adminRequest.post('/category/', param)
+            .catch((e) => {
+                console.error("增加商品分类失败：", param, e);
+                functions.modal("错误", "增加商品分类失败！请检查网络连接。");
+            });
+        let data = response.data;
+        if (data.status !== 200) {
+            console.error("增加商品分类错误：", param, data);
+            functions.modal("错误", data.message);
+            return null;
+        }
+        return data.id;
+    };
+
+    /**
+     * 删除商品分类
+     * @param categoryId
+     * @returns {Promise<null|boolean>}
+     */
+    let removeCategory = async (categoryId) => {
+        let response = await adminRequest.delete(`/category/${categoryId}/`)
+            .catch((e) => {
+                console.error("删除商品分类失败：", categoryId, e);
+                functions.modal("错误", "删除商品分类失败！请检查网络连接。");
+            });
+        let data = response.data;
+        if (data.status !== 200) {
+            console.error("删除商品分类错误：", categoryId, data);
+            functions.modal("错误", data.message);
+            return null;
+        }
+        return true;
+    };
+
     return {
         categories: categories,
         productCache: productCache,
 
-        getCategories: getCategories,
+        getHierarchyCategories: getHierarchyCategories,
         processData: processData,
         renderProductsByUrl: renderProductsByUrl,
         getProduct: getProduct,
@@ -237,5 +299,9 @@ define(['jquery', 'module/functions', 'module/auth'], function ($, functions, au
         editProduct: editProduct,
         removeProduct: removeProduct,
         checkIsbn: checkIsbn,
+
+        getCategories: getCategories,
+        addCategory: addCategory,
+        removeCategory: removeCategory,
     };
 });

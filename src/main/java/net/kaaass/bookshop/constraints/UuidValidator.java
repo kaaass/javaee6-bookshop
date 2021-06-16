@@ -18,7 +18,7 @@ public class UuidValidator implements ConstraintValidator<Uuid, String> {
     public boolean isValid(String s, ConstraintValidatorContext constraintValidatorContext) {
 
         if (s == null) {
-            return false;
+            return uuid.nullable();
         }
 
         if (s.length() != 32) {
