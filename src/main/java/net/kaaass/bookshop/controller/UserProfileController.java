@@ -56,13 +56,16 @@ public class UserProfileController extends BaseController {
     @Inject
     private OrderService orderService;
 
+    @Inject
+    private UserMapper userMapper;
+
     @GET
     @Path("/")
     @Secured(SecurityRole.USER)
     public UserProfileResponse getUserProfile() throws NotFoundException {
         var result = new UserProfileResponse();
         var auth = userService.getAuthEntityById(getUid(identity));
-        var info = UserMapper.INSTANCE.userInfoEntityToDto(userInfoRepository.findByAuth(auth));
+        var info = userMapper.userInfoEntityToDto(userInfoRepository.findByAuth(auth));
         result.setInfo(info);
         result.setOrderCount(orderService.getUserOrderCount(getUid(identity)));
         return result;
@@ -82,7 +85,7 @@ public class UserProfileController extends BaseController {
         entity.setWechat(request.getWechat());
         entity.setLastUpdateTime(TimeUtils.nowTimestamp());
         var result = userInfoRepository.save(entity);
-        return UserMapper.INSTANCE.userInfoEntityToDto(result);
+        return userMapper.userInfoEntityToDto(result);
     }
 
     /*
@@ -97,7 +100,7 @@ public class UserProfileController extends BaseController {
                 .map(new Function<UserAddressEntity, UserAddressDto>() {
                     @Override
                     public UserAddressDto apply(UserAddressEntity userAddressEntity) {
-                        return UserMapper.INSTANCE.userAddressEntityToDto(userAddressEntity);
+                        return userMapper.userAddressEntityToDto(userAddressEntity);
                     }
                 })
                 .collect(Collectors.<UserAddressDto>toList());
@@ -117,7 +120,7 @@ public class UserProfileController extends BaseController {
                 .map(new Function<UserAddressEntity, UserAddressDto>() {
                     @Override
                     public UserAddressDto apply(UserAddressEntity userAddressEntity) {
-                        return UserMapper.INSTANCE.userAddressEntityToDto(userAddressEntity);
+                        return userMapper.userAddressEntityToDto(userAddressEntity);
                     }
                 })
                 .orElseThrow(BaseException.supplier(NotFoundException.class, "未找到此收货地址！"));
@@ -128,10 +131,10 @@ public class UserProfileController extends BaseController {
     @Secured(SecurityRole.USER)
     public UserAddressDto addUserAddress(UserAddressDto userAddressDto) throws BadRequestException {
         validateBean(validator, userAddressDto);
-        var entity = UserMapper.INSTANCE.userAddressDtoToEntity(userAddressDto);
+        var entity = userMapper.userAddressDtoToEntity(userAddressDto);
         entity.setUid(getUid(identity));
         entity.setLastUpdateTime(TimeUtils.nowTimestamp());
         var result = addressRepository.save(entity);
-        return UserMapper.INSTANCE.userAddressEntityToDto(result);
+        return userMapper.userAddressEntityToDto(result);
     }
 }

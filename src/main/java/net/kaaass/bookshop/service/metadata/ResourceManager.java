@@ -16,6 +16,9 @@ public class ResourceManager {
     @Inject
     private MediaRepository mediaRepository;
 
+    @Inject
+    private CommenMapper commenMapper;
+
     public Optional<MediaEntity> getEntity(String id) {
         return mediaRepository.findById(id);
     }
@@ -24,7 +27,7 @@ public class ResourceManager {
         return getEntity(id).map(new Function<MediaEntity, MediaDto>() {
             @Override
             public MediaDto apply(MediaEntity mediaEntity) {
-                return CommenMapper.INSTANCE.mediaEntityToDto(mediaEntity);
+                return commenMapper.mediaEntityToDto(mediaEntity);
             }
         });
     }

@@ -5,7 +5,6 @@ import java8.util.stream.Collectors;
 import java8.util.stream.StreamSupport;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import lombok.var;
 import net.kaaass.bookshop.dao.entity.ProductEntity;
 import net.kaaass.bookshop.dao.entity.PromoteStrategyEntity;
 import net.kaaass.bookshop.dao.repository.PromoteStrategyRepository;
@@ -45,11 +44,14 @@ public class PromoteServiceImpl implements PromoteService, Serializable {
     private ServiceAdapter serviceAdapter;
 
     @Inject
-    private ProductService productService;
+    private OrderMapper orderMapper;
+
+    @Inject
+    private ProductMapper productMapper;
 
     @Override
     public PromoteStrategyDto getById(String promoteId) throws NotFoundException {
-        return OrderMapper.INSTANCE.promoteStrategyEntitiyToDto(getEntityById(promoteId));
+        return orderMapper.promoteStrategyEntitiyToDto(getEntityById(promoteId));
     }
 
     @Override
@@ -64,7 +66,7 @@ public class PromoteServiceImpl implements PromoteService, Serializable {
                 .map(new Function<PromoteStrategyEntity, PromoteStrategyDto>() {
                     @Override
                     public PromoteStrategyDto apply(PromoteStrategyEntity promoteStrategyEntity) {
-                        return OrderMapper.INSTANCE.promoteStrategyEntitiyToDto(promoteStrategyEntity);
+                        return orderMapper.promoteStrategyEntitiyToDto(promoteStrategyEntity);
                     }
                 })
                 .collect(Collectors.<PromoteStrategyDto>toList());
@@ -72,10 +74,10 @@ public class PromoteServiceImpl implements PromoteService, Serializable {
 
     @Override
     public PromoteStrategyDto modify(PromoteStrategyDto promoteStrategyDto) {
-        val entity = OrderMapper.INSTANCE.promoteStrategyDtoToEntitiy(promoteStrategyDto);
+        val entity = orderMapper.promoteStrategyDtoToEntitiy(promoteStrategyDto);
         entity.setLastUpdateTime(TimeUtils.nowTimestamp());
         val result = promoteStrategyRepository.save(entity);
-        return OrderMapper.INSTANCE.promoteStrategyEntitiyToDto(result);
+        return orderMapper.promoteStrategyEntitiyToDto(result);
     }
 
     @Override
@@ -86,7 +88,7 @@ public class PromoteServiceImpl implements PromoteService, Serializable {
 
     @Override
     public OrderPromoteResult getForSingleProduct(ProductEntity productEntity, int count, String uid, String addressId) throws NotFoundException {
-        val productDto = ProductMapper.INSTANCE.productEntityToDto(productEntity);
+        val productDto = productMapper.productEntityToDto(productEntity);
         val context = contextFactory.buildFromSingleProduct(productDto, count, uid, addressId);
         return promoteManager.doOnOrder(context);
     }

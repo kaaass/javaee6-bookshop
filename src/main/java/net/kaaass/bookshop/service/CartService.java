@@ -2,7 +2,6 @@ package net.kaaass.bookshop.service;
 
 import net.kaaass.bookshop.controller.request.CartAddRequest;
 import net.kaaass.bookshop.dao.Pageable;
-import net.kaaass.bookshop.dao.entity.CartEntity;
 import net.kaaass.bookshop.dto.CartDto;
 import net.kaaass.bookshop.exception.BadRequestException;
 import net.kaaass.bookshop.exception.ForbiddenException;
@@ -18,21 +17,15 @@ import java.util.List;
 @Local
 public interface CartService {
 
-    /**
-     * @deprecated
-     */
-    CartEntity getEntityById(String id) throws NotFoundException;
+    CartDto getById(String id) throws NotFoundException;
 
-    /**
-     * @deprecated
-     */
-    CartEntity getEntityByIdAndCheck(String id, String uid) throws NotFoundException, ForbiddenException;
+    CartDto addToCart(CartAddRequest request) throws NotFoundException, BadRequestException;
 
-    CartDto addToCart(String uid, CartAddRequest request) throws NotFoundException, BadRequestException;
+    void removeFromCart(String id) throws NotFoundException, ForbiddenException;
 
-    void removeFromCart(String uid, String id) throws NotFoundException, ForbiddenException;
+    CartDto modifyItemCount(String id, int count) throws NotFoundException, ForbiddenException, BadRequestException;
 
-    CartDto modifyItemCount(String uid, String id, int count) throws NotFoundException, ForbiddenException, BadRequestException;
+    List<CartDto> getAllPerUser(Pageable pageable);
 
-    List<CartDto> getAllByUid(String uid, Pageable pageable);
+    void deleteById(String id);
 }

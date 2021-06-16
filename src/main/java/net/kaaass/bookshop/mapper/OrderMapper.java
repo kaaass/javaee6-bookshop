@@ -10,7 +10,7 @@ import net.kaaass.bookshop.vo.PromoteStrategyInfoVo;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
-@Mapper
+@Mapper(componentModel = "cdi", uses = CommonTransform.class)
 public interface OrderMapper {
     OrderMapper INSTANCE = Mappers.getMapper(OrderMapper.class);
 

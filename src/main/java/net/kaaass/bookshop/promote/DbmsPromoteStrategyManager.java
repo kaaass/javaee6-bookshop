@@ -28,6 +28,9 @@ public class DbmsPromoteStrategyManager {
     @Inject
     private PromoteStrategyRepository promoteStrategyRepository;
 
+    @Inject
+    private OrderMapper orderMapper;
+
     /**
      * 依照优先级获得策略顺序
      * @return 策略s
@@ -37,7 +40,7 @@ public class DbmsPromoteStrategyManager {
                 .map(new Function<PromoteStrategyEntity, PromoteStrategyDto>() {
                     @Override
                     public PromoteStrategyDto apply(PromoteStrategyEntity promoteStrategyEntity) {
-                        return OrderMapper.INSTANCE.promoteStrategyEntitiyToDto(promoteStrategyEntity);
+                        return orderMapper.promoteStrategyEntitiyToDto(promoteStrategyEntity);
                     }
                 })
                 .collect(Collectors.<PromoteStrategyDto>toList());
@@ -58,7 +61,7 @@ public class DbmsPromoteStrategyManager {
             val constructor = clazz.getConstructor();
             BaseDbmsPromoteStrategy strategy = (BaseDbmsPromoteStrategy) constructor.newInstance();
             strategy.initialize(promoteStrategyDto, serviceAdapter);
-            strategy.promoteStrategyInfoVo = OrderMapper.INSTANCE.promoteStrategyDtoToInfoVo(promoteStrategyDto);
+            strategy.promoteStrategyInfoVo = orderMapper.promoteStrategyDtoToInfoVo(promoteStrategyDto);
             return strategy;
         } catch (ClassNotFoundException e) {
             log.info("找不到策略类：", e);

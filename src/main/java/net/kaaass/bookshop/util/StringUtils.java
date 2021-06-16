@@ -18,7 +18,7 @@ public class StringUtils {
         }
         val dateStr = new SimpleDateFormat("yyyyMMdd").format(new Date());
         val oldOrderNumStr = lastOrderId.substring(lastOrderId.length() - 4, lastOrderId.length());
-        val oldNum = Integer.valueOf(oldOrderNumStr);
+        val oldNum = Integer.parseInt(oldOrderNumStr);
         val orderNum = String.format("%04d", oldNum + 1);
         return dateStr + orderNum;
     }

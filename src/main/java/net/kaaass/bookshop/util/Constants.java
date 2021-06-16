@@ -39,4 +39,6 @@ public class Constants {
     public static final String UPLOAD_FOLDER = "/upload";
 
     public static final String ORDER_FOLDER = "/orders";
+
+    public static final long TIME_OFFSET = +8;
 }

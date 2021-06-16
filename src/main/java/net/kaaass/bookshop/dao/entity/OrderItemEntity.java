@@ -27,7 +27,7 @@ public class OrderItemEntity implements IEntity<String> {
     @JoinColumn(name = "order_id")
     private OrderEntity order;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
     @JoinColumn(name = "product_id")
     private ProductEntity product;
 

@@ -9,7 +9,7 @@ import org.mapstruct.factory.Mappers;
  * 商品对象映射
  * @author kaaass
  */
-@Mapper
+@Mapper(componentModel = "cdi", uses = CommonTransform.class)
 public interface ProductMapper {
     ProductMapper INSTANCE = Mappers.getMapper(ProductMapper.class);
 
@@ -20,6 +20,4 @@ public interface ProductMapper {
     ProductMetadataDto productMetadataEntityToDto(ProductMetadataEntity productMetadataEntity);
 
     ProductStorageDto productStorageEntityToDto(ProductStorageEntity productStorageEntity);
-
-    CartDto cartEntityToDto(CartEntity cartEntity);
 }

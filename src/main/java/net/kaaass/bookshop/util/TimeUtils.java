@@ -9,6 +9,10 @@ public class TimeUtils {
         return new Timestamp(date.getTime());
     }
 
+    public static Date timestampToDate(Timestamp timestamp) {
+        return new Date(timestamp.getTime());
+    }
+
     public static Timestamp nowTimestamp() {
         return dateToTimestamp(new Date());
     }
@@ -19,6 +23,6 @@ public class TimeUtils {
 
     public static Date dayStart(Date date) {
         long cur = date.getTime();
-        return new Date(cur - (cur % (24 * 60 * 60L)));
+        return new Date(cur - (cur % (24 * 60 * 60 * 1000L)) + Constants.TIME_OFFSET * 60 * 60 * 1000L);
     }
 }

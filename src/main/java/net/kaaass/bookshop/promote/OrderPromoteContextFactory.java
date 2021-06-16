@@ -2,14 +2,12 @@ package net.kaaass.bookshop.promote;
 
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import lombok.var;
 import net.kaaass.bookshop.controller.request.OrderCreateMultiRequest;
 import net.kaaass.bookshop.controller.request.OrderCreateSingleRequest;
 import net.kaaass.bookshop.dto.ProductDto;
 import net.kaaass.bookshop.exception.NotFoundException;
 import net.kaaass.bookshop.mapper.ProductMapper;
 import net.kaaass.bookshop.mapper.PromoteMapper;
-import net.kaaass.bookshop.service.CartService;
 import net.kaaass.bookshop.service.OrderRequestContext;
 import net.kaaass.bookshop.service.ProductService;
 import net.kaaass.bookshop.service.UserService;
@@ -27,10 +25,13 @@ public class OrderPromoteContextFactory {
     private UserService userService;
 
     @EJB
-    private CartService cartService;
-
-    @EJB
     private ProductService productService;
+
+    @Inject
+    private PromoteMapper promoteMapper;
+
+    @Inject
+    private ProductMapper productMapper;
 
     /**
      * 从请求中建立订单打折上下文
@@ -41,16 +42,15 @@ public class OrderPromoteContextFactory {
         val products = new ArrayList<PromoteItem>();
         // 商品
         if (request instanceof OrderCreateMultiRequest) {
-            for (val cartItem : ((OrderCreateMultiRequest) request).getCartItems()) {
-                val entity = cartService.getEntityById(cartItem.getId());
-                val item = PromoteMapper.INSTANCE.cartEntityToPromoteItem(entity);
+            for (val cartItem : ((OrderCreateMultiRequest) request).getCachedCartItems()) {
+                val item = promoteMapper.cartDtoToPromoteItem(cartItem);
                 item.setPrice(item.getProduct().getPrice());
                 products.add(item);
             }
         } else if (request instanceof OrderCreateSingleRequest) {
             val entity = productService.getEntityById(((OrderCreateSingleRequest) request).getProductId());
             val item = new PromoteItem();
-            item.setProduct(ProductMapper.INSTANCE.productEntityToDto(entity));
+            item.setProduct(productMapper.productEntityToDto(entity));
             item.setCount(1);
             item.setPrice(item.getProduct().getPrice());
             products.add(item);

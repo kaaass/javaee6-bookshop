@@ -17,7 +17,7 @@ import org.mapstruct.factory.Mappers;
  * 用户对象映射
  * @author kaaass
  */
-@Mapper
+@Mapper(componentModel = "cdi", uses = CommonTransform.class)
 public interface UserMapper {
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 

@@ -1,73 +1,62 @@
 package net.kaaass.bookshop.service.impl;
 
+import java8.util.Optional;
 import java8.util.function.Function;
 import java8.util.function.Supplier;
 import java8.util.stream.Collectors;
 import java8.util.stream.StreamSupport;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import lombok.var;
 import net.kaaass.bookshop.controller.request.CartAddRequest;
 import net.kaaass.bookshop.dao.Pageable;
-import net.kaaass.bookshop.dao.entity.CartEntity;
-import net.kaaass.bookshop.dao.repository.CartRepository;
+import net.kaaass.bookshop.dao.entity.ProductEntity;
 import net.kaaass.bookshop.dto.CartDto;
 import net.kaaass.bookshop.exception.BadRequestException;
 import net.kaaass.bookshop.exception.BaseException;
-import net.kaaass.bookshop.exception.ForbiddenException;
 import net.kaaass.bookshop.exception.NotFoundException;
 import net.kaaass.bookshop.mapper.ProductMapper;
 import net.kaaass.bookshop.service.CartService;
 import net.kaaass.bookshop.service.ProductService;
+import net.kaaass.bookshop.util.StringUtils;
 
 import javax.ejb.Stateful;
+import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import java.io.Serializable;
-import java.util.List;
+import java.util.*;
 
 /**
- * TODO 购物车服务
+ * 购物车服务
+ *
  * @author kaaass
  */
+@SessionScoped
 @Stateful
 @Slf4j
 public class CartServiceImpl implements CartService, Serializable {
 
     @Inject
-    private CartRepository cartRepository;
-
-    @Inject
     private ProductService productService;
 
     @Override
-    public CartEntity getEntityById(String id) throws NotFoundException {
-        return cartRepository.findById(id)
+    public CartDto getById(String id) throws NotFoundException {
+        return findById(id)
                 .orElseThrow(BaseException.supplier(NotFoundException.class, "该项目不在购物车内！"));
     }
 
     @Override
-    public CartEntity getEntityByIdAndCheck(String id, String uid) throws NotFoundException, ForbiddenException {
-        val result = this.getEntityById(id);
-        if (!result.getUid().equals(uid)) {
-            throw new ForbiddenException("该项目不在购物车内！");
-        }
-        return result;
-    }
-
-    @Override
-    public CartDto addToCart(final String uid, CartAddRequest request) throws NotFoundException, BadRequestException {
+    public CartDto addToCart(CartAddRequest request) throws NotFoundException, BadRequestException {
         val product = productService.getEntityById(request.getProductId());
-        val entity = cartRepository.findByProductAndUid(product, uid)
-                        .orElseGet(new Supplier<CartEntity>() {
-                            @Override
-                            public CartEntity get() {
-                                val newEntity = new CartEntity();
-                                newEntity.setUid(uid);
-                                newEntity.setProduct(product);
-                                newEntity.setCount(0);
-                                return newEntity;
-                            }
-                        });
+        val entity = findByProduct(product)
+                .orElseGet(new Supplier<CartDto>() {
+                    @Override
+                    public CartDto get() {
+                        val newEntity = new CartDto();
+                        newEntity.setProduct(ProductMapper.INSTANCE.productEntityToDto(product));
+                        newEntity.setCount(0);
+                        return newEntity;
+                    }
+                });
         // 检查购买限制
         val limit = product.getBuyLimit();
         val dest = entity.getCount() + request.getCount();
@@ -76,18 +65,18 @@ public class CartServiceImpl implements CartService, Serializable {
         } else {
             entity.setCount(dest);
         }
-        return ProductMapper.INSTANCE.cartEntityToDto(cartRepository.save(entity));
+        return save(entity);
     }
 
     @Override
-    public void removeFromCart(String uid, String id) throws NotFoundException, ForbiddenException {
-        val entity = this.getEntityByIdAndCheck(id, uid);
-        cartRepository.delete(entity);
+    public void removeFromCart(String id) throws NotFoundException {
+        val entity = this.getById(id);
+        delete(entity);
     }
 
     @Override
-    public CartDto modifyItemCount(String uid, String id, int count) throws NotFoundException, ForbiddenException, BadRequestException {
-        val entity = this.getEntityByIdAndCheck(id, uid);
+    public CartDto modifyItemCount(String id, int count) throws NotFoundException, BadRequestException {
+        val entity = this.getById(id);
         val product = entity.getProduct();
         // 检查购买限制
         val limit = product.getBuyLimit();
@@ -96,18 +85,55 @@ public class CartServiceImpl implements CartService, Serializable {
         } else {
             entity.setCount(count);
         }
-        return ProductMapper.INSTANCE.cartEntityToDto(cartRepository.save(entity));
+        return save(entity);
     }
 
     @Override
-    public List<CartDto> getAllByUid(String uid, Pageable pageable) {
-        return StreamSupport.stream(cartRepository.findAllByUidOrderByCreateTimeDesc(uid, pageable))
-                .map(new Function<CartEntity, CartDto>() {
-                    @Override
-                    public CartDto apply(CartEntity entity) {
-                        return ProductMapper.INSTANCE.cartEntityToDto(entity);
-                    }
-                })
-                .collect(Collectors.<CartDto>toList());
+    public List<CartDto> getAllPerUser(Pageable pageable) {
+        return new ArrayList<>(findAll());
+    }
+
+    @Override
+    public void deleteById(String id) {
+        this.cartEntities.remove(id);
+    }
+
+    /*
+        购物车数据相关
+     */
+
+    private final Map<String, CartDto> cartEntities = new HashMap<>();
+
+    private Optional<CartDto> findById(String id) {
+        return Optional.ofNullable(this.cartEntities.get(id));
+    }
+
+    private Optional<CartDto> findByProduct(ProductEntity product) {
+        if (product == null) {
+            return Optional.empty();
+        }
+        val pid = product.getId();
+        for (val entity : findAll()) {
+            if (pid.equals(entity.getProduct().getId())) {
+                return Optional.of(entity);
+            }
+        }
+        return Optional.empty();
+    }
+
+    private CartDto save(CartDto entity) {
+        if (entity.getId() == null) {
+            entity.setId(StringUtils.uuid());
+        }
+        this.cartEntities.put(entity.getId(), entity);
+        return entity;
+    }
+
+    private void delete(CartDto entity) {
+        this.cartEntities.remove(entity.getId());
+    }
+
+    private Collection<CartDto> findAll() {
+        return this.cartEntities.values();
     }
 }

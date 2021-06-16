@@ -5,7 +5,6 @@
              version="2.2">
     <persistence-unit name="Bookshop" transaction-type="JTA">
         <jta-data-source>java:jboss/datasources/sampleDS</jta-data-source>
-        <class>net.kaaass.bookshop.dao.entity.CartEntity</class>
         <class>net.kaaass.bookshop.dao.entity.CategoryEntity</class>
         <class>net.kaaass.bookshop.dao.entity.CommentEntity</class>
         <class>net.kaaass.bookshop.dao.entity.MediaEntity</class>

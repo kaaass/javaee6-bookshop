@@ -45,6 +45,9 @@ public class ResourceController extends BaseController {
     @Inject
     private SecurityIdentity identity;
 
+    @Inject
+    private CommenMapper commenMapper;
+
     @GET
     @Path("/")
     @Secured(SecurityRole.ADMIN)
@@ -53,7 +56,7 @@ public class ResourceController extends BaseController {
                 .map(new Function<MediaEntity, MediaDto>() {
                     @Override
                     public MediaDto apply(MediaEntity mediaEntity) {
-                        return CommenMapper.INSTANCE.mediaEntityToDto(mediaEntity);
+                        return commenMapper.mediaEntityToDto(mediaEntity);
                     }
                 })
                 .collect(Collectors.<MediaDto>toList());
@@ -68,7 +71,7 @@ public class ResourceController extends BaseController {
         entity.setUrl(request.getUrl());
         entity.setUploaderUid(getUid(identity));
         var result = mediaRepository.save(entity);
-        return CommenMapper.INSTANCE.mediaEntityToDto(result);
+        return commenMapper.mediaEntityToDto(result);
     }
 
     @DELETE
@@ -107,6 +110,6 @@ public class ResourceController extends BaseController {
         entity.setUploaderUid(getUid(identity));
 
         var result = mediaRepository.save(entity);
-        return CommenMapper.INSTANCE.mediaEntityToDto(result);
+        return commenMapper.mediaEntityToDto(result);
     }
 }

@@ -39,14 +39,14 @@ public class UserCartController extends BaseController {
     @Secured(SecurityRole.USER)
     public CartDto addToCart(CartAddRequest request) throws NotFoundException, BadRequestException {
         validateBean(validator, request);
-        return cartService.addToCart(getUid(identity), request);
+        return cartService.addToCart(request);
     }
 
     @DELETE
     @Path("/{id}/")
     @Secured(SecurityRole.USER)
     public boolean removeFromCart(@PathParam("id") String id) throws NotFoundException, ForbiddenException {
-        cartService.removeFromCart(getUid(identity), id);
+        cartService.removeFromCart(id);
         return true;
     }
 
@@ -58,13 +58,13 @@ public class UserCartController extends BaseController {
         if (count < 1) {
             throw new BadRequestException("数量必须大于等于1！");
         }
-        return cartService.modifyItemCount(getUid(identity), id, count);
+        return cartService.modifyItemCount(id, count);
     }
 
     @GET
     @Path("/")
     @Secured(SecurityRole.USER)
-    public List<CartDto> getAllByUid() {
-        return cartService.getAllByUid(getUid(identity), pageInfo.getPageable());
+    public List<CartDto> getAllPerUser() {
+        return cartService.getAllPerUser(pageInfo.getPageable());
     }
 }

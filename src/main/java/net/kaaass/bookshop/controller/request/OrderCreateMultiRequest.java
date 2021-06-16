@@ -1,7 +1,9 @@
 package net.kaaass.bookshop.controller.request;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import net.kaaass.bookshop.constraints.Uuid;
+import net.kaaass.bookshop.dto.CartDto;
 
 import java.util.List;
 
@@ -9,6 +11,7 @@ import java.util.List;
  * 创建多商品订单请求
  * @author kaaass
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class OrderCreateMultiRequest extends OrderCreateRequest {
 
@@ -22,4 +25,6 @@ public class OrderCreateMultiRequest extends OrderCreateRequest {
     }
 
     private List<CartItem> cartItems;
+
+    private List<CartDto> cachedCartItems = null;
 }

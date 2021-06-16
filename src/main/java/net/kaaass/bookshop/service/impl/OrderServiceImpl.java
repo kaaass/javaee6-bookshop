@@ -16,10 +16,10 @@ import net.kaaass.bookshop.dao.Pageable;
 import net.kaaass.bookshop.dao.entity.CommentEntity;
 import net.kaaass.bookshop.dao.entity.OrderEntity;
 import net.kaaass.bookshop.dao.entity.OrderItemEntity;
-import net.kaaass.bookshop.dao.repository.CartRepository;
 import net.kaaass.bookshop.dao.repository.CommentRepository;
 import net.kaaass.bookshop.dao.repository.OrderRepository;
 import net.kaaass.bookshop.dao.repository.ProductRepository;
+import net.kaaass.bookshop.dto.CartDto;
 import net.kaaass.bookshop.dto.OrderDto;
 import net.kaaass.bookshop.dto.OrderItemDto;
 import net.kaaass.bookshop.dto.OrderType;
@@ -31,23 +31,20 @@ import net.kaaass.bookshop.exception.*;
 import net.kaaass.bookshop.mapper.OrderMapper;
 import net.kaaass.bookshop.promote.OrderPromoteContextFactory;
 import net.kaaass.bookshop.promote.PromoteManager;
-import net.kaaass.bookshop.service.OrderRequestContext;
-import net.kaaass.bookshop.service.OrderService;
-import net.kaaass.bookshop.service.ProductService;
-import net.kaaass.bookshop.service.UserService;
+import net.kaaass.bookshop.service.*;
 import net.kaaass.bookshop.service.mq.OrderMessageProducer;
 import net.kaaass.bookshop.util.Constants;
 import net.kaaass.bookshop.util.FileUtils;
 import net.kaaass.bookshop.util.StringUtils;
 import net.kaaass.bookshop.util.TimeUtils;
 import net.kaaass.bookshop.vo.UserOrderCountVo;
-import org.codehaus.jackson.JsonProcessingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.io.*;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -74,7 +71,7 @@ public class OrderServiceImpl implements OrderService, Serializable {
     private ProductRepository productRepository;
 
     @Inject
-    private CartRepository cartRepository;
+    private CartService cartService;
 
     @Inject
     private OrderMessageProducer orderMessageProducer;
@@ -84,6 +81,9 @@ public class OrderServiceImpl implements OrderService, Serializable {
 
     @Inject
     private ProductService productService;
+
+    @Inject
+    private OrderMapper orderMapper;
 
     @Override
     public OrderEntity getEntityById(String id) throws NotFoundException {
@@ -116,12 +116,12 @@ public class OrderServiceImpl implements OrderService, Serializable {
 
     @Override
     public OrderDto getById(String id) throws NotFoundException {
-        return OrderMapper.INSTANCE.orderEntityToDto(this.getEntityById(id));
+        return orderMapper.orderEntityToDto(this.getEntityById(id));
     }
 
     @Override
     public OrderDto getByIdAndCheck(String id, String uid) throws NotFoundException, ForbiddenException {
-        return OrderMapper.INSTANCE.orderEntityToDto(this.getEntityByIdAndCheck(id, uid));
+        return orderMapper.orderEntityToDto(this.getEntityByIdAndCheck(id, uid));
     }
 
     @Override
@@ -130,7 +130,7 @@ public class OrderServiceImpl implements OrderService, Serializable {
                 .map(new Function<OrderEntity, OrderDto>() {
                     @Override
                     public OrderDto apply(OrderEntity orderEntity) {
-                        return OrderMapper.INSTANCE.orderEntityToDto(orderEntity);
+                        return orderMapper.orderEntityToDto(orderEntity);
                     }
                 })
                 .collect(Collectors.<OrderDto>toList());
@@ -142,7 +142,7 @@ public class OrderServiceImpl implements OrderService, Serializable {
                 .map(new Function<OrderEntity, OrderDto>() {
                     @Override
                     public OrderDto apply(OrderEntity orderEntity) {
-                        return OrderMapper.INSTANCE.orderEntityToDto(orderEntity);
+                        return orderMapper.orderEntityToDto(orderEntity);
                     }
                 })
                 .collect(Collectors.<OrderDto>toList());
@@ -166,7 +166,7 @@ public class OrderServiceImpl implements OrderService, Serializable {
                 .map(new Function<OrderEntity, OrderDto>() {
                     @Override
                     public OrderDto apply(OrderEntity orderEntity) {
-                        return OrderMapper.INSTANCE.orderEntityToDto(orderEntity);
+                        return orderMapper.orderEntityToDto(orderEntity);
                     }
                 })
                 .collect(Collectors.<OrderDto>toList());
@@ -178,7 +178,7 @@ public class OrderServiceImpl implements OrderService, Serializable {
                 .map(new Function<OrderEntity, OrderDto>() {
                     @Override
                     public OrderDto apply(OrderEntity orderEntity) {
-                        return OrderMapper.INSTANCE.orderEntityToDto(orderEntity);
+                        return orderMapper.orderEntityToDto(orderEntity);
                     }
                 })
                 .collect(Collectors.<OrderDto>toList());
@@ -191,7 +191,7 @@ public class OrderServiceImpl implements OrderService, Serializable {
                 .map(new Function<OrderEntity, OrderDto>() {
                     @Override
                     public OrderDto apply(OrderEntity orderEntity) {
-                        return OrderMapper.INSTANCE.orderEntityToDto(orderEntity);
+                        return orderMapper.orderEntityToDto(orderEntity);
                     }
                 })
                 .collect(Collectors.<OrderDto>toList());
@@ -200,6 +200,19 @@ public class OrderServiceImpl implements OrderService, Serializable {
     @Override
     public OrderRequestResponse createToQueue(String uid, OrderCreateRequest request) throws InternalErrorExeption, NotFoundException {
         val requestId = StringUtils.uuid();
+        // 购物车处理
+        if (request instanceof OrderCreateMultiRequest) {
+            val multi = (OrderCreateMultiRequest) request;
+            multi.setCachedCartItems(new ArrayList<CartDto>());
+            for (val cartItem : multi.getCartItems()) {
+                val cid = cartItem.getId();
+                // 实体缓存获取
+                multi.getCachedCartItems().add(cartService.getById(cid));
+                // 删除购物车中已有的商品
+                cartService.deleteById(cid);
+            }
+        }
+        // 订单处理
         var context = new OrderRequestContext();
         context.setRequest(request);
         context.setUid(uid);
@@ -211,7 +224,7 @@ public class OrderServiceImpl implements OrderService, Serializable {
         EventManager.EVENT_BUS.post(event);
         context = event.getContext();
         // 准备上下文
-        String message = null;
+        String message;
         try {
             message = this.objectMapper.writeValueAsString(context);
         } catch (IOException e) {
@@ -219,13 +232,14 @@ public class OrderServiceImpl implements OrderService, Serializable {
             throw new InternalErrorExeption(null, e);
         }
         log.info("序列化后的订单请求：{}", message);
+        // 发送消息
         this.orderMessageProducer.sendMessage(requestId, message);
         return result;
     }
 
     @Override
     public void doCreate(OrderRequestContext context) throws NotFoundException {
-        final val entity = new OrderEntity();
+        val entity = new OrderEntity();
         entity.setId(StringUtils.orderId(getLastOrderId()));
         entity.setUid(context.getUid());
         entity.setRequestId(context.getRequestId());
@@ -275,7 +289,7 @@ public class OrderServiceImpl implements OrderService, Serializable {
                     .map(new Function<OrderItemDto, OrderItemEntity>() {
                         @Override
                         public OrderItemEntity apply(OrderItemDto orderItemDto) {
-                            return OrderMapper.INSTANCE.orderItemDtoToEntity(orderItemDto);
+                            return orderMapper.orderItemDtoToEntity(orderItemDto);
                         }
                     })
                     .peek(new Consumer<OrderItemEntity>() {
@@ -305,18 +319,13 @@ public class OrderServiceImpl implements OrderService, Serializable {
             for (val orderItemEntity : entity.getProducts()) {
                 productRepository.save(orderItemEntity.getProduct());
             }
-        } catch (BadRequestException e) {
+        } catch (BaseException e) {
             entity.setType(OrderType.ERROR);
             entity.setReason(e.getMessage());
         }
         orderRepository.save(entity);
-        /*
-          删除购物车中已有的商品
-        */
-        if (request instanceof OrderCreateMultiRequest) {
-            for (val cartItem : ((OrderCreateMultiRequest) request).getCartItems()) {
-                cartRepository.deleteById(cartItem.getId());
-            }
+        if (OrderType.ERROR.equals(entity.getType())) {
+            return;
         }
         /*
           写订单文件
@@ -337,7 +346,7 @@ public class OrderServiceImpl implements OrderService, Serializable {
           写订单文件
          */
         printOrderFile(entity);
-        return OrderMapper.INSTANCE.orderEntityToDto(orderRepository.save(entity));
+        return orderMapper.orderEntityToDto(orderRepository.save(entity));
     }
 
     @Override
@@ -353,7 +362,7 @@ public class OrderServiceImpl implements OrderService, Serializable {
           写订单文件
          */
         printOrderFile(entity);
-        return OrderMapper.INSTANCE.orderEntityToDto(orderRepository.save(entity));
+        return orderMapper.orderEntityToDto(orderRepository.save(entity));
     }
 
     @Override
@@ -368,7 +377,7 @@ public class OrderServiceImpl implements OrderService, Serializable {
           写订单文件
          */
         printOrderFile(entity);
-        return OrderMapper.INSTANCE.orderEntityToDto(orderRepository.save(entity));
+        return orderMapper.orderEntityToDto(orderRepository.save(entity));
     }
 
     @Override
@@ -383,7 +392,7 @@ public class OrderServiceImpl implements OrderService, Serializable {
           写订单文件
          */
         printOrderFile(entity);
-        return OrderMapper.INSTANCE.orderEntityToDto(orderRepository.save(entity));
+        return orderMapper.orderEntityToDto(orderRepository.save(entity));
     }
 
     @Override
@@ -410,7 +419,7 @@ public class OrderServiceImpl implements OrderService, Serializable {
           写订单文件
          */
         printOrderFile(entity);
-        return OrderMapper.INSTANCE.orderEntityToDto(orderRepository.save(entity));
+        return orderMapper.orderEntityToDto(orderRepository.save(entity));
     }
 
     private String getLastOrderId() {
@@ -428,7 +437,7 @@ public class OrderServiceImpl implements OrderService, Serializable {
     }
 
     private void printOrderFile(OrderEntity entity) {
-        val dto = OrderMapper.INSTANCE.orderEntityToDto(entity);
+        val dto = orderMapper.orderEntityToDto(entity);
         String filename = String.format("%s.txt", entity.getId());
         File file = new File(Constants.ORDER_FOLDER, filename);
         if (file.exists()) {
