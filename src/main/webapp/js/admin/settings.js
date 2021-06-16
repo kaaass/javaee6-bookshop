@@ -19,14 +19,14 @@ require([
 
     let loadParam = (resource) => {
         $('#url').val(resource ? resource.url : "");
-        $('#type').val(resource ? resource.type : "");
+        $('#type').val(resource ? resource.type : "image");
     };
 
     let getParam = () => {
         // TODO 检查是否为空
         return {
-            name: $('#url').val(),
-            parentId: $('#type').val(),
+            url: $('#url').val(),
+            type: $('#type').val(),
         };
     };
 

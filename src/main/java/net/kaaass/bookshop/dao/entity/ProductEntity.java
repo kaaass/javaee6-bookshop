@@ -37,7 +37,7 @@ public class ProductEntity implements IEntity<String> {
             columnDefinition = "INT DEFAULT -1")
     private int buyLimit = -1;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "category_id")
     private CategoryEntity category;
 

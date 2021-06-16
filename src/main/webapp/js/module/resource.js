@@ -28,11 +28,7 @@ define(['module/functions', 'module/auth'], function (functions, auth) {
      * 增加资源
      */
     let addResource = async (param) => {
-        let response = await adminRequest.post('/resource/', param, {
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
-        }).catch((e) => {
+        let response = await adminRequest.post('/resource/', param).catch((e) => {
             console.error("增加资源失败：", param, e);
             functions.modal("错误", "增加资源失败！请检查网络连接。");
         });

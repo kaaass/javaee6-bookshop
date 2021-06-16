@@ -11,6 +11,7 @@ import java8.util.stream.StreamSupport;
 import lombok.val;
 import lombok.var;
 import net.kaaass.bookshop.controller.page.PageInfo;
+import net.kaaass.bookshop.controller.request.AddUrlResourceRequest;
 import net.kaaass.bookshop.dao.entity.MediaEntity;
 import net.kaaass.bookshop.dao.repository.MediaRepository;
 import net.kaaass.bookshop.dto.MediaDto;
@@ -61,11 +62,10 @@ public class ResourceController extends BaseController {
     @POST
     @Path("/")
     @Secured(SecurityRole.ADMIN)
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public MediaDto addNetworkResource(@FormParam("url") String url, @FormParam("type") String type) {
+    public MediaDto addNetworkResource(AddUrlResourceRequest request) {
         var entity = new MediaEntity();
-        entity.setType(type);
-        entity.setUrl(url);
+        entity.setType(request.getType());
+        entity.setUrl(request.getUrl());
         entity.setUploaderUid(getUid(identity));
         var result = mediaRepository.save(entity);
         return CommenMapper.INSTANCE.mediaEntityToDto(result);
