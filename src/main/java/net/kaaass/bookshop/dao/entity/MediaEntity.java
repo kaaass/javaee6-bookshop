@@ -9,6 +9,8 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -27,6 +29,9 @@ public class MediaEntity implements IEntity<String> {
 
     @Column(name = "uploader_uid")
     private String uploaderUid;
+
+    @OneToMany(mappedBy = "thumbnail", cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
+    private List<ProductEntity> products = new ArrayList<>();
 
     @Column(name = "upload_time",
             columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")

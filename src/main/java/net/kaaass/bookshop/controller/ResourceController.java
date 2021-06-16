@@ -71,6 +71,14 @@ public class ResourceController extends BaseController {
         return CommenMapper.INSTANCE.mediaEntityToDto(result);
     }
 
+    @DELETE
+    @Path("/{id}/")
+    @Secured(SecurityRole.ADMIN)
+    public boolean getAllResource(@PathParam("id") String id) {
+        mediaRepository.deleteById(id);
+        return true;
+    }
+
     @PUT
     @Path("/image/")
     @Secured(SecurityRole.LOGGED)
