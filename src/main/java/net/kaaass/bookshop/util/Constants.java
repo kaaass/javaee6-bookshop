@@ -37,4 +37,6 @@ public class Constants {
     public static final String UPLOAD_URL_PREFIX = "/web/upload/";
 
     public static final String UPLOAD_FOLDER = "/upload";
+
+    public static final String ORDER_FOLDER = "/orders";
 }

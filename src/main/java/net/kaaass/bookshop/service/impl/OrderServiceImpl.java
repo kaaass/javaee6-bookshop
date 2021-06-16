@@ -36,6 +36,7 @@ import net.kaaass.bookshop.service.OrderService;
 import net.kaaass.bookshop.service.UserService;
 import net.kaaass.bookshop.service.mq.OrderMessageProducer;
 import net.kaaass.bookshop.util.Constants;
+import net.kaaass.bookshop.util.FileUtils;
 import net.kaaass.bookshop.util.StringUtils;
 import net.kaaass.bookshop.util.TimeUtils;
 import net.kaaass.bookshop.vo.UserOrderCountVo;
@@ -44,8 +45,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import java.io.IOException;
-import java.io.Serializable;
+import java.io.*;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
@@ -300,6 +300,10 @@ public class OrderServiceImpl implements OrderService, Serializable {
                 cartRepository.deleteById(cartItem.getId());
             }
         }
+        /*
+          写订单文件
+         */
+        printOrderFile(entity);
     }
 
     @Override
@@ -311,6 +315,10 @@ public class OrderServiceImpl implements OrderService, Serializable {
         }
         entity.setType(OrderType.PAID);
         entity.setPayTime(TimeUtils.nowTimestamp());
+        /*
+          写订单文件
+         */
+        printOrderFile(entity);
         return OrderMapper.INSTANCE.orderEntityToDto(orderRepository.save(entity));
     }
 
@@ -323,6 +331,10 @@ public class OrderServiceImpl implements OrderService, Serializable {
         entity.setType(OrderType.DELIVERED);
         entity.setDeliverCode(deliverCode);
         entity.setDeliverTime(TimeUtils.nowTimestamp());
+        /*
+          写订单文件
+         */
+        printOrderFile(entity);
         return OrderMapper.INSTANCE.orderEntityToDto(orderRepository.save(entity));
     }
 
@@ -334,6 +346,10 @@ public class OrderServiceImpl implements OrderService, Serializable {
         }
         entity.setType(OrderType.CANCELED);
         entity.setFinishTime(TimeUtils.nowTimestamp());
+        /*
+          写订单文件
+         */
+        printOrderFile(entity);
         return OrderMapper.INSTANCE.orderEntityToDto(orderRepository.save(entity));
     }
 
@@ -345,6 +361,10 @@ public class OrderServiceImpl implements OrderService, Serializable {
         }
         entity.setType(OrderType.REFUNDED);
         entity.setRefundTime(TimeUtils.nowTimestamp());
+        /*
+          写订单文件
+         */
+        printOrderFile(entity);
         return OrderMapper.INSTANCE.orderEntityToDto(orderRepository.save(entity));
     }
 
@@ -368,6 +388,10 @@ public class OrderServiceImpl implements OrderService, Serializable {
             commentRepository.save(commentEntity);
         }
 
+        /*
+          写订单文件
+         */
+        printOrderFile(entity);
         return OrderMapper.INSTANCE.orderEntityToDto(orderRepository.save(entity));
     }
 
@@ -383,5 +407,48 @@ public class OrderServiceImpl implements OrderService, Serializable {
                 return orderEntity.getId();
             }
         }).orElse(Constants.INIT_ORDER_ID);
+    }
+
+    private void printOrderFile(OrderEntity entity) {
+        val dto = OrderMapper.INSTANCE.orderEntityToDto(entity);
+        String filename = String.format("%s.txt", entity.getId());
+        File file = new File(Constants.ORDER_FOLDER, filename);
+        if (file.exists()) {
+            file.delete();
+        }
+        // 订单文件内容
+        val addr = dto.getAddress();
+        StringBuilder sb = new StringBuilder();
+        sb.append("订单号：").append(dto.getId()).append('\n');
+        sb.append("订单状态：").append(dto.getType()).append('\n');
+        sb.append("运单号：").append(dto.getDeliverCode()).append('\n');
+        sb.append("创建时间：").append(formatDate(dto.getCreateTime())).append('\n');
+        sb.append("付款时间：").append(formatDate(dto.getPayTime())).append('\n');
+        sb.append("发货时间：").append(formatDate(dto.getDeliverTime())).append('\n');
+        sb.append("评价时间：").append(formatDate(dto.getFinishTime())).append('\n');
+        sb.append("退款时间：").append(formatDate(dto.getRefundTime())).append('\n');
+        sb.append("收货地址：\n")
+                .append("  ").append(addr.getName()).append(" ").append(addr.getPhone()).append('\n')
+                .append("  ").append(addr.getArea()).append('\n')
+                .append("  ").append(addr.getDetailAddress()).append('\n');
+        sb.append("订单信息：\n");
+        sb.append("书名\t\t\t\t\t\t单价\t\t数量\t\t总价\n");
+        for (val item : dto.getProducts()) {
+            sb.append(String.format("%s\t\t\t\t\t\t%s\t\t%s\t\t%s\n",
+                    item.getProduct().getName(),
+                    item.getProduct().getPrice(),
+                    item.getCount(),
+                    item.getPrice()));
+        }
+        // 输出
+        log.info("输出订单 {} 详细信息至 {}", dto.getId(), file.getAbsolutePath());
+        FileUtils.saveToFile(new ByteArrayInputStream(sb.toString().getBytes()), file);
+    }
+
+    private static String formatDate(Date date) {
+        if (date == null) {
+            return "暂无";
+        }
+        return date.toLocaleString();
     }
 }

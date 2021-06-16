@@ -86,12 +86,15 @@ define([
          * @param time
          */
         let jumpTo = (dest, time = 2000) => {
+            if (dest[0] === '/') {
+                dest = constants.BASE_URL + dest;
+            }
             if (time <= 0) {
-                location.href = constants.BASE_URL + '/' + dest;
+                location.href = dest;
                 return;
             }
             setTimeout(() => {
-                location.href = constants.BASE_URL + '/' + dest;
+                location.href = dest;
             }, time);
         };
 
