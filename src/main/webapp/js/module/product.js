@@ -285,6 +285,56 @@ define(['jquery', 'module/functions', 'module/auth'], function ($, functions, au
         return true;
     };
 
+    /**
+     * 获得商品元数据
+     * @param productId
+     * @returns {Promise<null|*>}
+     */
+    let getAllMetadata = async (productId) => {
+        let response = await adminRequest.get(`/product/${productId}/metadata/`)
+            .catch((e) => {
+                console.error("获得元数据失败：", productId, e);
+                functions.modal("错误", "获得元数据失败！请检查网络连接。");
+            });
+        let data = response.data;
+        if (data.status !== 200) {
+            console.error("获取元数据错误：", productId, data);
+            functions.modal("错误", data.message);
+            return null;
+        }
+        return data.data;
+    };
+
+    let setMetadata = async (productId, param) => {
+        let response = await adminRequest.post(`/product/${productId}/metadata/`, param)
+            .catch((e) => {
+                console.error("设置元数据失败：", productId, e);
+                functions.modal("错误", "设置元数据失败！请检查网络连接。");
+            });
+        let data = response.data;
+        if (data.status !== 200) {
+            console.error("设置元数据错误：", productId, data);
+            functions.modal("错误", data.message);
+            return null;
+        }
+        return data.data;
+    };
+
+    let removeMetadata = async (productId, key) => {
+        let response = await adminRequest.delete(`/product/${productId}/metadata/${key}/`)
+            .catch((e) => {
+                console.error("删除元数据失败：", productId, key, e);
+                functions.modal("错误", "删除元数据失败！请检查网络连接。");
+            });
+        let data = response.data;
+        if (data.status !== 200) {
+            console.error("删除元数据错误：", productId, key, data);
+            functions.modal("错误", data.message);
+            return null;
+        }
+        return true;
+    };
+
     return {
         categories: categories,
         productCache: productCache,
@@ -303,5 +353,9 @@ define(['jquery', 'module/functions', 'module/auth'], function ($, functions, au
         getCategories: getCategories,
         addCategory: addCategory,
         removeCategory: removeCategory,
+
+        getAllMetadata,
+        setMetadata,
+        removeMetadata
     };
 });

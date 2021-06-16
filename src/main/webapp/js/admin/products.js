@@ -96,10 +96,13 @@ require([
             let id = $(this).attr('product-id');
             functions.jumpTo(`orders-product.html?id=${id}`);
         });
+        // 元数据
+        $('.btn-meta').click(function () {
+            let id = $(this).attr('product-id');
+            functions.jumpTo(`products-metadata.html?id=${id}`);
+        });
     };
     render();
-
-    // TODO 增加元数据相关
 
     // 事件绑定
     $('#btn-create').click(() => {

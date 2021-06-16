@@ -1,5 +1,6 @@
 package net.kaaass.bookshop.service.metadata;
 
+import java8.util.function.Consumer;
 import java8.util.function.Function;
 import java8.util.function.Supplier;
 import java8.util.stream.Collectors;
@@ -119,5 +120,15 @@ public class MetadataManager {
         metadata.setValue(value);
         metadata.setLastUpdateTime(TimeUtils.nowTimestamp());
         productMetadataRepository.save(metadata);
+    }
+
+    public void deleteForProduct(String productId, String key) {
+        productMetadataRepository.findByProductIdAndKey(productId, key)
+                .ifPresent(new Consumer<ProductMetadataEntity>() {
+                    @Override
+                    public void accept(ProductMetadataEntity entity) {
+                        productMetadataRepository.delete(entity);
+                    }
+                });
     }
 }

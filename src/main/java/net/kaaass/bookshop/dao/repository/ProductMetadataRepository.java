@@ -19,6 +19,6 @@ public class ProductMetadataRepository extends BaseRepository<ProductMetadataEnt
 
     public List<ProductMetadataEntity> findAllByProductId(String productId) {
         String sql = "SELECT u FROM ProductMetadataEntity u where u.productId = ?1";
-        return findAllBySql(sql, ProductMetadataEntity.class);
+        return findAllBySql(sql, ProductMetadataEntity.class, productId);
     }
 }

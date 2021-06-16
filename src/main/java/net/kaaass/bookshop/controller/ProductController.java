@@ -1,6 +1,7 @@
 package net.kaaass.bookshop.controller;
 
 import net.kaaass.bookshop.controller.page.PageInfo;
+import net.kaaass.bookshop.controller.request.MetadataRequest;
 import net.kaaass.bookshop.controller.request.ProductAddRequest;
 import net.kaaass.bookshop.controller.response.ProductCommentResponse;
 import net.kaaass.bookshop.dao.Pageable;
@@ -12,6 +13,7 @@ import net.kaaass.bookshop.security.Secured;
 import net.kaaass.bookshop.security.SecurityIdentity;
 import net.kaaass.bookshop.security.SecurityRole;
 import net.kaaass.bookshop.service.ProductService;
+import net.kaaass.bookshop.service.metadata.MetadataManager;
 import net.kaaass.bookshop.vo.ProductExtraVo;
 
 import javax.inject.Inject;
@@ -20,6 +22,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Path("/product")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -28,6 +31,9 @@ public class ProductController extends BaseController {
 
     @Inject
     private ProductService productService;
+
+    @Inject
+    private MetadataManager metadataManager;
 
     @Inject
     private Validator validator;
@@ -146,5 +152,29 @@ public class ProductController extends BaseController {
     public ProductCommentResponse getComments(@PathParam("id") String id) {
         // TODO 评论用户头像
         return productService.getComments(id, pageInfo.getPageable());
+    }
+
+    @GET
+    @Path("/{id}/metadata/")
+    @Secured(SecurityRole.ADMIN)
+    public Map<String, String> getAllForProduct(@PathParam("id") String productId) {
+        return metadataManager.getAllForProduct(productId);
+    }
+
+    @POST
+    @Path("/{id}/metadata/")
+    @Secured(SecurityRole.ADMIN)
+    public boolean setForProduct(@PathParam("id") String productId, MetadataRequest request) throws BadRequestException {
+        validateBean(validator, request);
+        metadataManager.setForProduct(productId, request.getKey(), request.getValue());
+        return true;
+    }
+
+    @DELETE
+    @Path("/{id}/metadata/{key}/")
+    @Secured(SecurityRole.ADMIN)
+    public boolean deleteForProduct(@PathParam("id") String productId, @PathParam("key") String key) {
+        metadataManager.deleteForProduct(productId, key);
+        return true;
     }
 }
