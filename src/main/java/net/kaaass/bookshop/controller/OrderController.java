@@ -6,6 +6,7 @@ import net.kaaass.bookshop.controller.request.CommentRequest;
 import net.kaaass.bookshop.controller.request.OrderCreateRequest;
 import net.kaaass.bookshop.controller.response.OrderCheckResponse;
 import net.kaaass.bookshop.controller.response.OrderRequestResponse;
+import net.kaaass.bookshop.dao.Pageable;
 import net.kaaass.bookshop.dto.OrderDto;
 import net.kaaass.bookshop.dto.OrderType;
 import net.kaaass.bookshop.exception.*;
@@ -107,6 +108,13 @@ public class OrderController extends BaseController {
             throw new NotFoundException("订单类型错误！");
         }
         return orderService.getAllByType(type, pageInfo.getPageable());
+    }
+
+    @GET
+    @Path("/admin/product/{productId}/")
+    @Secured(SecurityRole.ADMIN)
+    public List<OrderDto> getAllByProduct(@PathParam("productId") String pid) throws NotFoundException {
+        return orderService.getAllByProduct(pid, pageInfo.getPageable());
     }
 
     /**

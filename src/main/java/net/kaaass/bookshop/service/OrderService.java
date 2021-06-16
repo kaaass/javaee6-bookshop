@@ -51,6 +51,8 @@ public interface OrderService {
 
     List<OrderDto> getAllByType(OrderType type, Pageable pageable);
 
+    List<OrderDto> getAllByProduct(String pid, Pageable pageable) throws NotFoundException;
+
     OrderRequestResponse createToQueue(String uid, OrderCreateRequest request) throws InternalErrorExeption, NotFoundException;
 
     void doCreate(OrderRequestContext context) throws NotFoundException;

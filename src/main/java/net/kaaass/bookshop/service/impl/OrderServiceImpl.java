@@ -33,6 +33,7 @@ import net.kaaass.bookshop.promote.OrderPromoteContextFactory;
 import net.kaaass.bookshop.promote.PromoteManager;
 import net.kaaass.bookshop.service.OrderRequestContext;
 import net.kaaass.bookshop.service.OrderService;
+import net.kaaass.bookshop.service.ProductService;
 import net.kaaass.bookshop.service.UserService;
 import net.kaaass.bookshop.service.mq.OrderMessageProducer;
 import net.kaaass.bookshop.util.Constants;
@@ -80,6 +81,9 @@ public class OrderServiceImpl implements OrderService, Serializable {
 
     @Inject
     private ObjectMapper objectMapper;
+
+    @Inject
+    private ProductService productService;
 
     @Override
     public OrderEntity getEntityById(String id) throws NotFoundException {
@@ -181,6 +185,19 @@ public class OrderServiceImpl implements OrderService, Serializable {
     }
 
     @Override
+    public List<OrderDto> getAllByProduct(String pid, Pageable pageable) throws NotFoundException {
+        val product = productService.getEntityById(pid);
+        return StreamSupport.stream(orderRepository.findAllByProduct(product, pageable))
+                .map(new Function<OrderEntity, OrderDto>() {
+                    @Override
+                    public OrderDto apply(OrderEntity orderEntity) {
+                        return OrderMapper.INSTANCE.orderEntityToDto(orderEntity);
+                    }
+                })
+                .collect(Collectors.<OrderDto>toList());
+    }
+
+    @Override
     public OrderRequestResponse createToQueue(String uid, OrderCreateRequest request) throws InternalErrorExeption, NotFoundException {
         val requestId = StringUtils.uuid();
         var context = new OrderRequestContext();
@@ -214,6 +231,7 @@ public class OrderServiceImpl implements OrderService, Serializable {
         entity.setRequestId(context.getRequestId());
         val request = context.getRequest();
         val address = userService.getAddressEntityByIdAndCheck(request.getAddressId(), context.getUid());
+        val user = userService.getAuthEntityById(context.getUid());
         entity.setAddress(address);
         /*
          打折逻辑
@@ -263,7 +281,7 @@ public class OrderServiceImpl implements OrderService, Serializable {
                     .peek(new Consumer<OrderItemEntity>() {
                         @Override
                         public void accept(OrderItemEntity orderItemEntity) {
-                            orderItemEntity.setUid(finalContext.getUid());
+                            orderItemEntity.setUser(user);
                         }
                     })
                     .peek(new Consumer<OrderItemEntity>() {

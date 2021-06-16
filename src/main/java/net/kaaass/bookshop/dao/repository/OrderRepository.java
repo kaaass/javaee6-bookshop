@@ -5,6 +5,7 @@ import java8.util.function.Function;
 import net.kaaass.bookshop.dao.BaseRepository;
 import net.kaaass.bookshop.dao.Pageable;
 import net.kaaass.bookshop.dao.entity.OrderEntity;
+import net.kaaass.bookshop.dao.entity.ProductEntity;
 import net.kaaass.bookshop.dto.OrderType;
 
 import java.sql.Timestamp;
@@ -60,5 +61,10 @@ public class OrderRepository extends BaseRepository<OrderEntity, String> {
     public List<OrderEntity> findAllByUidAndTypeOrderByCreateTimeDesc(String uid, OrderType type, Pageable page) {
         String sql = "SELECT u FROM OrderEntity u where u.uid = ?1 and u.type = ?2 order by u.createTime desc";
         return findAllBySql(sql, page, OrderEntity.class, uid, type);
+    }
+
+    public List<OrderEntity> findAllByProduct(ProductEntity productEntity, Pageable page) {
+        String sql = "SELECT distinct(c) FROM OrderItemEntity u JOIN u.order c where u.product = ?1 order by c.createTime desc";
+        return findAllBySql(sql, page, OrderEntity.class, productEntity);
     }
 }

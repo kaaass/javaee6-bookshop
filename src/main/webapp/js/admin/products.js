@@ -82,6 +82,11 @@ require([
                     render();
                 });
         });
+        // 关联订单
+        $('.btn-order').click(function () {
+            let id = $(this).attr('product-id');
+            functions.jumpTo(`orders-product.html?id=${id}`);
+        });
     };
     render();
 
