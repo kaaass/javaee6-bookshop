@@ -3,7 +3,7 @@
  */
 define([], function () {
 
-    const BASE_URL = "http://localhost:8080/web";
+    const BASE_URL = "/web";
     const API_BASE_URL = BASE_URL + "/api";
 
     return {

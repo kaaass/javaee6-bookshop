@@ -19,6 +19,7 @@ import net.kaaass.bookshop.dao.repository.OrderItemRepository;
 import net.kaaass.bookshop.dao.repository.ProductRepository;
 import net.kaaass.bookshop.dto.MediaDto;
 import net.kaaass.bookshop.dto.ProductDto;
+import net.kaaass.bookshop.exception.BadRequestException;
 import net.kaaass.bookshop.exception.BaseException;
 import net.kaaass.bookshop.exception.InternalErrorExeption;
 import net.kaaass.bookshop.exception.NotFoundException;
@@ -32,19 +33,20 @@ import net.kaaass.bookshop.service.metadata.MetadataManager;
 import net.kaaass.bookshop.service.metadata.ResourceManager;
 import net.kaaass.bookshop.util.Constants;
 import net.kaaass.bookshop.util.NumericUtils;
+import net.kaaass.bookshop.util.StringUtils;
 import net.kaaass.bookshop.util.TimeUtils;
 import net.kaaass.bookshop.vo.CommentVo;
 import net.kaaass.bookshop.vo.ProductExtraVo;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
+import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
+@SessionScoped
 @Stateful
 @Slf4j
 public class ProductServiceImpl implements ProductService, Serializable {
@@ -83,37 +85,26 @@ public class ProductServiceImpl implements ProductService, Serializable {
     private UserMapper userMapper;
 
     /**
+     * 待添加缓存
+     */
+    private Map<String, ProductEntity> productCache = new HashMap<>();
+
+    /**
      * 增加商品
+     * @return
      */
     @Override
-    public Optional<ProductDto> addProduct(ProductAddRequest productToAdd) {
+    public ProductDto addProduct(ProductAddRequest productToAdd) throws NotFoundException {
         val entity = new ProductEntity();
         requestToEntity(productToAdd, entity);
-        val storage = new ProductStorageEntity();
-        storage.setRest(productToAdd.getRest());
-        entity.setStorage(storage);
-        try {
-            val thumbnail = resourceManager.getEntity(productToAdd.getThumbnailId()).orElseThrow();
-            entity.setThumbnail(thumbnail);
-            val category = categoryRepository.findById(productToAdd.getCategoryId()).orElseThrow();
-            entity.setCategory(category);
-            return Optional.of(productRepository.save(entity))
-                    .map(new Function<ProductEntity, ProductDto>() {
-                        @Override
-                        public ProductDto apply(ProductEntity productEntity) {
-                            return productMapper.productEntityToDto(productEntity);
-                        }
-                    });
-        } catch (Exception e) {
-            log.info("插入时发生错误", e);
-            return Optional.empty();
-        }
+        return this.productMapper.productEntityToDto(productRepository.save(entity));
     }
 
     /**
      * 产品请求转换为添加，不包括 rest、略缩图、分类
      */
-    private void requestToEntity(ProductAddRequest productToAdd, ProductEntity entity) {
+    private void requestToEntity(ProductAddRequest productToAdd, ProductEntity entity) throws NotFoundException {
+        // 一般字段
         entity.setName(productToAdd.getName());
         entity.setPrice(productToAdd.getPrice());
         entity.setMailPrice(productToAdd.getMailPrice());
@@ -123,27 +114,32 @@ public class ProductServiceImpl implements ProductService, Serializable {
         entity.setIsbn(productToAdd.getIsbn());
         entity.setPublishDate(TimeUtils.dateToTimestamp(productToAdd.getPublishDate()));
         entity.setIndexOrder(productToAdd.getIndexOrder());
+        // 存储
+        if (entity.getStorage() == null) {
+            entity.setStorage(new ProductStorageEntity());
+        }
+        entity.getStorage().setRest(productToAdd.getRest());
+        // 图、分类
+        if (entity.getThumbnail() == null || !productToAdd.getThumbnailId().equals(entity.getThumbnail().getId())) {
+            val thumbnail = resourceManager.getEntity(productToAdd.getThumbnailId())
+                    .orElseThrow(BaseException.supplier(NotFoundException.class, "略缩图不存在！"));
+            entity.setThumbnail(thumbnail);
+        }
+        if (entity.getCategory() == null || !productToAdd.getCategoryId().equals(entity.getCategory().getId())) {
+            val category = categoryRepository.findById(productToAdd.getCategoryId())
+                    .orElseThrow(BaseException.supplier(NotFoundException.class, "分类不存在！"));
+            entity.setCategory(category);
+        }
     }
 
     @Override
     public ProductDto editProduct(String id, ProductAddRequest productToAdd) throws NotFoundException, InternalErrorExeption {
         val entity = productRepository.findById(id)
                 .orElseThrow(BaseException.supplier(NotFoundException.class, "未找到此商品！"));
-        requestToEntity(productToAdd, entity);
-        entity.getStorage().setRest(productToAdd.getRest());
         try {
-            if (!productToAdd.getThumbnailId().equals(entity.getThumbnail().getId())) {
-                val thumbnail = resourceManager.getEntity(productToAdd.getThumbnailId())
-                        .orElseThrow(BaseException.supplier(NotFoundException.class, "略缩图不存在！"));
-                entity.setThumbnail(thumbnail);
-            }
-            if (!productToAdd.getCategoryId().equals(entity.getCategory().getId())) {
-                val category = categoryRepository.findById(productToAdd.getCategoryId())
-                        .orElseThrow(BaseException.supplier(NotFoundException.class, "分类不存在！"));
-                entity.setCategory(category);
-            }
+            requestToEntity(productToAdd, entity);
             return productMapper.productEntityToDto(productRepository.save(entity));
-        } catch (BaseException e) {
+        } catch (NotFoundException e) {
             throw e;
         } catch (Exception e) {
             log.info("插入时发生错误", e);
@@ -162,6 +158,79 @@ public class ProductServiceImpl implements ProductService, Serializable {
     @Override
     public ProductDto getById(String id) throws NotFoundException {
         return productMapper.productEntityToDto(getEntityById(id));
+    }
+
+    @Override
+    public ProductDto addProductCache(ProductAddRequest request) throws NotFoundException {
+        val entity = new ProductEntity();
+        val fakeId = StringUtils.uuid();
+        entity.setId(fakeId);
+        requestToEntity(request, entity);
+        this.productCache.put(fakeId, entity);
+        return this.productMapper.productEntityToDto(entity);
+    }
+
+    @Override
+    public ProductDto editProductCache(String fakeId, ProductAddRequest request) throws NotFoundException {
+        // 检查存在
+        if (!this.productCache.containsKey(fakeId)) {
+            throw new NotFoundException("不存在此商品！");
+        }
+        // 更新
+        val entity = this.productCache.get(fakeId);
+        requestToEntity(request, entity);
+        this.productCache.put(fakeId, entity);
+        return this.productMapper.productEntityToDto(entity);
+    }
+
+    @Override
+    public void removeProductCache(String fakeId) throws NotFoundException {
+        // 检查存在
+        if (!this.productCache.containsKey(fakeId)) {
+            throw new NotFoundException("不存在此商品！");
+        }
+        // 删除
+        this.productCache.remove(fakeId);
+    }
+
+    @Override
+    public List<ProductDto> commitProductCache() throws BadRequestException {
+        // 是否为空
+        if (this.productCache.isEmpty()) {
+            throw new BadRequestException("当前缓冲区为空！");
+        }
+        // 提交
+        val ret = StreamSupport.stream(this.productCache.values())
+                .map(new Function<ProductEntity, ProductDto>() {
+                    @Override
+                    public ProductDto apply(ProductEntity entity) {
+                        // 清空伪 ID
+                        entity.setId(null);
+                        // 提交数据库
+                        entity = productRepository.save(entity);
+                        // 映射
+                        return productMapper.productEntityToDto(entity);
+                    }
+                }).collect(Collectors.<ProductDto>toList());
+        clearProductCache();
+        return ret;
+    }
+
+    @Override
+    public void clearProductCache() {
+        this.productCache.clear();
+    }
+
+    @Override
+    public List<ProductDto> getProductCache() {
+        return StreamSupport.stream(this.productCache.values())
+                .map(new Function<ProductEntity, ProductDto>() {
+                    @Override
+                    public ProductDto apply(ProductEntity productEntity) {
+                        return productMapper.productEntityToDto(productEntity);
+                    }
+                })
+                .collect(Collectors.<ProductDto>toList());
     }
 
     @Override

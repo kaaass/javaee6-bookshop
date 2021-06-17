@@ -9,9 +9,10 @@ import net.kaaass.bookshop.mapper.CommenMapper;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import java.io.Serializable;
 
 @Stateless
-public class ResourceManager {
+public class ResourceManager implements Serializable {
 
     @Inject
     private MediaRepository mediaRepository;

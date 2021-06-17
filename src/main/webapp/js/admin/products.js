@@ -11,8 +11,10 @@ require([
     'bootstrap'], function ($, functions, constants, auth, admin, product, _) {
 
     const TEMPLATE_LIST = 'product_list';
+    const TEMPLATE_CACHE_LIST = 'product_cache_list';
 
     let $list = $('.table-responsive'),
+        $cacheList = $('.table-cache'),
         $add = $('#btn-add'),
         $checkIsbn = $('#btn-check'),
         // Form
@@ -27,13 +29,13 @@ require([
 
     let loadParam = (product) => {
         $('#name').val(product ? product.name : "");
-        $('#thumbnailId').val(product ? product.thumbnail.id : "");
+        $('#thumbnailId').val(product && product.thumbnail ? product.thumbnail.id : "");
         $('#price').val(product ? product.price : "");
         $('#mailPrice').val(product ? product.mailPrice : "");
         $('#buyLimit').val(product ? product.buyLimit : "");
-        $('#categoryId').val(product ? product.category.id : "");
+        $('#categoryId').val(product && product.category ? product.category.id : "");
         $('#startSellTime').val(product ? product.startSellTimeReadable : "");
-        $('#rest').val(product ? product.storage.rest : "");
+        $('#rest').val(product && product.storage ? product.storage.rest : "");
         $('#author').val(product ? product.author : "");
         $('#isbn').val(product ? product.isbn : "");
         $('#publishDate').val(product ? product.publishDateReadable : "");
@@ -61,7 +63,7 @@ require([
     // 加载图标
     feather.replace();
 
-    // 渲染插件列表
+    // 渲染商品列表
     let render = async () => {
         await product.renderProductsByUrl('/product/', $list, TEMPLATE_LIST);
         // 编辑
@@ -104,21 +106,95 @@ require([
     };
     render();
 
+    // 渲染商品缓冲列表
+    let renderCache = async () => {
+        await product.renderProductsByUrl('/product/cache/', $cacheList, TEMPLATE_CACHE_LIST, false);
+        // 编辑
+        $('.btn-cache-edit').click(function () {
+            let id = $(this).attr('product-id');
+            loadParam(product.productCache[id]);
+            $('#productModal').modal('show');
+            // 添加
+            $add.unbind('click');
+            $add.click(() => {
+                let param = getParam();
+                product.editProductCache(id, param)
+                    .then(result => {
+                        if (result)
+                            functions.modal("信息", "编辑商品缓冲成功！");
+                        renderCache();
+                    });
+            });
+        });
+        // 移除
+        $('.btn-cache-remove').click(function () {
+            let id = $(this).attr('product-id');
+            product.removeProductCache(id)
+                .then(result => {
+                    if (result)
+                        functions.modal("信息", "删除商品缓冲成功！");
+                    renderCache();
+                });
+        });
+    };
+    renderCache();
+
     // 事件绑定
+    let createCache = null;
+
     $('#btn-create').click(() => {
         $('#productModal').modal('show');
-        loadParam(null);
-        // 添加
+        loadParam({
+            ...createCache,
+            thumbnail: {
+                id: createCache ? createCache.thumbnailId : ""
+            },
+            category: {
+                id: createCache ? createCache.categoryId : ""
+            },
+            storage: {
+                rest: createCache ? createCache.rest : ""
+            },
+            startSellTimeReadable: createCache ? functions.dateFormatTs(createCache.startSellTime) : "",
+            publishDateReadable: createCache ? functions.dateFormatTs(createCache.publishDate) : "",
+        });
+        // 添加商品
         $add.unbind('click');
         $add.click(() => {
             let param = getParam();
-            product.addProduct(param)
+            createCache = null;
+            product.addProductCache(param)
                 .then(result => {
                     if (result)
                         functions.modal("信息", "添加商品成功！");
-                    render();
+                    renderCache();
+                })
+                .catch(e => {
+                    // 失败则记录表单内容
+                    createCache = param;
                 });
         });
+    });
+
+    $('#btn-submit').click(() => {
+        // 提交商品
+        product.commitProductCache()
+            .then(result => {
+                if (result)
+                    functions.modal("信息", "提交商品成功！");
+                renderCache();
+                render();
+            });
+    });
+
+    $('#btn-clear').click(() => {
+        // 清空商品缓存
+        product.clearProductCache()
+            .then(result => {
+                if (result)
+                    functions.modal("信息", "清空缓存成功！");
+                renderCache();
+            });
     });
 
     // 检查 ISBN

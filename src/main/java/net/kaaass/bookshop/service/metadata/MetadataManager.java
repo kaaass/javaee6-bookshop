@@ -16,10 +16,11 @@ import net.kaaass.bookshop.util.TimeUtils;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import java.io.Serializable;
 import java.util.Map;
 
 @Stateless
-public class MetadataManager {
+public class MetadataManager implements Serializable {
 
     @Inject
     private MetadataRepository metadataRepository;

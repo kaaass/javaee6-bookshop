@@ -2,12 +2,13 @@ package net.kaaass.bookshop.service;
 
 import java.util.Date;
 import java.util.List;
-import java8.util.Optional;
+
 import net.kaaass.bookshop.controller.request.ProductAddRequest;
 import net.kaaass.bookshop.controller.response.ProductCommentResponse;
 import net.kaaass.bookshop.dao.Pageable;
 import net.kaaass.bookshop.dao.entity.ProductEntity;
 import net.kaaass.bookshop.dto.ProductDto;
+import net.kaaass.bookshop.exception.BadRequestException;
 import net.kaaass.bookshop.exception.InternalErrorExeption;
 import net.kaaass.bookshop.exception.NotFoundException;
 import net.kaaass.bookshop.vo.ProductExtraVo;
@@ -21,13 +22,25 @@ import javax.ejb.Local;
 @Local
 public interface ProductService {
 
-    Optional<ProductDto> addProduct(ProductAddRequest userToAdd);
+    ProductDto addProduct(ProductAddRequest userToAdd) throws NotFoundException;
 
     ProductDto editProduct(String id, ProductAddRequest userToAdd) throws NotFoundException, InternalErrorExeption;
 
     void removeProduct(String id);
 
     ProductDto getById(String id) throws NotFoundException;
+
+    ProductDto addProductCache(ProductAddRequest userToAdd) throws NotFoundException;
+
+    ProductDto editProductCache(String fakeId, ProductAddRequest request) throws NotFoundException;
+
+    void removeProductCache(String fakeId) throws NotFoundException;
+
+    List<ProductDto> commitProductCache() throws BadRequestException;
+
+    void clearProductCache();
+
+    List<ProductDto> getProductCache();
 
     /**
      * @deprecated

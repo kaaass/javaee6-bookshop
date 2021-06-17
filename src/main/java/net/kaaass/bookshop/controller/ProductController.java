@@ -47,9 +47,9 @@ public class ProductController extends BaseController {
     @POST
     @Path("/")
     @Secured(SecurityRole.ADMIN)
-    public ProductDto addProduct(ProductAddRequest productDto) throws BadRequestException {
+    public ProductDto addProduct(ProductAddRequest productDto) throws BadRequestException, NotFoundException {
         validateBean(validator, productDto);
-        return productService.addProduct(productDto).orElseThrow();
+        return productService.addProduct(productDto);
     }
 
     @POST
@@ -72,6 +72,52 @@ public class ProductController extends BaseController {
     @Path("/{id}/")
     public ProductDto getProductById(@PathParam("id") String id) throws NotFoundException {
         return productService.getById(id);
+    }
+
+    @PUT
+    @Path("/cache/")
+    @Secured(SecurityRole.ADMIN)
+    public ProductDto addProductCache(ProductAddRequest request) throws NotFoundException, BadRequestException {
+        validateBean(validator, request);
+        return productService.addProductCache(request);
+    }
+
+    @POST
+    @Path("/cache/{fakeId}/")
+    @Secured(SecurityRole.ADMIN)
+    public ProductDto editProductCache(@PathParam("fakeId") String fakeId, ProductAddRequest request) throws NotFoundException, BadRequestException {
+        validateBean(validator, request);
+        return productService.editProductCache(fakeId, request);
+    }
+
+    @DELETE
+    @Path("/cache/{fakeId}/")
+    @Secured(SecurityRole.ADMIN)
+    public boolean removeProductCache(@PathParam("fakeId") String fakeId) throws NotFoundException {
+        productService.removeProductCache(fakeId);
+        return true;
+    }
+
+    @POST
+    @Path("/cache/")
+    @Secured(SecurityRole.ADMIN)
+    public List<ProductDto> commitProductCache() throws BadRequestException {
+        return productService.commitProductCache();
+    }
+
+    @DELETE
+    @Path("/cache/")
+    @Secured(SecurityRole.ADMIN)
+    public boolean clearProductCache() {
+        productService.clearProductCache();
+        return true;
+    }
+
+    @GET
+    @Path("/cache/")
+    @Secured(SecurityRole.ADMIN)
+    public List<ProductDto> getProductCache() {
+        return productService.getProductCache();
     }
 
     @GET
