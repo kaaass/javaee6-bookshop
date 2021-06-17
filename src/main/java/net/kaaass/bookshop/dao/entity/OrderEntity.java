@@ -15,7 +15,7 @@ import java.util.List;
 public class OrderEntity implements IEntity<String> {
     /**
      * 订单号
-     *
+     * <p>
      * 格式：yyyyMMdd + 当日4位自增
      */
     @Id
@@ -201,7 +201,7 @@ public class OrderEntity implements IEntity<String> {
         if (o == this) return true;
         if (!(o instanceof OrderEntity)) return false;
         final OrderEntity other = (OrderEntity) o;
-        if (!other.canEqual((Object) this)) return false;
+        if (!other.canEqual(this)) return false;
         final Object this$id = this.getId();
         final Object other$id = other.getId();
         if (this$id == null ? other$id != null : !this$id.equals(other$id)) return false;
@@ -246,9 +246,7 @@ public class OrderEntity implements IEntity<String> {
             return false;
         final Object this$refundTime = this.getRefundTime();
         final Object other$refundTime = other.getRefundTime();
-        if (this$refundTime == null ? other$refundTime != null : !this$refundTime.equals(other$refundTime))
-            return false;
-        return true;
+        return this$refundTime == null ? other$refundTime == null : this$refundTime.equals(other$refundTime);
     }
 
     protected boolean canEqual(final Object other) {

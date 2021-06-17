@@ -4,6 +4,7 @@ import net.kaaass.bookshop.constraints.Uuid;
 
 /**
  * 创建单商品订单请求
+ *
  * @author kaaass
  */
 public class OrderCreateSingleRequest extends OrderCreateRequest {
@@ -28,11 +29,10 @@ public class OrderCreateSingleRequest extends OrderCreateRequest {
         if (o == this) return true;
         if (!(o instanceof OrderCreateSingleRequest)) return false;
         final OrderCreateSingleRequest other = (OrderCreateSingleRequest) o;
-        if (!other.canEqual((Object) this)) return false;
+        if (!other.canEqual(this)) return false;
         final Object this$productId = this.getProductId();
         final Object other$productId = other.getProductId();
-        if (this$productId == null ? other$productId != null : !this$productId.equals(other$productId)) return false;
-        return true;
+        return this$productId == null ? other$productId == null : this$productId.equals(other$productId);
     }
 
     protected boolean canEqual(final Object other) {

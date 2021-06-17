@@ -158,7 +158,7 @@ public class ProductAddRequest {
         if (o == this) return true;
         if (!(o instanceof ProductAddRequest)) return false;
         final ProductAddRequest other = (ProductAddRequest) o;
-        if (!other.canEqual((Object) this)) return false;
+        if (!other.canEqual(this)) return false;
         final Object this$name = this.getName();
         final Object other$name = other.getName();
         if (this$name == null ? other$name != null : !this$name.equals(other$name)) return false;
@@ -188,8 +188,7 @@ public class ProductAddRequest {
         final Object other$startSellTime = other.getStartSellTime();
         if (this$startSellTime == null ? other$startSellTime != null : !this$startSellTime.equals(other$startSellTime))
             return false;
-        if (this.getRest() != other.getRest()) return false;
-        return true;
+        return this.getRest() == other.getRest();
     }
 
     protected boolean canEqual(final Object other) {

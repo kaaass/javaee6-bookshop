@@ -2,6 +2,7 @@ package net.kaaass.bookshop.dto;
 
 /**
  * 用户信息 DTO
+ *
  * @author kaaass
  */
 public class UserInfoDto {
@@ -43,7 +44,7 @@ public class UserInfoDto {
         if (o == this) return true;
         if (!(o instanceof UserInfoDto)) return false;
         final UserInfoDto other = (UserInfoDto) o;
-        if (!other.canEqual((Object) this)) return false;
+        if (!other.canEqual(this)) return false;
         final Object this$auth = this.getAuth();
         final Object other$auth = other.getAuth();
         if (this$auth == null ? other$auth != null : !this$auth.equals(other$auth)) return false;
@@ -52,8 +53,7 @@ public class UserInfoDto {
         if (this$wechat == null ? other$wechat != null : !this$wechat.equals(other$wechat)) return false;
         final Object this$avatar = this.getAvatar();
         final Object other$avatar = other.getAvatar();
-        if (this$avatar == null ? other$avatar != null : !this$avatar.equals(other$avatar)) return false;
-        return true;
+        return this$avatar == null ? other$avatar == null : this$avatar.equals(other$avatar);
     }
 
     protected boolean canEqual(final Object other) {

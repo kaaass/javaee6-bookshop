@@ -8,7 +8,7 @@ import java.lang.reflect.InvocationTargetException;
 
 /**
  * 通用错误类
- *
+ * <p>
  * 记录状态码
  */
 public class BaseException extends Exception {

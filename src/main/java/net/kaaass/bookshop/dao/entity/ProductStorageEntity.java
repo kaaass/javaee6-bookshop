@@ -51,15 +51,14 @@ public class ProductStorageEntity implements IEntity<String> {
         if (o == this) return true;
         if (!(o instanceof ProductStorageEntity)) return false;
         final ProductStorageEntity other = (ProductStorageEntity) o;
-        if (!other.canEqual((Object) this)) return false;
+        if (!other.canEqual(this)) return false;
         final Object this$id = this.getId();
         final Object other$id = other.getId();
         if (this$id == null ? other$id != null : !this$id.equals(other$id)) return false;
         final Object this$product = this.getProduct();
         final Object other$product = other.getProduct();
         if (this$product == null ? other$product != null : !this$product.equals(other$product)) return false;
-        if (this.getRest() != other.getRest()) return false;
-        return true;
+        return this.getRest() == other.getRest();
     }
 
     protected boolean canEqual(final Object other) {

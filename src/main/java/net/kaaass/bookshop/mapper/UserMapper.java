@@ -14,6 +14,7 @@ import net.kaaass.bookshop.vo.UserAuthVo;
 
 /**
  * 用户对象映射
+ *
  * @author kaaass
  */
 public interface UserMapper {

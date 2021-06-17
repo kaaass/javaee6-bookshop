@@ -83,7 +83,7 @@ public class CategoryEntity implements IEntity<String> {
         if (o == this) return true;
         if (!(o instanceof CategoryEntity)) return false;
         final CategoryEntity other = (CategoryEntity) o;
-        if (!other.canEqual((Object) this)) return false;
+        if (!other.canEqual(this)) return false;
         final Object this$id = this.getId();
         final Object other$id = other.getId();
         if (this$id == null ? other$id != null : !this$id.equals(other$id)) return false;
@@ -98,9 +98,7 @@ public class CategoryEntity implements IEntity<String> {
         if (this$products == null ? other$products != null : !this$products.equals(other$products)) return false;
         final Object this$createTime = this.getCreateTime();
         final Object other$createTime = other.getCreateTime();
-        if (this$createTime == null ? other$createTime != null : !this$createTime.equals(other$createTime))
-            return false;
-        return true;
+        return this$createTime == null ? other$createTime == null : this$createTime.equals(other$createTime);
     }
 
     protected boolean canEqual(final Object other) {

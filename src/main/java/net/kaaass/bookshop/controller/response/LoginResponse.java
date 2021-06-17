@@ -44,15 +44,14 @@ public class LoginResponse {
         if (o == this) return true;
         if (!(o instanceof LoginResponse)) return false;
         final LoginResponse other = (LoginResponse) o;
-        if (!other.canEqual((Object) this)) return false;
+        if (!other.canEqual(this)) return false;
         final Object this$authToken = this.getAuthToken();
         final Object other$authToken = other.getAuthToken();
         if (this$authToken == null ? other$authToken != null : !this$authToken.equals(other$authToken)) return false;
         final Object this$phone = this.getPhone();
         final Object other$phone = other.getPhone();
         if (this$phone == null ? other$phone != null : !this$phone.equals(other$phone)) return false;
-        if (this.isAdmin() != other.isAdmin()) return false;
-        return true;
+        return this.isAdmin() == other.isAdmin();
     }
 
     protected boolean canEqual(final Object other) {

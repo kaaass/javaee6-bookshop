@@ -2,6 +2,7 @@ package net.kaaass.bookshop.controller.response;
 
 /**
  * 订单检查响应
+ *
  * @author kaaass
  */
 public class OrderCheckResponse {
@@ -23,11 +24,10 @@ public class OrderCheckResponse {
         if (o == this) return true;
         if (!(o instanceof OrderCheckResponse)) return false;
         final OrderCheckResponse other = (OrderCheckResponse) o;
-        if (!other.canEqual((Object) this)) return false;
+        if (!other.canEqual(this)) return false;
         final Object this$orderId = this.getOrderId();
         final Object other$orderId = other.getOrderId();
-        if (this$orderId == null ? other$orderId != null : !this$orderId.equals(other$orderId)) return false;
-        return true;
+        return this$orderId == null ? other$orderId == null : this$orderId.equals(other$orderId);
     }
 
     protected boolean canEqual(final Object other) {

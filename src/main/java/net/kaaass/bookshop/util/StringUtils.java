@@ -15,7 +15,7 @@ public class StringUtils {
             return Constants.INIT_ORDER_ID;
         }
         final String dateStr = new SimpleDateFormat("yyyyMMdd").format(new Date());
-        final String oldOrderNumStr = lastOrderId.substring(lastOrderId.length() - 4, lastOrderId.length());
+        final String oldOrderNumStr = lastOrderId.substring(lastOrderId.length() - 4);
         final int oldNum = Integer.parseInt(oldOrderNumStr);
         final String orderNum = String.format("%04d", oldNum + 1);
         return dateStr + orderNum;

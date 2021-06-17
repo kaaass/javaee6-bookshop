@@ -61,10 +61,9 @@ public class Pageable {
         if (o == this) return true;
         if (!(o instanceof Pageable)) return false;
         final Pageable other = (Pageable) o;
-        if (!other.canEqual((Object) this)) return false;
+        if (!other.canEqual(this)) return false;
         if (this.page != other.page) return false;
-        if (this.size != other.size) return false;
-        return true;
+        return this.size == other.size;
     }
 
     protected boolean canEqual(final Object other) {

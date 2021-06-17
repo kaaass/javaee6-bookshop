@@ -6,6 +6,7 @@ import java.util.List;
 
 /**
  * 订单额外信息 VO
+ *
  * @author kaaass
  */
 public class ProductExtraVo {
@@ -47,15 +48,14 @@ public class ProductExtraVo {
         if (o == this) return true;
         if (!(o instanceof ProductExtraVo)) return false;
         final ProductExtraVo other = (ProductExtraVo) o;
-        if (!other.canEqual((Object) this)) return false;
+        if (!other.canEqual(this)) return false;
         if (this.getMonthPurchase() != other.getMonthPurchase()) return false;
         final Object this$detail = this.getDetail();
         final Object other$detail = other.getDetail();
         if (this$detail == null ? other$detail != null : !this$detail.equals(other$detail)) return false;
         final Object this$images = this.getImages();
         final Object other$images = other.getImages();
-        if (this$images == null ? other$images != null : !this$images.equals(other$images)) return false;
-        return true;
+        return this$images == null ? other$images == null : this$images.equals(other$images);
     }
 
     protected boolean canEqual(final Object other) {

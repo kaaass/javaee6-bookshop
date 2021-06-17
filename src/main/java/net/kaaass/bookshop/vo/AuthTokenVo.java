@@ -36,15 +36,13 @@ public class AuthTokenVo {
         if (o == this) return true;
         if (!(o instanceof AuthTokenVo)) return false;
         final AuthTokenVo other = (AuthTokenVo) o;
-        if (!other.canEqual((Object) this)) return false;
+        if (!other.canEqual(this)) return false;
         final Object this$token = this.getToken();
         final Object other$token = other.getToken();
         if (this$token == null ? other$token != null : !this$token.equals(other$token)) return false;
         final Object this$publishTime = this.getPublishTime();
         final Object other$publishTime = other.getPublishTime();
-        if (this$publishTime == null ? other$publishTime != null : !this$publishTime.equals(other$publishTime))
-            return false;
-        return true;
+        return this$publishTime == null ? other$publishTime == null : this$publishTime.equals(other$publishTime);
     }
 
     protected boolean canEqual(final Object other) {

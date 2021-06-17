@@ -32,15 +32,13 @@ public class UserProfileResponse {
         if (o == this) return true;
         if (!(o instanceof UserProfileResponse)) return false;
         final UserProfileResponse other = (UserProfileResponse) o;
-        if (!other.canEqual((Object) this)) return false;
+        if (!other.canEqual(this)) return false;
         final Object this$info = this.getInfo();
         final Object other$info = other.getInfo();
         if (this$info == null ? other$info != null : !this$info.equals(other$info)) return false;
         final Object this$orderCount = this.getOrderCount();
         final Object other$orderCount = other.getOrderCount();
-        if (this$orderCount == null ? other$orderCount != null : !this$orderCount.equals(other$orderCount))
-            return false;
-        return true;
+        return this$orderCount == null ? other$orderCount == null : this$orderCount.equals(other$orderCount);
     }
 
     protected boolean canEqual(final Object other) {

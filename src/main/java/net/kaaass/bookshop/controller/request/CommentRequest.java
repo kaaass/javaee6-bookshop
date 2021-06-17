@@ -27,11 +27,10 @@ public class CommentRequest {
         if (o == this) return true;
         if (!(o instanceof CommentRequest)) return false;
         final CommentRequest other = (CommentRequest) o;
-        if (!other.canEqual((Object) this)) return false;
+        if (!other.canEqual(this)) return false;
         final Object this$comments = this.getComments();
         final Object other$comments = other.getComments();
-        if (this$comments == null ? other$comments != null : !this$comments.equals(other$comments)) return false;
-        return true;
+        return this$comments == null ? other$comments == null : this$comments.equals(other$comments);
     }
 
     protected boolean canEqual(final Object other) {
@@ -97,7 +96,7 @@ public class CommentRequest {
             if (o == this) return true;
             if (!(o instanceof Content)) return false;
             final Content other = (Content) o;
-            if (!other.canEqual((Object) this)) return false;
+            if (!other.canEqual(this)) return false;
             final Object this$productId = this.getProductId();
             final Object other$productId = other.getProductId();
             if (this$productId == null ? other$productId != null : !this$productId.equals(other$productId))
@@ -105,8 +104,7 @@ public class CommentRequest {
             if (this.getRate() != other.getRate()) return false;
             final Object this$content = this.getContent();
             final Object other$content = other.getContent();
-            if (this$content == null ? other$content != null : !this$content.equals(other$content)) return false;
-            return true;
+            return this$content == null ? other$content == null : this$content.equals(other$content);
         }
 
         protected boolean canEqual(final Object other) {

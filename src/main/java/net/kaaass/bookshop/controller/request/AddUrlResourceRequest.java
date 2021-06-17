@@ -29,14 +29,13 @@ public class AddUrlResourceRequest {
         if (o == this) return true;
         if (!(o instanceof AddUrlResourceRequest)) return false;
         final AddUrlResourceRequest other = (AddUrlResourceRequest) o;
-        if (!other.canEqual((Object) this)) return false;
+        if (!other.canEqual(this)) return false;
         final Object this$url = this.getUrl();
         final Object other$url = other.getUrl();
         if (this$url == null ? other$url != null : !this$url.equals(other$url)) return false;
         final Object this$type = this.getType();
         final Object other$type = other.getType();
-        if (this$type == null ? other$type != null : !this$type.equals(other$type)) return false;
-        return true;
+        return this$type == null ? other$type == null : this$type.equals(other$type);
     }
 
     protected boolean canEqual(final Object other) {

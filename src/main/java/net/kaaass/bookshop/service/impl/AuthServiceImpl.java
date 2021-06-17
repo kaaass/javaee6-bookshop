@@ -28,6 +28,7 @@ import java.util.UUID;
 
 /**
  * 鉴权服务
+ *
  * @author kaaass
  */
 @Stateless

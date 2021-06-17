@@ -8,6 +8,7 @@ import java.util.List;
 
 /**
  * 商品元数据 DAO
+ *
  * @author kaaass
  */
 public class ProductMetadataRepository extends BaseRepository<ProductMetadataEntity, String> {

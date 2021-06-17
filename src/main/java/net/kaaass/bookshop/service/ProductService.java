@@ -16,6 +16,7 @@ import java.util.List;
 
 /**
  * 商品服务
+ *
  * @author kaaass
  */
 @Local

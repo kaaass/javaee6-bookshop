@@ -7,6 +7,7 @@ import java.util.List;
 
 /**
  * 创建多商品订单请求
+ *
  * @author kaaass
  */
 public class OrderCreateMultiRequest extends OrderCreateRequest {
@@ -42,16 +43,14 @@ public class OrderCreateMultiRequest extends OrderCreateRequest {
         if (o == this) return true;
         if (!(o instanceof OrderCreateMultiRequest)) return false;
         final OrderCreateMultiRequest other = (OrderCreateMultiRequest) o;
-        if (!other.canEqual((Object) this)) return false;
+        if (!other.canEqual(this)) return false;
         if (!super.equals(o)) return false;
         final Object this$cartItems = this.getCartItems();
         final Object other$cartItems = other.getCartItems();
         if (this$cartItems == null ? other$cartItems != null : !this$cartItems.equals(other$cartItems)) return false;
         final Object this$cachedCartItems = this.getCachedCartItems();
         final Object other$cachedCartItems = other.getCachedCartItems();
-        if (this$cachedCartItems == null ? other$cachedCartItems != null : !this$cachedCartItems.equals(other$cachedCartItems))
-            return false;
-        return true;
+        return this$cachedCartItems == null ? other$cachedCartItems == null : this$cachedCartItems.equals(other$cachedCartItems);
     }
 
     @Override
@@ -89,11 +88,10 @@ public class OrderCreateMultiRequest extends OrderCreateRequest {
             if (o == this) return true;
             if (!(o instanceof CartItem)) return false;
             final CartItem other = (CartItem) o;
-            if (!other.canEqual((Object) this)) return false;
+            if (!other.canEqual(this)) return false;
             final Object this$id = this.getId();
             final Object other$id = other.getId();
-            if (this$id == null ? other$id != null : !this$id.equals(other$id)) return false;
-            return true;
+            return this$id == null ? other$id == null : this$id.equals(other$id);
         }
 
         protected boolean canEqual(final Object other) {

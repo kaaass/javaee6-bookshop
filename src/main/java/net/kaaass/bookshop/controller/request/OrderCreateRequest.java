@@ -6,6 +6,7 @@ import org.codehaus.jackson.annotate.JsonTypeInfo;
 
 /**
  * 基础订单创建请求
+ *
  * @author kaaass
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
@@ -37,11 +38,10 @@ public abstract class OrderCreateRequest {
         if (o == this) return true;
         if (!(o instanceof OrderCreateRequest)) return false;
         final OrderCreateRequest other = (OrderCreateRequest) o;
-        if (!other.canEqual((Object) this)) return false;
+        if (!other.canEqual(this)) return false;
         final Object this$addressId = this.getAddressId();
         final Object other$addressId = other.getAddressId();
-        if (this$addressId == null ? other$addressId != null : !this$addressId.equals(other$addressId)) return false;
-        return true;
+        return this$addressId == null ? other$addressId == null : this$addressId.equals(other$addressId);
     }
 
     protected boolean canEqual(final Object other) {

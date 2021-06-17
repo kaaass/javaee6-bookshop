@@ -4,6 +4,7 @@ import javax.validation.constraints.Pattern;
 
 /**
  * 账户注册请求
+ *
  * @author kaaass
  */
 public class RegisterRequest {
@@ -48,14 +49,13 @@ public class RegisterRequest {
         if (o == this) return true;
         if (!(o instanceof RegisterRequest)) return false;
         final RegisterRequest other = (RegisterRequest) o;
-        if (!other.canEqual((Object) this)) return false;
+        if (!other.canEqual(this)) return false;
         final Object this$phone = this.getPhone();
         final Object other$phone = other.getPhone();
         if (this$phone == null ? other$phone != null : !this$phone.equals(other$phone)) return false;
         final Object this$password = this.getPassword();
         final Object other$password = other.getPassword();
-        if (this$password == null ? other$password != null : !this$password.equals(other$password)) return false;
-        return true;
+        return this$password == null ? other$password == null : this$password.equals(other$password);
     }
 
     protected boolean canEqual(final Object other) {

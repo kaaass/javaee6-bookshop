@@ -186,7 +186,7 @@ public class BaseRepository<T extends IEntity<ID>, ID> implements IRepository<T,
     /**
      * 通过 SQL 查询一个结果
      */
-    protected <R> Optional<R> findOneBySql(String sql, Class<R> resultClz, Object ...args) {
+    protected <R> Optional<R> findOneBySql(String sql, Class<R> resultClz, Object... args) {
         EntityManager manager = getEntityManager();
         TypedQuery<R> query = manager.createQuery(sql, resultClz);
         for (int i = 0; i < args.length; i++) {
@@ -204,7 +204,7 @@ public class BaseRepository<T extends IEntity<ID>, ID> implements IRepository<T,
     /**
      * 通过 SQL 查询全部
      */
-    protected <R> List<R> findAllBySql(String sql, Class<R> resultClz, Object ...args) {
+    protected <R> List<R> findAllBySql(String sql, Class<R> resultClz, Object... args) {
         EntityManager manager = getEntityManager();
         TypedQuery<R> query = manager.createQuery(sql, resultClz);
         for (int i = 0; i < args.length; i++) {
@@ -216,7 +216,7 @@ public class BaseRepository<T extends IEntity<ID>, ID> implements IRepository<T,
     /**
      * 通过 SQL 查询全部
      */
-    protected <R> List<R> findAllBySql(String sql, Pageable page, Class<R> resultClz, Object ...args) {
+    protected <R> List<R> findAllBySql(String sql, Pageable page, Class<R> resultClz, Object... args) {
         EntityManager manager = getEntityManager();
         TypedQuery<R> query = manager.createQuery(sql, resultClz);
         for (int i = 0; i < args.length; i++) {

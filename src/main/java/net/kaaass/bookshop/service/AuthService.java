@@ -11,6 +11,7 @@ import javax.ejb.Local;
 
 /**
  * 鉴权服务
+ *
  * @author kaaass
  */
 @Local

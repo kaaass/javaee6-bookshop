@@ -104,7 +104,7 @@ public class OrderItemEntity implements IEntity<String> {
         if (o == this) return true;
         if (!(o instanceof OrderItemEntity)) return false;
         final OrderItemEntity other = (OrderItemEntity) o;
-        if (!other.canEqual((Object) this)) return false;
+        if (!other.canEqual(this)) return false;
         final Object this$id = this.getId();
         final Object other$id = other.getId();
         if (this$id == null ? other$id != null : !this$id.equals(other$id)) return false;
@@ -121,9 +121,7 @@ public class OrderItemEntity implements IEntity<String> {
         if (this.getCount() != other.getCount()) return false;
         final Object this$createTime = this.getCreateTime();
         final Object other$createTime = other.getCreateTime();
-        if (this$createTime == null ? other$createTime != null : !this$createTime.equals(other$createTime))
-            return false;
-        return true;
+        return this$createTime == null ? other$createTime == null : this$createTime.equals(other$createTime);
     }
 
     protected boolean canEqual(final Object other) {

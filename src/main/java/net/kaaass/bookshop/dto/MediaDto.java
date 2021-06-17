@@ -64,7 +64,7 @@ public class MediaDto {
         if (o == this) return true;
         if (!(o instanceof MediaDto)) return false;
         final MediaDto other = (MediaDto) o;
-        if (!other.canEqual((Object) this)) return false;
+        if (!other.canEqual(this)) return false;
         final Object this$id = this.getId();
         final Object other$id = other.getId();
         if (this$id == null ? other$id != null : !this$id.equals(other$id)) return false;
@@ -80,9 +80,7 @@ public class MediaDto {
             return false;
         final Object this$uploadTime = this.getUploadTime();
         final Object other$uploadTime = other.getUploadTime();
-        if (this$uploadTime == null ? other$uploadTime != null : !this$uploadTime.equals(other$uploadTime))
-            return false;
-        return true;
+        return this$uploadTime == null ? other$uploadTime == null : this$uploadTime.equals(other$uploadTime);
     }
 
     protected boolean canEqual(final Object other) {

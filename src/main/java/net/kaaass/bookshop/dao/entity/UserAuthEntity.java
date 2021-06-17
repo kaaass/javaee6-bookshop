@@ -129,7 +129,7 @@ public class UserAuthEntity implements IEntity<String> {
         if (o == this) return true;
         if (!(o instanceof UserAuthEntity)) return false;
         final UserAuthEntity other = (UserAuthEntity) o;
-        if (!other.canEqual((Object) this)) return false;
+        if (!other.canEqual(this)) return false;
         final Object this$id = this.getId();
         final Object other$id = other.getId();
         if (this$id == null ? other$id != null : !this$id.equals(other$id)) return false;
@@ -157,9 +157,7 @@ public class UserAuthEntity implements IEntity<String> {
             return false;
         final Object this$lastLoginTime = this.getLastLoginTime();
         final Object other$lastLoginTime = other.getLastLoginTime();
-        if (this$lastLoginTime == null ? other$lastLoginTime != null : !this$lastLoginTime.equals(other$lastLoginTime))
-            return false;
-        return true;
+        return this$lastLoginTime == null ? other$lastLoginTime == null : this$lastLoginTime.equals(other$lastLoginTime);
     }
 
     protected boolean canEqual(final Object other) {

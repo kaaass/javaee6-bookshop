@@ -9,6 +9,7 @@ import java.util.Date;
 
 /**
  * 商品 DTO
+ *
  * @author kaaass
  */
 public class ProductDto {
@@ -153,7 +154,7 @@ public class ProductDto {
         if (o == this) return true;
         if (!(o instanceof ProductDto)) return false;
         final ProductDto other = (ProductDto) o;
-        if (!other.canEqual((Object) this)) return false;
+        if (!other.canEqual(this)) return false;
         final Object this$id = this.getId();
         final Object other$id = other.getId();
         if (this$id == null ? other$id != null : !this$id.equals(other$id)) return false;
@@ -185,9 +186,7 @@ public class ProductDto {
         if (this$storage == null ? other$storage != null : !this$storage.equals(other$storage)) return false;
         final Object this$startSellTime = this.getStartSellTime();
         final Object other$startSellTime = other.getStartSellTime();
-        if (this$startSellTime == null ? other$startSellTime != null : !this$startSellTime.equals(other$startSellTime))
-            return false;
-        return true;
+        return this$startSellTime == null ? other$startSellTime == null : this$startSellTime.equals(other$startSellTime);
     }
 
     protected boolean canEqual(final Object other) {

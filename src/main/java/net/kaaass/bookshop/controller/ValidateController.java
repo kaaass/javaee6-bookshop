@@ -8,6 +8,7 @@ import javax.ws.rs.core.MediaType;
 
 /**
  * 校验控制器
+ *
  * @author kaaass
  */
 @Path("/validate")

@@ -22,6 +22,7 @@ import java.util.List;
 
 /**
  * 鉴权用请求拦截器
+ *
  * @author kaaass
  */
 @Provider

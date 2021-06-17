@@ -7,6 +7,7 @@ import javax.ws.rs.core.Response;
 
 /**
  * 标准返回格式
+ *
  * @param <T> 返回类型
  */
 public class GlobalResponse<T> {
@@ -32,8 +33,9 @@ public class GlobalResponse<T> {
 
     /**
      * 成功返回
+     *
      * @param data 返回数据
-     * @param <T> 返回数据类型
+     * @param <T>  返回数据类型
      * @return 返回VO
      */
     public static <T> GlobalResponse<T> success(T data) {
@@ -42,19 +44,21 @@ public class GlobalResponse<T> {
 
     /**
      * 失败返回
-     * @param status 状态码
+     *
+     * @param status  状态码
      * @param message 错误信息
-     * @param <T> 返回数据类型
+     * @param <T>     返回数据类型
      * @return 返回VO
      */
     public static <T> GlobalResponse<T> fail(StatusEnum status, String message) {
-        return new GlobalResponse<>(status.getCode(), message == null ? status.getDescription(): message, null);
+        return new GlobalResponse<>(status.getCode(), message == null ? status.getDescription() : message, null);
     }
 
     /**
      * 失败返回
+     *
      * @param status 状态码
-     * @param <T> 返回数据类型
+     * @param <T>    返回数据类型
      * @return 返回VO
      */
     public static <T> GlobalResponse<T> fail(StatusEnum status) {
@@ -63,8 +67,9 @@ public class GlobalResponse<T> {
 
     /**
      * 失败返回
+     *
      * @param exception 异常
-     * @param <T> 返回数据类型
+     * @param <T>       返回数据类型
      * @return 返回VO
      */
     public static <T> GlobalResponse<T> fail(BaseException exception) {
@@ -99,15 +104,14 @@ public class GlobalResponse<T> {
         if (o == this) return true;
         if (!(o instanceof GlobalResponse)) return false;
         final GlobalResponse<?> other = (GlobalResponse<?>) o;
-        if (!other.canEqual((Object) this)) return false;
+        if (!other.canEqual(this)) return false;
         if (this.getStatus() != other.getStatus()) return false;
         final Object this$message = this.getMessage();
         final Object other$message = other.getMessage();
         if (this$message == null ? other$message != null : !this$message.equals(other$message)) return false;
         final Object this$data = this.getData();
         final Object other$data = other.getData();
-        if (this$data == null ? other$data != null : !this$data.equals(other$data)) return false;
-        return true;
+        return this$data == null ? other$data == null : this$data.equals(other$data);
     }
 
     protected boolean canEqual(final Object other) {

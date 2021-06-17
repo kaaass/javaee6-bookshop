@@ -36,14 +36,13 @@ public class MetadataRequest {
         if (o == this) return true;
         if (!(o instanceof MetadataRequest)) return false;
         final MetadataRequest other = (MetadataRequest) o;
-        if (!other.canEqual((Object) this)) return false;
+        if (!other.canEqual(this)) return false;
         final Object this$key = this.getKey();
         final Object other$key = other.getKey();
         if (this$key == null ? other$key != null : !this$key.equals(other$key)) return false;
         final Object this$value = this.getValue();
         final Object other$value = other.getValue();
-        if (this$value == null ? other$value != null : !this$value.equals(other$value)) return false;
-        return true;
+        return this$value == null ? other$value == null : this$value.equals(other$value);
     }
 
     protected boolean canEqual(final Object other) {

@@ -65,7 +65,7 @@ public class CommentVo {
         if (o == this) return true;
         if (!(o instanceof CommentVo)) return false;
         final CommentVo other = (CommentVo) o;
-        if (!other.canEqual((Object) this)) return false;
+        if (!other.canEqual(this)) return false;
         final Object this$id = this.getId();
         final Object other$id = other.getId();
         if (this$id == null ? other$id != null : !this$id.equals(other$id)) return false;
@@ -78,9 +78,7 @@ public class CommentVo {
         if (this$content == null ? other$content != null : !this$content.equals(other$content)) return false;
         final Object this$commentTime = this.getCommentTime();
         final Object other$commentTime = other.getCommentTime();
-        if (this$commentTime == null ? other$commentTime != null : !this$commentTime.equals(other$commentTime))
-            return false;
-        return true;
+        return this$commentTime == null ? other$commentTime == null : this$commentTime.equals(other$commentTime);
     }
 
     protected boolean canEqual(final Object other) {

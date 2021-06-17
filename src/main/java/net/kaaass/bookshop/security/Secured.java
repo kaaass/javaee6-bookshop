@@ -9,6 +9,7 @@ import static java.lang.annotation.ElementType.TYPE;
 
 /**
  * 接口鉴权注解
+ *
  * @author kaaass
  */
 @Target({TYPE, METHOD})

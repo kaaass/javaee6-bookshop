@@ -2,6 +2,7 @@ package net.kaaass.bookshop.vo;
 
 /**
  * 用户订单统计 VO
+ *
  * @author kaaass
  */
 public class UserOrderCountVo {
@@ -43,11 +44,10 @@ public class UserOrderCountVo {
         if (o == this) return true;
         if (!(o instanceof UserOrderCountVo)) return false;
         final UserOrderCountVo other = (UserOrderCountVo) o;
-        if (!other.canEqual((Object) this)) return false;
+        if (!other.canEqual(this)) return false;
         if (this.getToPay() != other.getToPay()) return false;
         if (this.getToDeliver() != other.getToDeliver()) return false;
-        if (this.getToComment() != other.getToComment()) return false;
-        return true;
+        return this.getToComment() == other.getToComment();
     }
 
     protected boolean canEqual(final Object other) {

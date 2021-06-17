@@ -2,6 +2,7 @@ package net.kaaass.bookshop.dto;
 
 /**
  * 订单内容 DTO
+ *
  * @author kaaass
  */
 public class OrderItemDto {
@@ -53,7 +54,7 @@ public class OrderItemDto {
         if (o == this) return true;
         if (!(o instanceof OrderItemDto)) return false;
         final OrderItemDto other = (OrderItemDto) o;
-        if (!other.canEqual((Object) this)) return false;
+        if (!other.canEqual(this)) return false;
         final Object this$id = this.getId();
         final Object other$id = other.getId();
         if (this$id == null ? other$id != null : !this$id.equals(other$id)) return false;
@@ -61,8 +62,7 @@ public class OrderItemDto {
         final Object other$product = other.getProduct();
         if (this$product == null ? other$product != null : !this$product.equals(other$product)) return false;
         if (Float.compare(this.getPrice(), other.getPrice()) != 0) return false;
-        if (this.getCount() != other.getCount()) return false;
-        return true;
+        return this.getCount() == other.getCount();
     }
 
     protected boolean canEqual(final Object other) {

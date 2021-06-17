@@ -56,12 +56,10 @@ public class SecurityIdentity implements Serializable {
         if (o == this) return true;
         if (!(o instanceof SecurityIdentity)) return false;
         final SecurityIdentity other = (SecurityIdentity) o;
-        if (!other.canEqual((Object) this)) return false;
+        if (!other.canEqual(this)) return false;
         final Object this$userAuthDto = this.getUserAuthDto();
         final Object other$userAuthDto = other.getUserAuthDto();
-        if (this$userAuthDto == null ? other$userAuthDto != null : !this$userAuthDto.equals(other$userAuthDto))
-            return false;
-        return true;
+        return this$userAuthDto == null ? other$userAuthDto == null : this$userAuthDto.equals(other$userAuthDto);
     }
 
     protected boolean canEqual(final Object other) {

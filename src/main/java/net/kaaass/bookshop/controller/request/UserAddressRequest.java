@@ -88,7 +88,7 @@ public class UserAddressRequest {
         if (o == this) return true;
         if (!(o instanceof UserAddressRequest)) return false;
         final UserAddressRequest other = (UserAddressRequest) o;
-        if (!other.canEqual((Object) this)) return false;
+        if (!other.canEqual(this)) return false;
         final Object this$area = this.getArea();
         final Object other$area = other.getArea();
         if (this$area == null ? other$area != null : !this$area.equals(other$area)) return false;
@@ -104,8 +104,7 @@ public class UserAddressRequest {
         if (this$phone == null ? other$phone != null : !this$phone.equals(other$phone)) return false;
         final Object this$name = this.getName();
         final Object other$name = other.getName();
-        if (this$name == null ? other$name != null : !this$name.equals(other$name)) return false;
-        return true;
+        return this$name == null ? other$name == null : this$name.equals(other$name);
     }
 
     protected boolean canEqual(final Object other) {

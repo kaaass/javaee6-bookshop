@@ -2,6 +2,7 @@ package net.kaaass.bookshop.controller.response;
 
 /**
  * 订单请求响应
+ *
  * @author kaaass
  */
 public class OrderRequestResponse {
@@ -23,11 +24,10 @@ public class OrderRequestResponse {
         if (o == this) return true;
         if (!(o instanceof OrderRequestResponse)) return false;
         final OrderRequestResponse other = (OrderRequestResponse) o;
-        if (!other.canEqual((Object) this)) return false;
+        if (!other.canEqual(this)) return false;
         final Object this$requestId = this.getRequestId();
         final Object other$requestId = other.getRequestId();
-        if (this$requestId == null ? other$requestId != null : !this$requestId.equals(other$requestId)) return false;
-        return true;
+        return this$requestId == null ? other$requestId == null : this$requestId.equals(other$requestId);
     }
 
     protected boolean canEqual(final Object other) {

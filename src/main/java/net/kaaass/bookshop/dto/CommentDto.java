@@ -7,6 +7,7 @@ import java.util.Date;
 
 /**
  * 评论 DTO
+ *
  * @author kaaass
  */
 public class CommentDto {
@@ -89,7 +90,7 @@ public class CommentDto {
         if (o == this) return true;
         if (!(o instanceof CommentDto)) return false;
         final CommentDto other = (CommentDto) o;
-        if (!other.canEqual((Object) this)) return false;
+        if (!other.canEqual(this)) return false;
         final Object this$id = this.getId();
         final Object other$id = other.getId();
         if (this$id == null ? other$id != null : !this$id.equals(other$id)) return false;
@@ -108,9 +109,7 @@ public class CommentDto {
         if (this$content == null ? other$content != null : !this$content.equals(other$content)) return false;
         final Object this$commentTime = this.getCommentTime();
         final Object other$commentTime = other.getCommentTime();
-        if (this$commentTime == null ? other$commentTime != null : !this$commentTime.equals(other$commentTime))
-            return false;
-        return true;
+        return this$commentTime == null ? other$commentTime == null : this$commentTime.equals(other$commentTime);
     }
 
     protected boolean canEqual(final Object other) {

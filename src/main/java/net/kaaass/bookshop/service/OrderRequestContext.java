@@ -4,6 +4,7 @@ import net.kaaass.bookshop.controller.request.OrderCreateRequest;
 
 /**
  * 订单请求 DTO
+ *
  * @author kaaass
  */
 public class OrderRequestContext {
@@ -45,7 +46,7 @@ public class OrderRequestContext {
         if (o == this) return true;
         if (!(o instanceof OrderRequestContext)) return false;
         final OrderRequestContext other = (OrderRequestContext) o;
-        if (!other.canEqual((Object) this)) return false;
+        if (!other.canEqual(this)) return false;
         final Object this$requestId = this.getRequestId();
         final Object other$requestId = other.getRequestId();
         if (this$requestId == null ? other$requestId != null : !this$requestId.equals(other$requestId)) return false;
@@ -54,8 +55,7 @@ public class OrderRequestContext {
         if (this$uid == null ? other$uid != null : !this$uid.equals(other$uid)) return false;
         final Object this$request = this.getRequest();
         final Object other$request = other.getRequest();
-        if (this$request == null ? other$request != null : !this$request.equals(other$request)) return false;
-        return true;
+        return this$request == null ? other$request == null : this$request.equals(other$request);
     }
 
     protected boolean canEqual(final Object other) {

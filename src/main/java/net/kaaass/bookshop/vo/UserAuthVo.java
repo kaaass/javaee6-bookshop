@@ -38,7 +38,7 @@ public class UserAuthVo {
         if (o == this) return true;
         if (!(o instanceof UserAuthVo)) return false;
         final UserAuthVo other = (UserAuthVo) o;
-        if (!other.canEqual((Object) this)) return false;
+        if (!other.canEqual(this)) return false;
         final Object this$id = this.getId();
         final Object other$id = other.getId();
         if (this$id == null ? other$id != null : !this$id.equals(other$id)) return false;
@@ -47,8 +47,7 @@ public class UserAuthVo {
         if (this$phone == null ? other$phone != null : !this$phone.equals(other$phone)) return false;
         final Object this$role = this.getRole();
         final Object other$role = other.getRole();
-        if (this$role == null ? other$role != null : !this$role.equals(other$role)) return false;
-        return true;
+        return this$role == null ? other$role == null : this$role.equals(other$role);
     }
 
     protected boolean canEqual(final Object other) {

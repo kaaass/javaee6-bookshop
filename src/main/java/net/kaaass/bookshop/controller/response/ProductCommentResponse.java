@@ -6,6 +6,7 @@ import java.util.List;
 
 /**
  * 物品评论请求返回
+ *
  * @author kaaass
  */
 public class ProductCommentResponse {
@@ -37,15 +38,14 @@ public class ProductCommentResponse {
         if (o == this) return true;
         if (!(o instanceof ProductCommentResponse)) return false;
         final ProductCommentResponse other = (ProductCommentResponse) o;
-        if (!other.canEqual((Object) this)) return false;
+        if (!other.canEqual(this)) return false;
         final Object this$averageRate = this.getAverageRate();
         final Object other$averageRate = other.getAverageRate();
         if (this$averageRate == null ? other$averageRate != null : !this$averageRate.equals(other$averageRate))
             return false;
         final Object this$comments = this.getComments();
         final Object other$comments = other.getComments();
-        if (this$comments == null ? other$comments != null : !this$comments.equals(other$comments)) return false;
-        return true;
+        return this$comments == null ? other$comments == null : this$comments.equals(other$comments);
     }
 
     protected boolean canEqual(final Object other) {

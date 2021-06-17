@@ -29,12 +29,11 @@ public class ProductStorageDto {
         if (o == this) return true;
         if (!(o instanceof ProductStorageDto)) return false;
         final ProductStorageDto other = (ProductStorageDto) o;
-        if (!other.canEqual((Object) this)) return false;
+        if (!other.canEqual(this)) return false;
         final Object this$id = this.getId();
         final Object other$id = other.getId();
         if (this$id == null ? other$id != null : !this$id.equals(other$id)) return false;
-        if (this.getRest() != other.getRest()) return false;
-        return true;
+        return this.getRest() == other.getRest();
     }
 
     protected boolean canEqual(final Object other) {

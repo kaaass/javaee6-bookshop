@@ -9,6 +9,7 @@ import java.sql.Timestamp;
 
 /**
  * 订单项目 DAO
+ *
  * @author kaaass
  */
 public class OrderItemRepository extends BaseRepository<OrderItemEntity, String> {

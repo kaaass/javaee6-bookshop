@@ -11,6 +11,7 @@ import net.kaaass.bookshop.dto.ProductStorageDto;
 
 /**
  * 商品对象映射
+ *
  * @author kaaass
  */
 public interface ProductMapper {

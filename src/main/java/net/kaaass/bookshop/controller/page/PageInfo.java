@@ -27,11 +27,10 @@ public class PageInfo implements Serializable {
         if (o == this) return true;
         if (!(o instanceof PageInfo)) return false;
         final PageInfo other = (PageInfo) o;
-        if (!other.canEqual((Object) this)) return false;
+        if (!other.canEqual(this)) return false;
         final Object this$pageable = this.getPageable();
         final Object other$pageable = other.getPageable();
-        if (this$pageable == null ? other$pageable != null : !this$pageable.equals(other$pageable)) return false;
-        return true;
+        return this$pageable == null ? other$pageable == null : this$pageable.equals(other$pageable);
     }
 
     protected boolean canEqual(final Object other) {

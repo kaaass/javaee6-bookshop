@@ -39,14 +39,13 @@ public class UserInfoModifyRequest {
         if (o == this) return true;
         if (!(o instanceof UserInfoModifyRequest)) return false;
         final UserInfoModifyRequest other = (UserInfoModifyRequest) o;
-        if (!other.canEqual((Object) this)) return false;
+        if (!other.canEqual(this)) return false;
         final Object this$wechat = this.getWechat();
         final Object other$wechat = other.getWechat();
         if (this$wechat == null ? other$wechat != null : !this$wechat.equals(other$wechat)) return false;
         final Object this$avatar = this.getAvatar();
         final Object other$avatar = other.getAvatar();
-        if (this$avatar == null ? other$avatar != null : !this$avatar.equals(other$avatar)) return false;
-        return true;
+        return this$avatar == null ? other$avatar == null : this$avatar.equals(other$avatar);
     }
 
     protected boolean canEqual(final Object other) {

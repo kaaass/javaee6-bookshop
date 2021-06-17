@@ -2,6 +2,7 @@ package net.kaaass.bookshop.controller.request;
 
 /**
  * 购物车添加请求
+ *
  * @author kaaass
  */
 public class CartAddRequest {
@@ -33,12 +34,11 @@ public class CartAddRequest {
         if (o == this) return true;
         if (!(o instanceof CartAddRequest)) return false;
         final CartAddRequest other = (CartAddRequest) o;
-        if (!other.canEqual((Object) this)) return false;
+        if (!other.canEqual(this)) return false;
         final Object this$productId = this.getProductId();
         final Object other$productId = other.getProductId();
         if (this$productId == null ? other$productId != null : !this$productId.equals(other$productId)) return false;
-        if (this.getCount() != other.getCount()) return false;
-        return true;
+        return this.getCount() == other.getCount();
     }
 
     protected boolean canEqual(final Object other) {

@@ -82,7 +82,7 @@ public class SellerInfoEntity implements IEntity<String> {
         if (o == this) return true;
         if (!(o instanceof SellerInfoEntity)) return false;
         final SellerInfoEntity other = (SellerInfoEntity) o;
-        if (!other.canEqual((Object) this)) return false;
+        if (!other.canEqual(this)) return false;
         final Object this$id = this.getId();
         final Object other$id = other.getId();
         if (this$id == null ? other$id != null : !this$id.equals(other$id)) return false;
@@ -97,9 +97,7 @@ public class SellerInfoEntity implements IEntity<String> {
         if (this$avatar == null ? other$avatar != null : !this$avatar.equals(other$avatar)) return false;
         final Object this$lastUpdateTime = this.getLastUpdateTime();
         final Object other$lastUpdateTime = other.getLastUpdateTime();
-        if (this$lastUpdateTime == null ? other$lastUpdateTime != null : !this$lastUpdateTime.equals(other$lastUpdateTime))
-            return false;
-        return true;
+        return this$lastUpdateTime == null ? other$lastUpdateTime == null : this$lastUpdateTime.equals(other$lastUpdateTime);
     }
 
     protected boolean canEqual(final Object other) {

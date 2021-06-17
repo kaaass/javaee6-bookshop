@@ -50,7 +50,7 @@ public class ProductMetadataDto {
         if (o == this) return true;
         if (!(o instanceof ProductMetadataDto)) return false;
         final ProductMetadataDto other = (ProductMetadataDto) o;
-        if (!other.canEqual((Object) this)) return false;
+        if (!other.canEqual(this)) return false;
         final Object this$id = this.getId();
         final Object other$id = other.getId();
         if (this$id == null ? other$id != null : !this$id.equals(other$id)) return false;
@@ -62,8 +62,7 @@ public class ProductMetadataDto {
         if (this$key == null ? other$key != null : !this$key.equals(other$key)) return false;
         final Object this$value = this.getValue();
         final Object other$value = other.getValue();
-        if (this$value == null ? other$value != null : !this$value.equals(other$value)) return false;
-        return true;
+        return this$value == null ? other$value == null : this$value.equals(other$value);
     }
 
     protected boolean canEqual(final Object other) {

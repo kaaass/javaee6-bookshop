@@ -2,6 +2,7 @@ package net.kaaass.bookshop.dto;
 
 /**
  * 用户地址 DTO
+ *
  * @author kaaass
  */
 public class UserAddressDto {
@@ -83,7 +84,7 @@ public class UserAddressDto {
         if (o == this) return true;
         if (!(o instanceof UserAddressDto)) return false;
         final UserAddressDto other = (UserAddressDto) o;
-        if (!other.canEqual((Object) this)) return false;
+        if (!other.canEqual(this)) return false;
         final Object this$id = this.getId();
         final Object other$id = other.getId();
         if (this$id == null ? other$id != null : !this$id.equals(other$id)) return false;
@@ -103,8 +104,7 @@ public class UserAddressDto {
         final Object this$name = this.getName();
         final Object other$name = other.getName();
         if (this$name == null ? other$name != null : !this$name.equals(other$name)) return false;
-        if (this.isDefaultAddress() != other.isDefaultAddress()) return false;
-        return true;
+        return this.isDefaultAddress() == other.isDefaultAddress();
     }
 
     protected boolean canEqual(final Object other) {

@@ -8,6 +8,7 @@ import java.util.List;
 
 /**
  * 用户地址 DAO
+ *
  * @author kaaass
  */
 public class UserAddressRepository extends BaseRepository<UserAddressEntity, String> {

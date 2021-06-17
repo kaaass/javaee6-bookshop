@@ -8,6 +8,7 @@ import java.util.Arrays;
 
 /**
  * 错误号
+ *
  * @author kaaass
  */
 public enum StatusEnum {
@@ -23,10 +24,10 @@ public enum StatusEnum {
     INTERNAL_ERROR(500, "服务器内部错误"),
     SERVICE_UNAVAILIBLE(503, "服务器暂不可用");
 
-    private int code;
-    private String description;
+    private final int code;
+    private final String description;
 
-    private StatusEnum(int code, String description) {
+    StatusEnum(int code, String description) {
         this.code = code;
         this.description = description;
     }
