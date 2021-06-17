@@ -27,7 +27,6 @@ import net.kaaass.bookshop.mapper.ProductMapper;
 import net.kaaass.bookshop.mapper.UserMapper;
 import net.kaaass.bookshop.service.CategoryService;
 import net.kaaass.bookshop.service.ProductService;
-import net.kaaass.bookshop.service.PromoteService;
 import net.kaaass.bookshop.service.UserService;
 import net.kaaass.bookshop.service.metadata.MetadataManager;
 import net.kaaass.bookshop.service.metadata.ResourceManager;
@@ -38,7 +37,6 @@ import net.kaaass.bookshop.util.TimeUtils;
 import net.kaaass.bookshop.vo.CommentVo;
 import net.kaaass.bookshop.vo.ProductExtraVo;
 
-import javax.ejb.EJB;
 import javax.ejb.Stateful;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
@@ -65,9 +63,6 @@ public class ProductServiceImpl implements ProductService, Serializable {
 
     @Inject
     private MetadataManager metadataManager;
-
-    @EJB
-    private PromoteService promoteService;
 
     @Inject
     private UserService userService;
@@ -251,7 +246,6 @@ public class ProductServiceImpl implements ProductService, Serializable {
         } catch (NotFoundException ignored) {
         }
         val entity = getEntityById(id);
-        extra.setPromotes(promoteService.getForSingleProduct(entity, count, uid, defaultAddress));
         extra.setMonthPurchase(getMonthPurchaseById(entity));
         // 获得商品图片
         extra.setImages(getProductImagesById(id));

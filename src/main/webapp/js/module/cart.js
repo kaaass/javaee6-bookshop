@@ -19,9 +19,9 @@ define([
             let count = cartItem.count;
             // 获得extra数据
             // noinspection JSPrimitiveTypeWrapperUsage
-            cartItem.product.extra = await product.getExtra(cartItem.product.id, count);
+            // cartItem.product.extra = await product.getExtra(cartItem.product.id, count);
             // 计算总价
-            cartItem.totalPrice = cartItem.product.extra.promotes.price;
+            cartItem.totalPrice = cartItem.product.price * cartItem.count;
             // 加入映射表
             cartItemMap[cartItem.id] = cartItem;
         }
@@ -39,7 +39,7 @@ define([
         result.totalMailPrice = .0;
         for (const cartItem of cartItems) {
             result.totalPrice += cartItem.totalPrice;
-            result.totalMailPrice = Math.max(result.totalMailPrice, cartItem.product.extra.promotes.mailPrice);
+            result.totalMailPrice = Math.max(result.totalMailPrice, cartItem.product.mailPrice);
         }
         result.totalPrice += result.totalMailPrice;
         return result;
@@ -55,7 +55,7 @@ define([
         let cartItem = {};
         cartItem.count = 1;
         cartItem.product = product;
-        cartItem.totalPrice = cartItem.product.extra.promotes.price;
+        cartItem.totalPrice = cartItem.product.price;
         // 构造返回信息
         return globalCartInfo = {
             items: [cartItem],

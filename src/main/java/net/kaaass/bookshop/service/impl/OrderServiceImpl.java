@@ -10,6 +10,7 @@ import lombok.var;
 import net.kaaass.bookshop.controller.request.CommentRequest;
 import net.kaaass.bookshop.controller.request.OrderCreateMultiRequest;
 import net.kaaass.bookshop.controller.request.OrderCreateRequest;
+import net.kaaass.bookshop.controller.request.OrderCreateSingleRequest;
 import net.kaaass.bookshop.controller.response.OrderCheckResponse;
 import net.kaaass.bookshop.controller.response.OrderRequestResponse;
 import net.kaaass.bookshop.dao.Pageable;
@@ -25,8 +26,7 @@ import net.kaaass.bookshop.dto.OrderItemDto;
 import net.kaaass.bookshop.dto.OrderType;
 import net.kaaass.bookshop.exception.*;
 import net.kaaass.bookshop.mapper.OrderMapper;
-import net.kaaass.bookshop.promote.OrderPromoteContextFactory;
-import net.kaaass.bookshop.promote.PromoteManager;
+import net.kaaass.bookshop.mapper.ProductMapper;
 import net.kaaass.bookshop.service.*;
 import net.kaaass.bookshop.service.mq.OrderMessageProducer;
 import net.kaaass.bookshop.util.Constants;
@@ -52,16 +52,10 @@ import java.util.List;
 public class OrderServiceImpl implements OrderService, Serializable {
 
     @Inject
-    private PromoteManager promoteManager;
-
-    @Inject
     private OrderRepository orderRepository;
 
     @Inject
     private UserService userService;
-
-    @Inject
-    private OrderPromoteContextFactory orderPromoteContextFactory;
 
     @Inject
     private CommentRepository commentRepository;
@@ -83,6 +77,9 @@ public class OrderServiceImpl implements OrderService, Serializable {
 
     @Inject
     private OrderMapper orderMapper;
+
+    @Inject
+    private ProductMapper productMapper;
 
     @Override
     public OrderEntity getEntityById(String id) throws NotFoundException {
@@ -243,29 +240,53 @@ public class OrderServiceImpl implements OrderService, Serializable {
         val user = userService.getAuthEntityById(context.getUid());
         entity.setAddress(address);
         /*
-         打折逻辑
+         订单逻辑
          */
         try {
-            // 拼接上下文
-            val promoteContext = orderPromoteContextFactory.buildFromRequestContext(context);
-            log.info("请求上下文：{}", promoteContext);
+            // 生成商品信息
+            float price = 0;
+            float mailPrice = 0;
+            val products = new ArrayList<OrderItemDto>();
+            if (request instanceof OrderCreateSingleRequest) {
+                val single = (OrderCreateSingleRequest) request;
+                val product = productRepository.getOne(single.getProductId());
+                val item = new OrderItemDto();
+                price = product.getPrice();
+                mailPrice = product.getMailPrice();
+                item.setCount(1);
+                item.setPrice(price);
+                item.setProduct(productMapper.productEntityToDto(product));
+                products.add(item);
+            } else if (request instanceof OrderCreateMultiRequest) {
+                val multi = (OrderCreateMultiRequest) request;
+                for (val cartItem : multi.getCachedCartItems()) {
+                    val item = new OrderItemDto();
+                    val curPrice = cartItem.getCount() * cartItem.getProduct().getPrice();
+                    val curMailPrice = cartItem.getProduct().getMailPrice();
+                    item.setProduct(cartItem.getProduct());
+                    item.setPrice(curPrice);
+                    item.setCount(cartItem.getCount());
+                    products.add(item);
+                    price += curPrice;
+                    if (curMailPrice > mailPrice) {
+                        mailPrice = curMailPrice;
+                    }
+                }
+            }
             // 检查购买限制
-            for (val promoteItem : promoteContext.getProducts()) {
-                val buyLimit = promoteItem.getProduct().getBuyLimit();
-                if (buyLimit > 0 && promoteItem.getCount() > buyLimit) {
+            for (val orderItem : products) {
+                val buyLimit = orderItem.getProduct().getBuyLimit();
+                if (buyLimit > 0 && orderItem.getCount() > buyLimit) {
                     throw new BadRequestException(String.format("本商品限购%d件！", buyLimit));
                 }
-                if (new Date().before(promoteItem.getProduct().getStartSellTime())) {
+                if (new Date().before(orderItem.getProduct().getStartSellTime())) {
                     throw new BadRequestException("商品还未开卖！");
                 }
             }
-            // 打折处理
-            var promoteResult = promoteManager.doOnOrder(promoteContext);
-            log.info("打折结果：{}", promoteResult);
             // 处理返回
-            entity.setPrice(promoteResult.getPrice());
-            entity.setMailPrice(promoteResult.getMailPrice());
-            entity.setProducts(StreamSupport.stream(promoteResult.getProducts())
+            entity.setPrice(price + mailPrice);
+            entity.setMailPrice(mailPrice);
+            entity.setProducts(StreamSupport.stream(products)
                     .map(new Function<OrderItemDto, OrderItemEntity>() {
                         @Override
                         public OrderItemEntity apply(OrderItemDto orderItemDto) {

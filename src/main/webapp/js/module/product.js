@@ -117,7 +117,7 @@ define(['jquery', 'module/functions', 'module/auth'], function ($, functions, au
                     product.buyTips = `${time} 开售`;
                     product.quickBuy = true;
                 } else {
-                    product.buyTips = `¥ ${product.extra.promotes.price} 购买`;
+                    product.buyTips = `¥ ${product.price} 购买`;
                     product.quickBuy = false;
                 }
             }
