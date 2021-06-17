@@ -11,6 +11,7 @@ import net.kaaass.bookshop.dto.UserInfoDto;
 import net.kaaass.bookshop.vo.CommentVo;
 import net.kaaass.bookshop.vo.UserAuthVo;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 /**
@@ -33,5 +34,6 @@ public interface UserMapper {
 
     CommentDto commentEntityToDto(CommentEntity commentEntity);
 
+    @Mapping(target = "avatar", source = "user", qualifiedByName = "getAvatarFromAuth")
     CommentVo commentEntityToVo(CommentEntity commentEntity);
 }

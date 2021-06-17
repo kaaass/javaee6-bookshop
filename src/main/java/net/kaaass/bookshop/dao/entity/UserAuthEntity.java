@@ -33,6 +33,9 @@ public class UserAuthEntity implements IEntity<String> {
     @Column(name = "auth_token")
     private String authToken;
 
+    @OneToOne(mappedBy = "auth", cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
+    private UserInfoEntity userInfo;
+
     @Column(name = "register_time",
             columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP",
             insertable = false,

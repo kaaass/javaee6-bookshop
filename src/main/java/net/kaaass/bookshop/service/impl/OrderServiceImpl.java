@@ -398,6 +398,7 @@ public class OrderServiceImpl implements OrderService, Serializable {
     @Override
     public OrderDto setCommented(String id, String uid, CommentRequest commentRequest) throws NotFoundException, ForbiddenException, BadRequestException {
         val entity = getEntityByIdAndCheck(id, uid);
+        val auth = userService.getAuthEntityById(uid);
         if (entity.getType() != OrderType.DELIVERED) {
             throw new BadRequestException("该订单当前不能评价！");
         }
@@ -406,7 +407,7 @@ public class OrderServiceImpl implements OrderService, Serializable {
 
         for (val comment : commentRequest.getComments()) {
             val commentEntity = new CommentEntity();
-            commentEntity.setUid(uid);
+            commentEntity.setUser(auth);
             commentEntity.setOrderId(id);
             commentEntity.setProductId(comment.getProductId());
             commentEntity.setRate(comment.getRate());
