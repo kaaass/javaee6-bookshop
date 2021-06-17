@@ -4,12 +4,9 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import net.kaaass.bookshop.dto.PromoteStrategyDto;
-import net.kaaass.bookshop.event.BeforeScriptStrategyExecuteEvent;
-import net.kaaass.bookshop.eventhandle.EventManager;
 import net.kaaass.bookshop.exception.BadRequestException;
 import net.kaaass.bookshop.exception.BaseException;
 import net.kaaass.bookshop.promote.BaseDbmsPromoteStrategy;
-import net.kaaass.bookshop.promote.IPromoteStrategy;
 import net.kaaass.bookshop.promote.OrderPromoteContext;
 import net.kaaass.bookshop.promote.ServiceAdapter;
 import net.kaaass.bookshop.script.ScriptSource;
@@ -61,12 +58,8 @@ public class JavascriptStrategy extends BaseDbmsPromoteStrategy<OrderPromoteCont
         evaluator.setLanguage(Constants.SCRIPT_TYPE_JAVASCRIPT);
         val arguments = new HashMap<String, Object>();
         // 触发事件获得附加参数
-        val event = new BeforeScriptStrategyExecuteEvent(context, getPromoteInfo(), this.param, null);
-        EventManager.EVENT_BUS.post(event);
-        context = event.getContext();
-        this.param = event.getParam();
         arguments.put("promoteContext", context);
-        arguments.put("extraInfo", event.getExtraInfo());
+        arguments.put("extraInfo", getPromoteInfo());
         arguments.put("OK", ResultType.OK);
         arguments.put("NOT_COND", ResultType.NOT_COND);
         arguments.put("NOT_MATCH", ResultType.NOT_MATCH);

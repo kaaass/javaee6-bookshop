@@ -23,10 +23,6 @@ import net.kaaass.bookshop.dto.CartDto;
 import net.kaaass.bookshop.dto.OrderDto;
 import net.kaaass.bookshop.dto.OrderItemDto;
 import net.kaaass.bookshop.dto.OrderType;
-import net.kaaass.bookshop.event.AfterOrderPromoteEvent;
-import net.kaaass.bookshop.event.GotOrderContextEvent;
-import net.kaaass.bookshop.event.PostOrderContextEvent;
-import net.kaaass.bookshop.eventhandle.EventManager;
 import net.kaaass.bookshop.exception.*;
 import net.kaaass.bookshop.mapper.OrderMapper;
 import net.kaaass.bookshop.promote.OrderPromoteContextFactory;
@@ -42,7 +38,10 @@ import org.codehaus.jackson.map.ObjectMapper;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -219,10 +218,6 @@ public class OrderServiceImpl implements OrderService, Serializable {
         context.setRequestId(requestId);
         val result = new OrderRequestResponse();
         result.setRequestId(requestId);
-        // 触发事件
-        val event = new PostOrderContextEvent(uid, context);
-        EventManager.EVENT_BUS.post(event);
-        context = event.getContext();
         // 准备上下文
         String message;
         try {
@@ -251,13 +246,6 @@ public class OrderServiceImpl implements OrderService, Serializable {
          打折逻辑
          */
         try {
-            // 触发事件
-            val event = new GotOrderContextEvent(context);
-            var cancel = EventManager.EVENT_BUS.post(event);
-            context = event.getContext();
-            if (cancel) {
-                throw new BadRequestException("订单处理被取消！");
-            }
             // 拼接上下文
             val promoteContext = orderPromoteContextFactory.buildFromRequestContext(context);
             log.info("请求上下文：{}", promoteContext);
@@ -274,17 +262,9 @@ public class OrderServiceImpl implements OrderService, Serializable {
             // 打折处理
             var promoteResult = promoteManager.doOnOrder(promoteContext);
             log.info("打折结果：{}", promoteResult);
-            // 触发事件
-            val promoteEvent = new AfterOrderPromoteEvent(promoteResult);
-            cancel = EventManager.EVENT_BUS.post(event);
-            promoteResult = promoteEvent.getPromoteResult();
-            if (cancel) {
-                throw new BadRequestException("订单处理被取消！");
-            }
             // 处理返回
             entity.setPrice(promoteResult.getPrice());
             entity.setMailPrice(promoteResult.getMailPrice());
-            final OrderRequestContext finalContext = context;
             entity.setProducts(StreamSupport.stream(promoteResult.getProducts())
                     .map(new Function<OrderItemDto, OrderItemEntity>() {
                         @Override

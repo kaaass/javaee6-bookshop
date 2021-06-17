@@ -2,8 +2,6 @@ package net.kaaass.bookshop.conf;
 
 import lombok.val;
 import net.kaaass.bookshop.controller.response.GlobalResponse;
-import net.kaaass.bookshop.event.AfterControllerEvent;
-import net.kaaass.bookshop.eventhandle.EventManager;
 import org.jboss.resteasy.annotations.interception.EncoderPrecedence;
 import org.jboss.resteasy.annotations.interception.ServerInterceptor;
 import org.jboss.resteasy.core.ServerResponse;
@@ -26,11 +24,7 @@ public class GlobalResponseInterceptor implements PostProcessInterceptor {
             return;
         }
 
-        val event = new AfterControllerEvent(resp);
-        EventManager.EVENT_BUS.post(event);
-        val eventResult = event.getControllerResult();
-
-        val wrapperResp = GlobalResponse.success(eventResult);
+        val wrapperResp = GlobalResponse.success(resp);
         response.setEntity(wrapperResp);
         response.setResourceClass(wrapperResp.getClass());
         response.setGenericType(wrapperResp.getClass().getGenericSuperclass());

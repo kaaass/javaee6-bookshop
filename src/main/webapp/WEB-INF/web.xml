@@ -17,8 +17,4 @@
             net.kaaass.bookshop.controller.page.PagePreProcessInterceptor
         </param-value>
     </context-param>
-
-    <listener>
-        <listener-class>net.kaaass.bookshop.plugin.PluginContextListener</listener-class>
-    </listener>
 </web-app>
