@@ -13,7 +13,6 @@
         <class>net.kaaass.bookshop.dao.entity.ProductEntity</class>
         <class>net.kaaass.bookshop.dao.entity.ProductMetadataEntity</class>
         <class>net.kaaass.bookshop.dao.entity.ProductStorageEntity</class>
-        <class>net.kaaass.bookshop.dao.entity.SellerInfoEntity</class>
         <class>net.kaaass.bookshop.dao.entity.UserAddressEntity</class>
         <class>net.kaaass.bookshop.dao.entity.UserAuthEntity</class>
         <class>net.kaaass.bookshop.dao.entity.UserInfoEntity</class>
