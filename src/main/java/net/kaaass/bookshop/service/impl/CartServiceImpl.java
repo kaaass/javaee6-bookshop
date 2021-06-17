@@ -38,6 +38,9 @@ public class CartServiceImpl implements CartService, Serializable {
     @Inject
     private ProductService productService;
 
+    @Inject
+    private ProductMapper productMapper;
+
     @Override
     public CartDto getById(String id) throws NotFoundException {
         return findById(id)
@@ -52,7 +55,7 @@ public class CartServiceImpl implements CartService, Serializable {
                     @Override
                     public CartDto get() {
                         val newEntity = new CartDto();
-                        newEntity.setProduct(ProductMapper.INSTANCE.productEntityToDto(product));
+                        newEntity.setProduct(productMapper.productEntityToDto(product));
                         newEntity.setCount(0);
                         return newEntity;
                     }

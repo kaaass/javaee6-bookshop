@@ -31,6 +31,9 @@ public class CategoryServiceImpl implements CategoryService, Serializable {
     @Inject
     private CategoryRepository categoryRepository;
 
+    @Inject
+    private ProductMapper productMapper;
+
     @Override
     public Optional<CategoryDto> add(CategoryAddRequest categoryDto) {
         val entity = new CategoryEntity();
@@ -49,7 +52,7 @@ public class CategoryServiceImpl implements CategoryService, Serializable {
                     .map(new Function<CategoryEntity, CategoryDto>() {
                         @Override
                         public CategoryDto apply(CategoryEntity categoryEntity) {
-                            return ProductMapper.INSTANCE.categoryEntityToDto(categoryEntity);
+                            return productMapper.categoryEntityToDto(categoryEntity);
                         }
                     });
         } catch (Exception e) {
@@ -64,7 +67,7 @@ public class CategoryServiceImpl implements CategoryService, Serializable {
                 .map(new Function<CategoryEntity, CategoryDto>() {
                     @Override
                     public CategoryDto apply(CategoryEntity categoryEntity) {
-                        return ProductMapper.INSTANCE.categoryEntityToDto(categoryEntity);
+                        return productMapper.categoryEntityToDto(categoryEntity);
                     }
                 })
                 .orElseThrow(BaseException.supplier(NotFoundException.class, "未找到此分类！"));
@@ -82,7 +85,7 @@ public class CategoryServiceImpl implements CategoryService, Serializable {
                 .map(new Function<CategoryEntity, CategoryDto>() {
                     @Override
                     public CategoryDto apply(CategoryEntity categoryEntity) {
-                        return ProductMapper.INSTANCE.categoryEntityToDto(categoryEntity);
+                        return productMapper.categoryEntityToDto(categoryEntity);
                     }
                 })
                 .collect(Collectors.<CategoryDto>toList());

@@ -11,17 +11,12 @@ import net.kaaass.bookshop.dto.UserAuthDto;
 import net.kaaass.bookshop.dto.UserInfoDto;
 import net.kaaass.bookshop.vo.CommentVo;
 import net.kaaass.bookshop.vo.UserAuthVo;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
 
 /**
  * 用户对象映射
  * @author kaaass
  */
-@Mapper(componentModel = "cdi", uses = CommonTransform.class)
 public interface UserMapper {
-    UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
     UserAuthDto userAuthEntityToDto(UserAuthEntity authEntity);
 
@@ -37,6 +32,5 @@ public interface UserMapper {
 
     CommentDto commentEntityToDto(CommentEntity commentEntity);
 
-    @Mapping(target = "avatar", source = "user", qualifiedByName = "getAvatarFromAuth")
     CommentVo commentEntityToVo(CommentEntity commentEntity);
 }

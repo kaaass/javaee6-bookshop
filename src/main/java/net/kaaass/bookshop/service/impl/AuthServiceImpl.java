@@ -1,6 +1,7 @@
 package net.kaaass.bookshop.service.impl;
 
 import java8.util.Optional;
+import java8.util.function.Function;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import net.kaaass.bookshop.controller.request.RegisterRequest;
@@ -13,13 +14,11 @@ import net.kaaass.bookshop.dto.UserAuthDto;
 import net.kaaass.bookshop.exception.BaseException;
 import net.kaaass.bookshop.exception.ForbiddenException;
 import net.kaaass.bookshop.exception.NotFoundException;
-import net.kaaass.bookshop.mapper.Mapper;
 import net.kaaass.bookshop.mapper.UserMapper;
 import net.kaaass.bookshop.security.SecurityRole;
 import net.kaaass.bookshop.service.AuthService;
 import net.kaaass.bookshop.vo.AuthTokenVo;
 
-import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.io.Serializable;
@@ -41,6 +40,9 @@ public class AuthServiceImpl implements AuthService, Serializable {
 
     @Inject
     private UserInfoRepository infoRepository;
+
+    @Inject
+    private UserMapper userMapper;
 
     @Override
     public Optional<UserAuthDto> register(RegisterRequest request) {
@@ -66,7 +68,7 @@ public class AuthServiceImpl implements AuthService, Serializable {
         infoEntity.setAuth(authEntity);
         infoRepository.save(infoEntity);
         // 拼接结果
-        return Optional.of(UserMapper.INSTANCE.userAuthEntityToDto(authEntity));
+        return Optional.of(userMapper.userAuthEntityToDto(authEntity));
     }
 
     @Override
@@ -105,7 +107,12 @@ public class AuthServiceImpl implements AuthService, Serializable {
     @Override
     public UserAuthDto validate(String authToken) throws ForbiddenException {
         return repository.findByAuthToken(authToken)
-                .map(Mapper.userAuthEntityToDto)
+                .map(new Function<UserAuthEntity, UserAuthDto>() {
+                    @Override
+                    public UserAuthDto apply(UserAuthEntity entity) {
+                        return userMapper.userAuthEntityToDto(entity);
+                    }
+                })
                 .orElseThrow(BaseException.supplier(ForbiddenException.class, "鉴权令牌不存在"));
     }
 
