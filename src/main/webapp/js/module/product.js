@@ -136,8 +136,8 @@ define(['jquery', 'module/functions', 'module/auth'], function ($, functions, au
      * @param $el 渲染dom
      * @param template 模板路径
      */
-    let renderProductsByUrl = async (url, $el, template, fetchExtra=true) => {
-        let response = await request.get(url)
+    let renderProductsByUrl = async (url, $el, template, fetchExtra=true, admin=false) => {
+        let response = await (admin ? adminRequest : request).get(url)
             .catch((e) => {
                 console.error("获取所有数据失败：", url, e);
                 functions.modal("错误", "无法获取数据，请检查网络连接！");

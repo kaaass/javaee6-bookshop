@@ -65,7 +65,7 @@ require([
 
     // 渲染商品列表
     let render = async () => {
-        await product.renderProductsByUrl('/product/', $list, TEMPLATE_LIST);
+        await product.renderProductsByUrl('/product/', $list, TEMPLATE_LIST, false, true);
         // 编辑
         $('.btn-edit').click(function () {
             let id = $(this).attr('product-id');
@@ -108,7 +108,7 @@ require([
 
     // 渲染商品缓冲列表
     let renderCache = async () => {
-        await product.renderProductsByUrl('/product/cache/', $cacheList, TEMPLATE_CACHE_LIST, false);
+        await product.renderProductsByUrl('/product/cache/', $cacheList, TEMPLATE_CACHE_LIST, false, true);
         // 编辑
         $('.btn-cache-edit').click(function () {
             let id = $(this).attr('product-id');

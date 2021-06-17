@@ -45,6 +45,7 @@ public class CategoryController extends BaseController {
 
     @DELETE
     @Path("/{id}/")
+    @Secured(SecurityRole.ADMIN)
     public boolean deleteCategoryById(@PathParam("id") String id) throws NotFoundException {
         categoryService.deleteById(id);
         return true;
@@ -52,7 +53,7 @@ public class CategoryController extends BaseController {
 
     @GET
     @Path("/")
-    public List<CategoryDto> getAllProducts() {
+    public List<CategoryDto> getAll() {
         return categoryService.getAll(pageInfo.getPageable());
     }
 }
