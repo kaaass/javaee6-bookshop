@@ -1,7 +1,5 @@
 package net.kaaass.bookshop.util;
 
-import lombok.val;
-
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
@@ -24,7 +22,7 @@ public class GenericUtils {
             }
         }
 
-        val genericSuper = (ParameterizedType) superClazz;
+        final ParameterizedType genericSuper = (ParameterizedType) superClazz;
         return (Class<?>) genericSuper.getActualTypeArguments()[index];
     }
 }

@@ -3,20 +3,13 @@ package net.kaaass.bookshop.util;
 import java8.util.function.Function;
 import java8.util.function.Predicate;
 import java8.util.stream.StreamSupport;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
-import java8.util.stream.Stream;
 
 import java.util.Arrays;
-import java.util.Collections;
 
 /**
  * 错误号
  * @author kaaass
  */
-@Getter
-@AllArgsConstructor
 public enum StatusEnum {
     /**
      * 成功
@@ -32,6 +25,11 @@ public enum StatusEnum {
 
     private int code;
     private String description;
+
+    private StatusEnum(int code, String description) {
+        this.code = code;
+        this.description = description;
+    }
 
     public boolean isSuccess() {
         return code == StatusEnum.SUCCESS.code;
@@ -52,5 +50,13 @@ public enum StatusEnum {
                     }
                 })
                 .findAny().orElse(Constants.UNKNOWN);
+    }
+
+    public int getCode() {
+        return this.code;
+    }
+
+    public String getDescription() {
+        return this.description;
     }
 }

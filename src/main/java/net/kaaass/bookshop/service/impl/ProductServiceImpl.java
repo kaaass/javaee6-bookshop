@@ -5,14 +5,10 @@ import java8.util.function.Function;
 import java8.util.stream.Collectors;
 import java8.util.stream.Stream;
 import java8.util.stream.StreamSupport;
-import lombok.extern.slf4j.Slf4j;
-import lombok.val;
 import net.kaaass.bookshop.controller.request.ProductAddRequest;
 import net.kaaass.bookshop.controller.response.ProductCommentResponse;
 import net.kaaass.bookshop.dao.Pageable;
-import net.kaaass.bookshop.dao.entity.CommentEntity;
-import net.kaaass.bookshop.dao.entity.ProductEntity;
-import net.kaaass.bookshop.dao.entity.ProductStorageEntity;
+import net.kaaass.bookshop.dao.entity.*;
 import net.kaaass.bookshop.dao.repository.CategoryRepository;
 import net.kaaass.bookshop.dao.repository.CommentRepository;
 import net.kaaass.bookshop.dao.repository.OrderItemRepository;
@@ -36,6 +32,7 @@ import net.kaaass.bookshop.util.StringUtils;
 import net.kaaass.bookshop.util.TimeUtils;
 import net.kaaass.bookshop.vo.CommentVo;
 import net.kaaass.bookshop.vo.ProductExtraVo;
+import org.slf4j.Logger;
 
 import javax.ejb.Stateful;
 import javax.enterprise.context.SessionScoped;
@@ -46,9 +43,9 @@ import java.util.*;
 
 @SessionScoped
 @Stateful
-@Slf4j
 public class ProductServiceImpl implements ProductService, Serializable {
 
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(ProductServiceImpl.class);
     @Inject
     private ProductRepository productRepository;
 
@@ -90,7 +87,7 @@ public class ProductServiceImpl implements ProductService, Serializable {
      */
     @Override
     public ProductDto addProduct(ProductAddRequest productToAdd) throws NotFoundException {
-        val entity = new ProductEntity();
+        ProductEntity entity = new ProductEntity();
         requestToEntity(productToAdd, entity);
         return this.productMapper.productEntityToDto(productRepository.save(entity));
     }
@@ -116,12 +113,12 @@ public class ProductServiceImpl implements ProductService, Serializable {
         entity.getStorage().setRest(productToAdd.getRest());
         // 图、分类
         if (entity.getThumbnail() == null || !productToAdd.getThumbnailId().equals(entity.getThumbnail().getId())) {
-            val thumbnail = resourceManager.getEntity(productToAdd.getThumbnailId())
+            final MediaEntity thumbnail = resourceManager.getEntity(productToAdd.getThumbnailId())
                     .orElseThrow(BaseException.supplier(NotFoundException.class, "略缩图不存在！"));
             entity.setThumbnail(thumbnail);
         }
         if (entity.getCategory() == null || !productToAdd.getCategoryId().equals(entity.getCategory().getId())) {
-            val category = categoryRepository.findById(productToAdd.getCategoryId())
+            final CategoryEntity category = categoryRepository.findById(productToAdd.getCategoryId())
                     .orElseThrow(BaseException.supplier(NotFoundException.class, "分类不存在！"));
             entity.setCategory(category);
         }
@@ -129,7 +126,7 @@ public class ProductServiceImpl implements ProductService, Serializable {
 
     @Override
     public ProductDto editProduct(String id, ProductAddRequest productToAdd) throws NotFoundException, InternalErrorExeption {
-        val entity = productRepository.findById(id)
+        final ProductEntity entity = productRepository.findById(id)
                 .orElseThrow(BaseException.supplier(NotFoundException.class, "未找到此商品！"));
         try {
             requestToEntity(productToAdd, entity);
@@ -157,8 +154,8 @@ public class ProductServiceImpl implements ProductService, Serializable {
 
     @Override
     public ProductDto addProductCache(ProductAddRequest request) throws NotFoundException {
-        val entity = new ProductEntity();
-        val fakeId = StringUtils.uuid();
+        final ProductEntity entity = new ProductEntity();
+        final String fakeId = StringUtils.uuid();
         entity.setId(fakeId);
         requestToEntity(request, entity);
         this.productCache.put(fakeId, entity);
@@ -172,7 +169,7 @@ public class ProductServiceImpl implements ProductService, Serializable {
             throw new NotFoundException("不存在此商品！");
         }
         // 更新
-        val entity = this.productCache.get(fakeId);
+        final ProductEntity entity = this.productCache.get(fakeId);
         requestToEntity(request, entity);
         this.productCache.put(fakeId, entity);
         return this.productMapper.productEntityToDto(entity);
@@ -195,7 +192,7 @@ public class ProductServiceImpl implements ProductService, Serializable {
             throw new BadRequestException("当前缓冲区为空！");
         }
         // 提交
-        val ret = StreamSupport.stream(this.productCache.values())
+        final List<ProductDto> ret = StreamSupport.stream(this.productCache.values())
                 .map(new Function<ProductEntity, ProductDto>() {
                     @Override
                     public ProductDto apply(ProductEntity entity) {
@@ -236,7 +233,7 @@ public class ProductServiceImpl implements ProductService, Serializable {
 
     @Override
     public ProductExtraVo getExtraById(String id, int count, String uid) throws NotFoundException {
-        val extra = new ProductExtraVo();
+        final ProductExtraVo extra = new ProductExtraVo();
         extra.setDetail(metadataManager.getForProduct(id, Constants.METAKEY_DETAIL));
         String defaultAddress = null;
         try {
@@ -245,7 +242,7 @@ public class ProductServiceImpl implements ProductService, Serializable {
             }
         } catch (NotFoundException ignored) {
         }
-        val entity = getEntityById(id);
+        final ProductEntity entity = getEntityById(id);
         extra.setMonthPurchase(getMonthPurchaseById(entity));
         // 获得商品图片
         extra.setImages(getProductImagesById(id));
@@ -300,8 +297,8 @@ public class ProductServiceImpl implements ProductService, Serializable {
      */
     @Override
     public List<ProductDto> getAllByCategory(String categoryId, Pageable pageable) throws NotFoundException {
-        val root = categoryService.getEntityById(categoryId);
-        val categories = categoryService.getAllSubs(root);
+        final CategoryEntity root = categoryService.getEntityById(categoryId);
+        final List<CategoryEntity> categories = categoryService.getAllSubs(root);
         log.info("子分类：{}", categories);
         return StreamSupport.stream(productRepository.findAllByCategoryIn(categories, pageable))
                 .map(new Function<ProductEntity, ProductDto>() {
@@ -315,8 +312,8 @@ public class ProductServiceImpl implements ProductService, Serializable {
 
     @Override
     public ProductCommentResponse getComments(String id, Pageable pageable) {
-        val result = new ProductCommentResponse();
-        val comments = StreamSupport.stream(commentRepository.findAllByProductIdOrderByRateDescCommentTimeDesc(id, pageable))
+        final ProductCommentResponse result = new ProductCommentResponse();
+        final List<CommentVo> comments = StreamSupport.stream(commentRepository.findAllByProductIdOrderByRateDescCommentTimeDesc(id, pageable))
                 .map(new Function<CommentEntity, CommentVo>() {
                     @Override
                     public CommentVo apply(CommentEntity commentEntity) {
@@ -324,7 +321,7 @@ public class ProductServiceImpl implements ProductService, Serializable {
                     }
                 })
                 .collect(Collectors.<CommentVo>toList());
-        val rate = commentRepository.averageRateByProductId(id)
+        final Float rate = commentRepository.averageRateByProductId(id)
                 .map(new Function<Double, Float>() {
                     @Override
                     public Float apply(Double aFloat) {
@@ -339,7 +336,7 @@ public class ProductServiceImpl implements ProductService, Serializable {
 
     @Override
     public List<ProductDto> search(String keyword, Pageable pageable) {
-        val searchStr = StreamSupport.stream(Arrays.asList(keyword.split(" ")))
+        final String searchStr = StreamSupport.stream(Arrays.asList(keyword.split(" ")))
                 .map(new Function<String, String>() {
                     @Override
                     public String apply(String s) {
@@ -424,7 +421,7 @@ public class ProductServiceImpl implements ProductService, Serializable {
      * 获得商品图片
      */
     private List<MediaDto> getProductImagesById(String id) {
-        val imgStr = metadataManager.getForProduct(id, Constants.METAKEY_IMAGES);
+        final String imgStr = metadataManager.getForProduct(id, Constants.METAKEY_IMAGES);
         return StreamSupport.stream(Arrays.asList(imgStr.split(",")))
                 .map(new Function<String, String>() {
                     @Override

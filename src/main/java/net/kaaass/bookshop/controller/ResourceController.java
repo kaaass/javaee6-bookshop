@@ -1,15 +1,8 @@
 package net.kaaass.bookshop.controller;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
-
 import java8.util.function.Function;
 import java8.util.stream.Collectors;
 import java8.util.stream.StreamSupport;
-import lombok.val;
-import lombok.var;
 import net.kaaass.bookshop.controller.page.PageInfo;
 import net.kaaass.bookshop.controller.request.AddUrlResourceRequest;
 import net.kaaass.bookshop.dao.entity.MediaEntity;
@@ -23,12 +16,18 @@ import net.kaaass.bookshop.security.SecurityRole;
 import net.kaaass.bookshop.util.Constants;
 import net.kaaass.bookshop.util.FileUtils;
 import net.kaaass.bookshop.util.StringUtils;
+import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
+import java.util.Map;
 
 @Stateless
 @Path("/resource")
@@ -66,11 +65,11 @@ public class ResourceController extends BaseController {
     @Path("/")
     @Secured(SecurityRole.ADMIN)
     public MediaDto addNetworkResource(AddUrlResourceRequest request) {
-        var entity = new MediaEntity();
+        MediaEntity entity = new MediaEntity();
         entity.setType(request.getType());
         entity.setUrl(request.getUrl());
         entity.setUploaderUid(getUid(identity));
-        var result = mediaRepository.save(entity);
+        MediaEntity result = mediaRepository.save(entity);
         return commenMapper.mediaEntityToDto(result);
     }
 
@@ -87,11 +86,11 @@ public class ResourceController extends BaseController {
     @Secured(SecurityRole.LOGGED)
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public MediaDto uploadImage(MultipartFormDataInput input) throws BadRequestException, IOException {
-        val uploadForm = input.getFormDataMap();
-        val originalFilename = uploadForm.get("fileName").get(0).getBodyAsString();
-        val inputParts = uploadForm.get("file");
-        var suffix = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
-        var newFileName = StringUtils.uuid() + "." + suffix;
+        Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
+        String originalFilename = uploadForm.get("fileName").get(0).getBodyAsString();
+        List<InputPart> inputParts = uploadForm.get("file");
+        String suffix = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
+        String newFileName = StringUtils.uuid() + "." + suffix;
         // TODO 检查suffix
 
         // 保存文件
@@ -99,17 +98,17 @@ public class ResourceController extends BaseController {
             throw new BadRequestException("无文件传送！");
         }
 
-        val inputStream = inputParts.get(0).getBody(InputStream.class, null);
+        InputStream inputStream = inputParts.get(0).getBody(InputStream.class, null);
 
         File destFile = new File(Constants.UPLOAD_FOLDER + newFileName);
         FileUtils.saveToFile(inputStream, destFile);
 
-        var entity = new MediaEntity();
+        MediaEntity entity = new MediaEntity();
         entity.setType(Constants.MEDIA_TYPE_IMAGE);
         entity.setUrl(Constants.UPLOAD_URL_PREFIX + newFileName);
         entity.setUploaderUid(getUid(identity));
 
-        var result = mediaRepository.save(entity);
+        MediaEntity result = mediaRepository.save(entity);
         return commenMapper.mediaEntityToDto(result);
     }
 }

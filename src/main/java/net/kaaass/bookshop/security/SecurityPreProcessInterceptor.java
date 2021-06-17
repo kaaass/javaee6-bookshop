@@ -1,7 +1,5 @@
 package net.kaaass.bookshop.security;
 
-import lombok.extern.slf4j.Slf4j;
-import lombok.val;
 import net.kaaass.bookshop.controller.response.GlobalResponse;
 import net.kaaass.bookshop.dto.UserAuthDto;
 import net.kaaass.bookshop.exception.ForbiddenException;
@@ -15,21 +13,23 @@ import org.jboss.resteasy.core.ServerResponse;
 import org.jboss.resteasy.spi.Failure;
 import org.jboss.resteasy.spi.HttpRequest;
 import org.jboss.resteasy.spi.interception.PreProcessInterceptor;
+import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.ext.Provider;
+import java.util.List;
 
 /**
  * 鉴权用请求拦截器
  * @author kaaass
  */
-@Slf4j
 @Provider
 @ServerInterceptor
 @SecurityPrecedence
 public class SecurityPreProcessInterceptor implements PreProcessInterceptor {
 
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(SecurityPreProcessInterceptor.class);
     @Inject
     private AuthService service;
 
@@ -40,22 +40,22 @@ public class SecurityPreProcessInterceptor implements PreProcessInterceptor {
     public ServerResponse preProcess(HttpRequest request, ResourceMethod method)
             throws Failure, WebApplicationException {
         // 获得注解
-        val annotate = method.getMethod().getAnnotation(Secured.class);
+        final Secured annotate = method.getMethod().getAnnotation(Secured.class);
         if (annotate == null) {
             return null;
         }
         // 如果不需要登录
-        val requiredRole = annotate.value();
+        final SecurityRole requiredRole = annotate.value();
         if (requiredRole.lowThan(SecurityRole.LOGGED)) {
             return null;
         }
         // 需要登录时，获取登录令牌
-        val headers = request.getHttpHeaders().getRequestHeader(Constants.HEADER_AUTH);
+        final List<String> headers = request.getHttpHeaders().getRequestHeader(Constants.HEADER_AUTH);
         if (headers == null || headers.isEmpty()) {
             return ServerResponse.copyIfNotServerResponse(
                     GlobalResponse.fail(StatusEnum.FORBIDDEN, "接口需要鉴权").toResponse());
         }
-        val authToken = headers.get(0);
+        final String authToken = headers.get(0);
         // 校验
         UserAuthDto authDto;
         try {

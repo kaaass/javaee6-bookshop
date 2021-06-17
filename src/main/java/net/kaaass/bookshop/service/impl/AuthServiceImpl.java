@@ -2,8 +2,6 @@ package net.kaaass.bookshop.service.impl;
 
 import java8.util.Optional;
 import java8.util.function.Function;
-import lombok.extern.slf4j.Slf4j;
-import lombok.val;
 import net.kaaass.bookshop.controller.request.RegisterRequest;
 import net.kaaass.bookshop.controller.response.LoginResponse;
 import net.kaaass.bookshop.dao.entity.UserAuthEntity;
@@ -18,6 +16,7 @@ import net.kaaass.bookshop.mapper.UserMapper;
 import net.kaaass.bookshop.security.SecurityRole;
 import net.kaaass.bookshop.service.AuthService;
 import net.kaaass.bookshop.vo.AuthTokenVo;
+import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -32,9 +31,9 @@ import java.util.UUID;
  * @author kaaass
  */
 @Stateless
-@Slf4j
 public class AuthServiceImpl implements AuthService, Serializable {
 
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(AuthServiceImpl.class);
     @Inject
     private UserAuthRepository repository;
 
@@ -47,7 +46,7 @@ public class AuthServiceImpl implements AuthService, Serializable {
     @Override
     public Optional<UserAuthDto> register(RegisterRequest request) {
         // 检查重复
-        val phone = request.getPhone();
+        final String phone = request.getPhone();
         if (repository.findByPhone(phone).isPresent()) {
             log.info("用户 Phone = {} 已经存在", phone);
             return Optional.empty();
@@ -74,10 +73,10 @@ public class AuthServiceImpl implements AuthService, Serializable {
     @Override
     public Optional<LoginResponse> login(String phone, String password) {
         try {
-            val entity = repository.findByPhone(phone).orElseThrow();
+            final UserAuthEntity entity = repository.findByPhone(phone).orElseThrow();
 
             // 登录判断
-            val truePasswd = entity.getPassword();
+            final String truePasswd = entity.getPassword();
             if (!truePasswd.equals(password)) {
                 log.info("密码错误 phone = {}, password = {}", phone, password);
                 return Optional.empty();
@@ -118,7 +117,7 @@ public class AuthServiceImpl implements AuthService, Serializable {
 
     @Override
     public void remove(String id) throws NotFoundException {
-        val entity = repository.findById(id)
+        final UserAuthEntity entity = repository.findById(id)
                 .orElseThrow(BaseException.supplier(NotFoundException.class, "未找到该用户！"));
         infoRepository.deleteAllByAuth(entity);
         repository.delete(entity);

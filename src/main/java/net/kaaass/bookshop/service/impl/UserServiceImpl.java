@@ -4,7 +4,6 @@ import java8.util.function.Function;
 import java8.util.function.Predicate;
 import java8.util.stream.Collectors;
 import java8.util.stream.StreamSupport;
-import lombok.extern.slf4j.Slf4j;
 import net.kaaass.bookshop.dao.entity.UserAddressEntity;
 import net.kaaass.bookshop.dao.entity.UserAuthEntity;
 import net.kaaass.bookshop.dao.entity.UserInfoEntity;
@@ -17,6 +16,7 @@ import net.kaaass.bookshop.exception.BaseException;
 import net.kaaass.bookshop.exception.NotFoundException;
 import net.kaaass.bookshop.mapper.UserMapper;
 import net.kaaass.bookshop.service.UserService;
+import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -24,9 +24,9 @@ import java.io.Serializable;
 import java.util.List;
 
 @Stateless
-@Slf4j
 public class UserServiceImpl implements UserService, Serializable {
 
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(UserServiceImpl.class);
     @Inject
     private UserAddressRepository userAddressRepository;
 

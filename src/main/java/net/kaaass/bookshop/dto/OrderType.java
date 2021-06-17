@@ -2,7 +2,6 @@ package net.kaaass.bookshop.dto;
 
 import java8.util.Optional;
 import java8.util.function.Predicate;
-import java8.util.stream.Stream;
 import java8.util.stream.StreamSupport;
 
 import java.util.Arrays;

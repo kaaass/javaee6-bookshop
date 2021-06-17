@@ -1,6 +1,5 @@
 package net.kaaass.bookshop.dao.repository;
 
-import lombok.val;
 import net.kaaass.bookshop.dao.BaseRepository;
 import net.kaaass.bookshop.dao.entity.UserAuthEntity;
 import net.kaaass.bookshop.dao.entity.UserInfoEntity;
@@ -18,7 +17,7 @@ public class UserInfoRepository extends BaseRepository<UserInfoEntity, String> {
     }
 
     public void deleteAllByAuth(UserAuthEntity auth) {
-        val entity = findByAuth(auth);
+        UserInfoEntity entity = findByAuth(auth);
         delete(entity);
     }
 }

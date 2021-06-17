@@ -1,16 +1,9 @@
 package net.kaaass.bookshop.service.impl;
 
-import java8.util.function.Function;
-import java8.util.stream.StreamSupport;
-import lombok.extern.slf4j.Slf4j;
-
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import java8.util.Optional;
+import java8.util.function.Function;
 import java8.util.stream.Collectors;
-import lombok.val;
-import lombok.var;
+import java8.util.stream.StreamSupport;
 import net.kaaass.bookshop.controller.request.CategoryAddRequest;
 import net.kaaass.bookshop.dao.Pageable;
 import net.kaaass.bookshop.dao.entity.CategoryEntity;
@@ -20,14 +13,18 @@ import net.kaaass.bookshop.exception.BaseException;
 import net.kaaass.bookshop.exception.NotFoundException;
 import net.kaaass.bookshop.mapper.ProductMapper;
 import net.kaaass.bookshop.service.CategoryService;
+import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Stateless
-@Slf4j
 public class CategoryServiceImpl implements CategoryService, Serializable {
 
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(CategoryServiceImpl.class);
     @Inject
     private CategoryRepository categoryRepository;
 
@@ -36,9 +33,9 @@ public class CategoryServiceImpl implements CategoryService, Serializable {
 
     @Override
     public Optional<CategoryDto> add(CategoryAddRequest categoryDto) {
-        val entity = new CategoryEntity();
+        CategoryEntity entity = new CategoryEntity();
         entity.setName(categoryDto.getName());
-        val parent = Optional.ofNullable(categoryDto.getParentId())
+        CategoryEntity parent = Optional.ofNullable(categoryDto.getParentId())
                 .flatMap(new Function<String, Optional<CategoryEntity>>() {
                     @Override
                     public Optional<CategoryEntity> apply(String s) {
@@ -93,12 +90,12 @@ public class CategoryServiceImpl implements CategoryService, Serializable {
 
     @Override
     public List<CategoryEntity> getAllSubs(final CategoryEntity root) {
-        val result = new ArrayList<CategoryEntity>(){{
+        List<CategoryEntity> result = new ArrayList<CategoryEntity>() {{
             add(root);
         }};
         // 找到一层子节点
-        val sons = categoryRepository.findAllByParent(root);
-        for (val son : sons) {
+        final List<CategoryEntity> sons = categoryRepository.findAllByParent(root);
+        for (final CategoryEntity son : sons) {
             result.addAll(getAllSubs(son));
         }
         return result;
@@ -106,7 +103,7 @@ public class CategoryServiceImpl implements CategoryService, Serializable {
 
     @Override
     public void deleteById(String id) throws NotFoundException {
-        val entity = getEntityById(id);
+        CategoryEntity entity = getEntityById(id);
         categoryRepository.delete(entity);
     }
 }

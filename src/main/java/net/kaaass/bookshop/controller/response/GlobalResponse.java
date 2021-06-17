@@ -1,8 +1,5 @@
 package net.kaaass.bookshop.controller.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.ToString;
 import net.kaaass.bookshop.exception.BaseException;
 import net.kaaass.bookshop.util.StatusEnum;
 
@@ -12,15 +9,18 @@ import javax.ws.rs.core.Response;
  * 标准返回格式
  * @param <T> 返回类型
  */
-@Data
-@ToString
-@AllArgsConstructor
 public class GlobalResponse<T> {
     private int status;
 
     private String message;
 
     private T data;
+
+    public GlobalResponse(int status, String message, T data) {
+        this.status = status;
+        this.message = message;
+        this.data = data;
+    }
 
     public Response toResponse() {
         return Response
@@ -69,5 +69,63 @@ public class GlobalResponse<T> {
      */
     public static <T> GlobalResponse<T> fail(BaseException exception) {
         return fail(exception.getStatus(), exception.getMessage());
+    }
+
+    public int getStatus() {
+        return this.status;
+    }
+
+    public String getMessage() {
+        return this.message;
+    }
+
+    public T getData() {
+        return this.data;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public void setData(T data) {
+        this.data = data;
+    }
+
+    public boolean equals(final Object o) {
+        if (o == this) return true;
+        if (!(o instanceof GlobalResponse)) return false;
+        final GlobalResponse<?> other = (GlobalResponse<?>) o;
+        if (!other.canEqual((Object) this)) return false;
+        if (this.getStatus() != other.getStatus()) return false;
+        final Object this$message = this.getMessage();
+        final Object other$message = other.getMessage();
+        if (this$message == null ? other$message != null : !this$message.equals(other$message)) return false;
+        final Object this$data = this.getData();
+        final Object other$data = other.getData();
+        if (this$data == null ? other$data != null : !this$data.equals(other$data)) return false;
+        return true;
+    }
+
+    protected boolean canEqual(final Object other) {
+        return other instanceof GlobalResponse;
+    }
+
+    public int hashCode() {
+        final int PRIME = 59;
+        int result = 1;
+        result = result * PRIME + this.getStatus();
+        final Object $message = this.getMessage();
+        result = result * PRIME + ($message == null ? 43 : $message.hashCode());
+        final Object $data = this.getData();
+        result = result * PRIME + ($data == null ? 43 : $data.hashCode());
+        return result;
+    }
+
+    public String toString() {
+        return "GlobalResponse(status=" + this.getStatus() + ", message=" + this.getMessage() + ", data=" + this.getData() + ")";
     }
 }

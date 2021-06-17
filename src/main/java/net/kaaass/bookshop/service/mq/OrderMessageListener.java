@@ -1,10 +1,10 @@
 package net.kaaass.bookshop.service.mq;
 
-import lombok.extern.slf4j.Slf4j;
 import net.kaaass.bookshop.service.OrderRequestContext;
 import net.kaaass.bookshop.service.OrderService;
 import net.kaaass.bookshop.util.Constants;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.slf4j.Logger;
 
 import javax.annotation.Resource;
 import javax.ejb.ActivationConfigProperty;
@@ -23,9 +23,9 @@ import java.io.IOException;
         @ActivationConfigProperty(propertyName = "subscriptionDurability", propertyValue = "Durable"),
         @ActivationConfigProperty(propertyName = "clientID", propertyValue = "consumer")
 })
-@Slf4j
 public class OrderMessageListener implements MessageListener {
 
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(OrderMessageListener.class);
     @Inject
     private OrderService orderService;
 

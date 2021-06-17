@@ -1,15 +1,16 @@
 package net.kaaass.bookshop.dao;
 
 import java8.util.Optional;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
-import lombok.val;
 import net.kaaass.bookshop.util.GenericUtils;
+import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,11 +20,10 @@ import java.util.List;
  *
  * @param <T>
  */
-@Slf4j
 @Stateless
 public class BaseRepository<T extends IEntity<ID>, ID> implements IRepository<T, ID>, Serializable {
 
-    @Getter(AccessLevel.PROTECTED)
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(BaseRepository.class);
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -59,7 +59,7 @@ public class BaseRepository<T extends IEntity<ID>, ID> implements IRepository<T,
             throw new NullPointerException();
         }
 
-        val entityList = new ArrayList<T>();
+        ArrayList<T> entityList = new ArrayList<T>();
         for (ID id : ids) {
             T entity = getOne(id);
             entityList.add(entity);
@@ -71,12 +71,12 @@ public class BaseRepository<T extends IEntity<ID>, ID> implements IRepository<T,
      * 获得所有对象
      */
     public List<T> findAll() {
-        val criteriaBuilder = this.entityManager.getCriteriaBuilder();
-        val criteriaQuery = criteriaBuilder.createQuery(this.entityClass);
-        val root = criteriaQuery.from(this.entityClass);
+        CriteriaBuilder criteriaBuilder = this.entityManager.getCriteriaBuilder();
+        CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(this.entityClass);
+        Root<T> root = criteriaQuery.from(this.entityClass);
         criteriaQuery.select(root);
 
-        val query = this.entityManager.createQuery(criteriaQuery);
+        TypedQuery<T> query = this.entityManager.createQuery(criteriaQuery);
         return query.getResultList();
     }
 
@@ -84,12 +84,12 @@ public class BaseRepository<T extends IEntity<ID>, ID> implements IRepository<T,
      * TODO 分页获得所有对象
      */
     public List<T> findAll(Pageable page) {
-        val criteriaBuilder = this.entityManager.getCriteriaBuilder();
-        val criteriaQuery = criteriaBuilder.createQuery(this.entityClass);
-        val root = criteriaQuery.from(this.entityClass);
+        CriteriaBuilder criteriaBuilder = this.entityManager.getCriteriaBuilder();
+        CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(this.entityClass);
+        Root<T> root = criteriaQuery.from(this.entityClass);
         criteriaQuery.select(root);
 
-        val query = this.entityManager.createQuery(criteriaQuery);
+        TypedQuery<T> query = this.entityManager.createQuery(criteriaQuery);
         return query.getResultList();
     }
 
@@ -99,7 +99,7 @@ public class BaseRepository<T extends IEntity<ID>, ID> implements IRepository<T,
     public <S extends T> S save(S object) {
         S savedObject;
 
-        val id = object.getId();
+        ID id = object.getId();
         if (id != null) {
             log.info("合并已存在对象 {}, ID = {}", this.entityClass.getName(), id);
             savedObject = this.entityManager.merge(object);
@@ -121,9 +121,9 @@ public class BaseRepository<T extends IEntity<ID>, ID> implements IRepository<T,
             throw new NullPointerException();
         }
 
-        val entityList = new ArrayList<S>();
-        for (val entity : objects) {
-            val savedEntity = save(entity);
+        ArrayList<S> entityList = new ArrayList<S>();
+        for (S entity : objects) {
+            S savedEntity = save(entity);
             entityList.add(savedEntity);
         }
         return entityList;
@@ -133,7 +133,7 @@ public class BaseRepository<T extends IEntity<ID>, ID> implements IRepository<T,
      * 通过 ID 删除对象
      */
     public void deleteById(ID id) {
-        val entity = getOne(id);
+        T entity = getOne(id);
         if (entity != null) {
             delete(entity);
         }
@@ -147,7 +147,7 @@ public class BaseRepository<T extends IEntity<ID>, ID> implements IRepository<T,
             throw new NullPointerException();
         }
 
-        for (val id : ids) {
+        for (ID id : ids) {
             deleteById(id);
         }
     }
@@ -168,7 +168,7 @@ public class BaseRepository<T extends IEntity<ID>, ID> implements IRepository<T,
             throw new NullPointerException();
         }
 
-        for (val entity : objects) {
+        for (T entity : objects) {
             delete(entity);
         }
     }
@@ -177,8 +177,8 @@ public class BaseRepository<T extends IEntity<ID>, ID> implements IRepository<T,
      * 删除所有实体
      */
     public void deleteAll() {
-        val entities = findAll();
-        for (val entity : entities) {
+        List<T> entities = findAll();
+        for (T entity : entities) {
             delete(entity);
         }
     }
@@ -187,14 +187,14 @@ public class BaseRepository<T extends IEntity<ID>, ID> implements IRepository<T,
      * 通过 SQL 查询一个结果
      */
     protected <R> Optional<R> findOneBySql(String sql, Class<R> resultClz, Object ...args) {
-        val manager = getEntityManager();
-        val query = manager.createQuery(sql, resultClz);
+        EntityManager manager = getEntityManager();
+        TypedQuery<R> query = manager.createQuery(sql, resultClz);
         for (int i = 0; i < args.length; i++) {
             query.setParameter(i + 1, args[i]);
         }
         query.setFirstResult(0);
         query.setMaxResults(1);
-        val list = query.getResultList();
+        List<R> list = query.getResultList();
         if (list.isEmpty()) {
             return Optional.empty();
         }
@@ -205,8 +205,8 @@ public class BaseRepository<T extends IEntity<ID>, ID> implements IRepository<T,
      * 通过 SQL 查询全部
      */
     protected <R> List<R> findAllBySql(String sql, Class<R> resultClz, Object ...args) {
-        val manager = getEntityManager();
-        val query = manager.createQuery(sql, resultClz);
+        EntityManager manager = getEntityManager();
+        TypedQuery<R> query = manager.createQuery(sql, resultClz);
         for (int i = 0; i < args.length; i++) {
             query.setParameter(i + 1, args[i]);
         }
@@ -217,8 +217,8 @@ public class BaseRepository<T extends IEntity<ID>, ID> implements IRepository<T,
      * 通过 SQL 查询全部
      */
     protected <R> List<R> findAllBySql(String sql, Pageable page, Class<R> resultClz, Object ...args) {
-        val manager = getEntityManager();
-        val query = manager.createQuery(sql, resultClz);
+        EntityManager manager = getEntityManager();
+        TypedQuery<R> query = manager.createQuery(sql, resultClz);
         for (int i = 0; i < args.length; i++) {
             query.setParameter(i + 1, args[i]);
         }
@@ -227,5 +227,9 @@ public class BaseRepository<T extends IEntity<ID>, ID> implements IRepository<T,
             query.setMaxResults(page.getPageSize());
         }
         return query.getResultList();
+    }
+
+    protected EntityManager getEntityManager() {
+        return this.entityManager;
     }
 }

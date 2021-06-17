@@ -1,15 +1,10 @@
 package net.kaaass.bookshop.dao;
 
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-
 /**
  * 分页
  *
  * @author kaaass
  */
-@ToString
-@EqualsAndHashCode
 public class Pageable {
 
     private final int page;
@@ -60,5 +55,31 @@ public class Pageable {
 
     public static Pageable of(int page, int size) {
         return new Pageable(page, size);
+    }
+
+    public boolean equals(final Object o) {
+        if (o == this) return true;
+        if (!(o instanceof Pageable)) return false;
+        final Pageable other = (Pageable) o;
+        if (!other.canEqual((Object) this)) return false;
+        if (this.page != other.page) return false;
+        if (this.size != other.size) return false;
+        return true;
+    }
+
+    protected boolean canEqual(final Object other) {
+        return other instanceof Pageable;
+    }
+
+    public int hashCode() {
+        final int PRIME = 59;
+        int result = 1;
+        result = result * PRIME + this.page;
+        result = result * PRIME + this.size;
+        return result;
+    }
+
+    public String toString() {
+        return "Pageable(page=" + this.page + ", size=" + this.size + ")";
     }
 }

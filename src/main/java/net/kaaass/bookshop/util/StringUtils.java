@@ -1,7 +1,5 @@
 package net.kaaass.bookshop.util;
 
-import lombok.val;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
@@ -16,10 +14,10 @@ public class StringUtils {
         if (lastOrderId.length() != 12) {
             return Constants.INIT_ORDER_ID;
         }
-        val dateStr = new SimpleDateFormat("yyyyMMdd").format(new Date());
-        val oldOrderNumStr = lastOrderId.substring(lastOrderId.length() - 4, lastOrderId.length());
-        val oldNum = Integer.parseInt(oldOrderNumStr);
-        val orderNum = String.format("%04d", oldNum + 1);
+        final String dateStr = new SimpleDateFormat("yyyyMMdd").format(new Date());
+        final String oldOrderNumStr = lastOrderId.substring(lastOrderId.length() - 4, lastOrderId.length());
+        final int oldNum = Integer.parseInt(oldOrderNumStr);
+        final String orderNum = String.format("%04d", oldNum + 1);
         return dateStr + orderNum;
     }
 }

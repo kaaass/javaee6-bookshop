@@ -1,8 +1,8 @@
 package net.kaaass.bookshop.conf;
 
-import lombok.extern.slf4j.Slf4j;
 import net.kaaass.bookshop.controller.response.GlobalResponse;
 import net.kaaass.bookshop.util.StatusEnum;
+import org.slf4j.Logger;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
@@ -13,8 +13,9 @@ import javax.ws.rs.ext.Provider;
  * @author kaaass
  */
 @Provider
-@Slf4j
 public class CommonExceptionHandler implements ExceptionMapper<Exception> {
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(CommonExceptionHandler.class);
+
     @Override
     public Response toResponse(Exception exception) {
         log.warn("未知错误", exception);

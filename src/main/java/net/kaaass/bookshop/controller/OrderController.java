@@ -1,12 +1,10 @@
 package net.kaaass.bookshop.controller;
 
-import lombok.extern.slf4j.Slf4j;
 import net.kaaass.bookshop.controller.page.PageInfo;
 import net.kaaass.bookshop.controller.request.CommentRequest;
 import net.kaaass.bookshop.controller.request.OrderCreateRequest;
 import net.kaaass.bookshop.controller.response.OrderCheckResponse;
 import net.kaaass.bookshop.controller.response.OrderRequestResponse;
-import net.kaaass.bookshop.dao.Pageable;
 import net.kaaass.bookshop.dto.OrderDto;
 import net.kaaass.bookshop.dto.OrderType;
 import net.kaaass.bookshop.exception.*;
@@ -14,6 +12,7 @@ import net.kaaass.bookshop.security.Secured;
 import net.kaaass.bookshop.security.SecurityIdentity;
 import net.kaaass.bookshop.security.SecurityRole;
 import net.kaaass.bookshop.service.OrderService;
+import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import javax.validation.Validator;
@@ -24,9 +23,9 @@ import java.util.List;
 @Path("/order")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-@Slf4j
 public class OrderController extends BaseController {
 
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(OrderController.class);
     @Inject
     private OrderService orderService;
 

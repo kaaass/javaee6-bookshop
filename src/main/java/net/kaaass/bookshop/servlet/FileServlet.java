@@ -1,8 +1,7 @@
 package net.kaaass.bookshop.servlet;
 
-import lombok.extern.slf4j.Slf4j;
-import net.kaaass.bookshop.exception.NotFoundException;
 import net.kaaass.bookshop.util.Constants;
+import org.slf4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,9 +14,10 @@ import java.net.URLDecoder;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 
-@Slf4j
 @WebServlet("/upload/*")
 public class FileServlet extends HttpServlet {
+
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(FileServlet.class);
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

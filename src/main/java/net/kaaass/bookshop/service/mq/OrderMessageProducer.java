@@ -1,18 +1,18 @@
 package net.kaaass.bookshop.service.mq;
 
-import lombok.extern.slf4j.Slf4j;
 import net.kaaass.bookshop.util.Constants;
+import org.slf4j.Logger;
 
 import javax.annotation.Resource;
 import javax.ejb.Stateless;
 import javax.jms.*;
 
 @Stateless
-@Slf4j
 public class OrderMessageProducer {
 
     private static final String DEFAULT_USERNAME = "testJNDI";
     private static final String DEFAULT_PASSWORD = "123456";
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(OrderMessageProducer.class);
 
     @Resource(mappedName = "java:/ConnectionFactory")
     ConnectionFactory connectionFactory;

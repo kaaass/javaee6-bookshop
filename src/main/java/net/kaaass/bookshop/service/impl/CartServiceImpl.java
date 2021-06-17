@@ -1,16 +1,12 @@
 package net.kaaass.bookshop.service.impl;
 
 import java8.util.Optional;
-import java8.util.function.Function;
 import java8.util.function.Supplier;
-import java8.util.stream.Collectors;
-import java8.util.stream.StreamSupport;
-import lombok.extern.slf4j.Slf4j;
-import lombok.val;
 import net.kaaass.bookshop.controller.request.CartAddRequest;
 import net.kaaass.bookshop.dao.Pageable;
 import net.kaaass.bookshop.dao.entity.ProductEntity;
 import net.kaaass.bookshop.dto.CartDto;
+import net.kaaass.bookshop.dto.ProductDto;
 import net.kaaass.bookshop.exception.BadRequestException;
 import net.kaaass.bookshop.exception.BaseException;
 import net.kaaass.bookshop.exception.NotFoundException;
@@ -18,6 +14,7 @@ import net.kaaass.bookshop.mapper.ProductMapper;
 import net.kaaass.bookshop.service.CartService;
 import net.kaaass.bookshop.service.ProductService;
 import net.kaaass.bookshop.util.StringUtils;
+import org.slf4j.Logger;
 
 import javax.ejb.Stateful;
 import javax.enterprise.context.SessionScoped;
@@ -32,9 +29,9 @@ import java.util.*;
  */
 @SessionScoped
 @Stateful
-@Slf4j
 public class CartServiceImpl implements CartService, Serializable {
 
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(CartServiceImpl.class);
     @Inject
     private ProductService productService;
 
@@ -49,20 +46,20 @@ public class CartServiceImpl implements CartService, Serializable {
 
     @Override
     public CartDto addToCart(CartAddRequest request) throws NotFoundException, BadRequestException {
-        val product = productService.getEntityById(request.getProductId());
-        val entity = findByProduct(product)
+        final ProductEntity product = productService.getEntityById(request.getProductId());
+        final CartDto entity = findByProduct(product)
                 .orElseGet(new Supplier<CartDto>() {
                     @Override
                     public CartDto get() {
-                        val newEntity = new CartDto();
+                        final CartDto newEntity = new CartDto();
                         newEntity.setProduct(productMapper.productEntityToDto(product));
                         newEntity.setCount(0);
                         return newEntity;
                     }
                 });
         // 检查购买限制
-        val limit = product.getBuyLimit();
-        val dest = entity.getCount() + request.getCount();
+        final int limit = product.getBuyLimit();
+        final int dest = entity.getCount() + request.getCount();
         if (limit != -1 && dest > limit) {
             throw new BadRequestException(String.format("本商品限购%d件！", limit));
         } else {
@@ -73,16 +70,16 @@ public class CartServiceImpl implements CartService, Serializable {
 
     @Override
     public void removeFromCart(String id) throws NotFoundException {
-        val entity = this.getById(id);
+        final CartDto entity = this.getById(id);
         delete(entity);
     }
 
     @Override
     public CartDto modifyItemCount(String id, int count) throws NotFoundException, BadRequestException {
-        val entity = this.getById(id);
-        val product = entity.getProduct();
+        final CartDto entity = this.getById(id);
+        final ProductDto product = entity.getProduct();
         // 检查购买限制
-        val limit = product.getBuyLimit();
+        final int limit = product.getBuyLimit();
         if (limit != -1 && count > limit) {
             throw new BadRequestException(String.format("本商品限购%d件！", limit));
         } else {
@@ -115,8 +112,8 @@ public class CartServiceImpl implements CartService, Serializable {
         if (product == null) {
             return Optional.empty();
         }
-        val pid = product.getId();
-        for (val entity : findAll()) {
+        final String pid = product.getId();
+        for (final CartDto entity : findAll()) {
             if (pid.equals(entity.getProduct().getId())) {
                 return Optional.of(entity);
             }

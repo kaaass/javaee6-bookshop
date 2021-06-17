@@ -1,16 +1,17 @@
 package net.kaaass.bookshop.mapper;
 
-import lombok.val;
+import net.kaaass.bookshop.dao.entity.MediaEntity;
 import net.kaaass.bookshop.dao.entity.UserAuthEntity;
+import net.kaaass.bookshop.dao.entity.UserInfoEntity;
 
 public class CommonTransform {
 
     public String getAvatarFromAuth(UserAuthEntity auth) {
-        val info = auth.getUserInfo();
+        final UserInfoEntity info = auth.getUserInfo();
         if (info == null) {
             return "";
         }
-        val avatar = info.getAvatar();
+        final MediaEntity avatar = info.getAvatar();
         if (avatar == null) {
             return "";
         }

@@ -1,10 +1,7 @@
 package net.kaaass.bookshop.controller.request;
 
-import lombok.Data;
-
 import javax.validation.constraints.Size;
 
-@Data
 public class MetadataRequest {
 
     @Size(
@@ -15,4 +12,55 @@ public class MetadataRequest {
     private String key;
 
     private String value;
+
+    public MetadataRequest() {
+    }
+
+    public String getKey() {
+        return this.key;
+    }
+
+    public String getValue() {
+        return this.value;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    public boolean equals(final Object o) {
+        if (o == this) return true;
+        if (!(o instanceof MetadataRequest)) return false;
+        final MetadataRequest other = (MetadataRequest) o;
+        if (!other.canEqual((Object) this)) return false;
+        final Object this$key = this.getKey();
+        final Object other$key = other.getKey();
+        if (this$key == null ? other$key != null : !this$key.equals(other$key)) return false;
+        final Object this$value = this.getValue();
+        final Object other$value = other.getValue();
+        if (this$value == null ? other$value != null : !this$value.equals(other$value)) return false;
+        return true;
+    }
+
+    protected boolean canEqual(final Object other) {
+        return other instanceof MetadataRequest;
+    }
+
+    public int hashCode() {
+        final int PRIME = 59;
+        int result = 1;
+        final Object $key = this.getKey();
+        result = result * PRIME + ($key == null ? 43 : $key.hashCode());
+        final Object $value = this.getValue();
+        result = result * PRIME + ($value == null ? 43 : $value.hashCode());
+        return result;
+    }
+
+    public String toString() {
+        return "MetadataRequest(key=" + this.getKey() + ", value=" + this.getValue() + ")";
+    }
 }

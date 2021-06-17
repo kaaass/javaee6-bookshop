@@ -1,12 +1,10 @@
 package net.kaaass.bookshop.service.impl;
 
+import java8.util.Optional;
 import java8.util.function.Consumer;
 import java8.util.function.Function;
 import java8.util.stream.Collectors;
 import java8.util.stream.StreamSupport;
-import lombok.extern.slf4j.Slf4j;
-import lombok.val;
-import lombok.var;
 import net.kaaass.bookshop.controller.request.CommentRequest;
 import net.kaaass.bookshop.controller.request.OrderCreateMultiRequest;
 import net.kaaass.bookshop.controller.request.OrderCreateRequest;
@@ -14,16 +12,11 @@ import net.kaaass.bookshop.controller.request.OrderCreateSingleRequest;
 import net.kaaass.bookshop.controller.response.OrderCheckResponse;
 import net.kaaass.bookshop.controller.response.OrderRequestResponse;
 import net.kaaass.bookshop.dao.Pageable;
-import net.kaaass.bookshop.dao.entity.CommentEntity;
-import net.kaaass.bookshop.dao.entity.OrderEntity;
-import net.kaaass.bookshop.dao.entity.OrderItemEntity;
+import net.kaaass.bookshop.dao.entity.*;
 import net.kaaass.bookshop.dao.repository.CommentRepository;
 import net.kaaass.bookshop.dao.repository.OrderRepository;
 import net.kaaass.bookshop.dao.repository.ProductRepository;
-import net.kaaass.bookshop.dto.CartDto;
-import net.kaaass.bookshop.dto.OrderDto;
-import net.kaaass.bookshop.dto.OrderItemDto;
-import net.kaaass.bookshop.dto.OrderType;
+import net.kaaass.bookshop.dto.*;
 import net.kaaass.bookshop.exception.*;
 import net.kaaass.bookshop.mapper.OrderMapper;
 import net.kaaass.bookshop.mapper.ProductMapper;
@@ -35,6 +28,7 @@ import net.kaaass.bookshop.util.StringUtils;
 import net.kaaass.bookshop.util.TimeUtils;
 import net.kaaass.bookshop.vo.UserOrderCountVo;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -48,9 +42,9 @@ import java.util.Date;
 import java.util.List;
 
 @Stateless
-@Slf4j
 public class OrderServiceImpl implements OrderService, Serializable {
 
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(OrderServiceImpl.class);
     @Inject
     private OrderRepository orderRepository;
 
@@ -89,7 +83,7 @@ public class OrderServiceImpl implements OrderService, Serializable {
 
     @Override
     public OrderEntity getEntityByIdAndCheck(String id, String uid) throws NotFoundException, ForbiddenException {
-        val result = this.getEntityById(id);
+        final OrderEntity result = this.getEntityById(id);
         if (!result.getUid().equals(uid)) {
             throw new ForbiddenException("未找到该订单！");
         }
@@ -98,10 +92,10 @@ public class OrderServiceImpl implements OrderService, Serializable {
 
     @Override
     public OrderCheckResponse checkRequest(String requestId) throws BadRequestException {
-        val result = new OrderCheckResponse();
-        val order = orderRepository.findByRequestId(requestId);
+        final OrderCheckResponse result = new OrderCheckResponse();
+        final Optional<OrderEntity> order = orderRepository.findByRequestId(requestId);
         if (order.isPresent()) {
-            val entity = order.get();
+            final OrderEntity entity = order.get();
             if (entity.getType() == OrderType.ERROR) {
                 throw new BadRequestException(entity.getReason());
             }
@@ -146,12 +140,12 @@ public class OrderServiceImpl implements OrderService, Serializable {
 
     @Override
     public UserOrderCountVo getUserOrderCount(String uid) {
-        val result = new UserOrderCountVo();
-        val toPay = orderRepository.countAllByUidAndType(uid, OrderType.CREATED).orElse(0);
+        final UserOrderCountVo result = new UserOrderCountVo();
+        final Integer toPay = orderRepository.countAllByUidAndType(uid, OrderType.CREATED).orElse(0);
         result.setToPay(toPay);
-        val toDeliver = orderRepository.countAllByUidAndType(uid, OrderType.PAID).orElse(0);
+        final Integer toDeliver = orderRepository.countAllByUidAndType(uid, OrderType.PAID).orElse(0);
         result.setToDeliver(toDeliver);
-        val toComment = orderRepository.countAllByUidAndType(uid, OrderType.DELIVERED).orElse(0);
+        final Integer toComment = orderRepository.countAllByUidAndType(uid, OrderType.DELIVERED).orElse(0);
         result.setToComment(toComment);
         return result;
     }
@@ -182,7 +176,7 @@ public class OrderServiceImpl implements OrderService, Serializable {
 
     @Override
     public List<OrderDto> getAllByProduct(String pid, Pageable pageable) throws NotFoundException {
-        val product = productService.getEntityById(pid);
+        final ProductEntity product = productService.getEntityById(pid);
         return StreamSupport.stream(orderRepository.findAllByProduct(product, pageable))
                 .map(new Function<OrderEntity, OrderDto>() {
                     @Override
@@ -195,13 +189,13 @@ public class OrderServiceImpl implements OrderService, Serializable {
 
     @Override
     public OrderRequestResponse createToQueue(String uid, OrderCreateRequest request) throws InternalErrorExeption, NotFoundException {
-        val requestId = StringUtils.uuid();
+        final String requestId = StringUtils.uuid();
         // 购物车处理
         if (request instanceof OrderCreateMultiRequest) {
-            val multi = (OrderCreateMultiRequest) request;
+            final OrderCreateMultiRequest multi = (OrderCreateMultiRequest) request;
             multi.setCachedCartItems(new ArrayList<CartDto>());
-            for (val cartItem : multi.getCartItems()) {
-                val cid = cartItem.getId();
+            for (final OrderCreateMultiRequest.CartItem cartItem : multi.getCartItems()) {
+                final String cid = cartItem.getId();
                 // 实体缓存获取
                 multi.getCachedCartItems().add(cartService.getById(cid));
                 // 删除购物车中已有的商品
@@ -209,11 +203,11 @@ public class OrderServiceImpl implements OrderService, Serializable {
             }
         }
         // 订单处理
-        var context = new OrderRequestContext();
+        OrderRequestContext context = new OrderRequestContext();
         context.setRequest(request);
         context.setUid(uid);
         context.setRequestId(requestId);
-        val result = new OrderRequestResponse();
+        OrderRequestResponse result = new OrderRequestResponse();
         result.setRequestId(requestId);
         // 准备上下文
         String message;
@@ -231,13 +225,13 @@ public class OrderServiceImpl implements OrderService, Serializable {
 
     @Override
     public void doCreate(OrderRequestContext context) throws NotFoundException {
-        val entity = new OrderEntity();
+        final OrderEntity entity = new OrderEntity();
         entity.setId(StringUtils.orderId(getLastOrderId()));
         entity.setUid(context.getUid());
         entity.setRequestId(context.getRequestId());
-        val request = context.getRequest();
-        val address = userService.getAddressEntityByIdAndCheck(request.getAddressId(), context.getUid());
-        val user = userService.getAuthEntityById(context.getUid());
+        final OrderCreateRequest request = context.getRequest();
+        final UserAddressEntity address = userService.getAddressEntityByIdAndCheck(request.getAddressId(), context.getUid());
+        final UserAuthEntity user = userService.getAuthEntityById(context.getUid());
         entity.setAddress(address);
         /*
          订单逻辑
@@ -246,11 +240,11 @@ public class OrderServiceImpl implements OrderService, Serializable {
             // 生成商品信息
             float price = 0;
             float mailPrice = 0;
-            val products = new ArrayList<OrderItemDto>();
+            final ArrayList<OrderItemDto> products = new ArrayList<>();
             if (request instanceof OrderCreateSingleRequest) {
-                val single = (OrderCreateSingleRequest) request;
-                val product = productRepository.getOne(single.getProductId());
-                val item = new OrderItemDto();
+                final OrderCreateSingleRequest single = (OrderCreateSingleRequest) request;
+                final ProductEntity product = productRepository.getOne(single.getProductId());
+                final OrderItemDto item = new OrderItemDto();
                 price = product.getPrice();
                 mailPrice = product.getMailPrice();
                 item.setCount(1);
@@ -258,11 +252,11 @@ public class OrderServiceImpl implements OrderService, Serializable {
                 item.setProduct(productMapper.productEntityToDto(product));
                 products.add(item);
             } else if (request instanceof OrderCreateMultiRequest) {
-                val multi = (OrderCreateMultiRequest) request;
-                for (val cartItem : multi.getCachedCartItems()) {
-                    val item = new OrderItemDto();
-                    val curPrice = cartItem.getCount() * cartItem.getProduct().getPrice();
-                    val curMailPrice = cartItem.getProduct().getMailPrice();
+                final OrderCreateMultiRequest multi = (OrderCreateMultiRequest) request;
+                for (final CartDto cartItem : multi.getCachedCartItems()) {
+                    final OrderItemDto item = new OrderItemDto();
+                    final float curPrice = cartItem.getCount() * cartItem.getProduct().getPrice();
+                    final float curMailPrice = cartItem.getProduct().getMailPrice();
                     item.setProduct(cartItem.getProduct());
                     item.setPrice(curPrice);
                     item.setCount(cartItem.getCount());
@@ -274,8 +268,8 @@ public class OrderServiceImpl implements OrderService, Serializable {
                 }
             }
             // 检查购买限制
-            for (val orderItem : products) {
-                val buyLimit = orderItem.getProduct().getBuyLimit();
+            for (final OrderItemDto orderItem : products) {
+                final int buyLimit = orderItem.getProduct().getBuyLimit();
                 if (buyLimit > 0 && orderItem.getCount() > buyLimit) {
                     throw new BadRequestException(String.format("本商品限购%d件！", buyLimit));
                 }
@@ -307,9 +301,9 @@ public class OrderServiceImpl implements OrderService, Serializable {
                     })
                     .collect(Collectors.<OrderItemEntity>toList()));
             // 检查库存数量
-            for (val orderItemEntity : entity.getProducts()) {
-                val product = orderItemEntity.getProduct();
-                val dest = product.getStorage().getRest() - orderItemEntity.getCount();
+            for (final OrderItemEntity orderItemEntity : entity.getProducts()) {
+                final ProductEntity product = orderItemEntity.getProduct();
+                final int dest = product.getStorage().getRest() - orderItemEntity.getCount();
                 if (dest >= 0) {
                     product.getStorage().setRest(dest);
                 } else {
@@ -317,7 +311,7 @@ public class OrderServiceImpl implements OrderService, Serializable {
                 }
             }
             // 更新库存
-            for (val orderItemEntity : entity.getProducts()) {
+            for (final OrderItemEntity orderItemEntity : entity.getProducts()) {
                 productRepository.save(orderItemEntity.getProduct());
             }
         } catch (BaseException e) {
@@ -336,7 +330,7 @@ public class OrderServiceImpl implements OrderService, Serializable {
 
     @Override
     public OrderDto setPaid(String id, String uid) throws NotFoundException, ForbiddenException, BadRequestException {
-        val entity = uid == null ? getEntityById(id) :
+        final OrderEntity entity = uid == null ? getEntityById(id) :
                 getEntityByIdAndCheck(id, uid);
         if (!entity.getType().less(OrderType.PAID)) {
             throw new BadRequestException("该订单已付款或已取消！");
@@ -352,7 +346,7 @@ public class OrderServiceImpl implements OrderService, Serializable {
 
     @Override
     public OrderDto setDelivered(String id, String deliverCode) throws NotFoundException, BadRequestException {
-        val entity = getEntityById(id);
+        final OrderEntity entity = getEntityById(id);
         if (entity.getType() != OrderType.PAID) {
             throw new BadRequestException("只有已付款的订单可以发货！");
         }
@@ -368,7 +362,7 @@ public class OrderServiceImpl implements OrderService, Serializable {
 
     @Override
     public OrderDto setCanceled(String id, String uid) throws NotFoundException, ForbiddenException, BadRequestException {
-        val entity = getEntityByIdAndCheck(id, uid);
+        final OrderEntity entity = getEntityByIdAndCheck(id, uid);
         if (!entity.getType().less(OrderType.PAID)) {
             throw new BadRequestException("该订单已付款或已取消！");
         }
@@ -383,7 +377,7 @@ public class OrderServiceImpl implements OrderService, Serializable {
 
     @Override
     public OrderDto setRefunded(String id) throws NotFoundException, BadRequestException {
-        val entity = getEntityById(id);
+        final OrderEntity entity = getEntityById(id);
         if (entity.getType().less(OrderType.PAID) || entity.getType().great(OrderType.COMMENTED)) {
             throw new BadRequestException("只有已付款、未退款的订单可以退款！");
         }
@@ -398,16 +392,16 @@ public class OrderServiceImpl implements OrderService, Serializable {
 
     @Override
     public OrderDto setCommented(String id, String uid, CommentRequest commentRequest) throws NotFoundException, ForbiddenException, BadRequestException {
-        val entity = getEntityByIdAndCheck(id, uid);
-        val auth = userService.getAuthEntityById(uid);
+        final OrderEntity entity = getEntityByIdAndCheck(id, uid);
+        final UserAuthEntity auth = userService.getAuthEntityById(uid);
         if (entity.getType() != OrderType.DELIVERED) {
             throw new BadRequestException("该订单当前不能评价！");
         }
         entity.setType(OrderType.COMMENTED);
         entity.setFinishTime(TimeUtils.nowTimestamp());
 
-        for (val comment : commentRequest.getComments()) {
-            val commentEntity = new CommentEntity();
+        for (final CommentRequest.Content comment : commentRequest.getComments()) {
+            final CommentEntity commentEntity = new CommentEntity();
             commentEntity.setUser(auth);
             commentEntity.setOrderId(id);
             commentEntity.setProductId(comment.getProductId());
@@ -425,11 +419,11 @@ public class OrderServiceImpl implements OrderService, Serializable {
     }
 
     private String getLastOrderId() {
-        val dayStart = TimeUtils.dayStart(new Date());
+        final Date dayStart = TimeUtils.dayStart(new Date());
         Timestamp start = TimeUtils.dateToTimestamp(dayStart);
         Timestamp end = TimeUtils.dateToTimestamp(TimeUtils.dayShift(dayStart, 1));
         log.info("查询与日期 {} 与 {} 之间", start, end);
-        val result = orderRepository.findFirstByCreateTimeBetweenOrderByCreateTimeDesc(start, end);
+        final Optional<OrderEntity> result = orderRepository.findFirstByCreateTimeBetweenOrderByCreateTimeDesc(start, end);
         return result.map(new Function<OrderEntity, String>() {
             @Override
             public String apply(OrderEntity orderEntity) {
@@ -439,14 +433,14 @@ public class OrderServiceImpl implements OrderService, Serializable {
     }
 
     private void printOrderFile(OrderEntity entity) {
-        val dto = orderMapper.orderEntityToDto(entity);
+        final OrderDto dto = orderMapper.orderEntityToDto(entity);
         String filename = String.format("%s.txt", entity.getId());
         File file = new File(Constants.ORDER_FOLDER, filename);
         if (file.exists()) {
             file.delete();
         }
         // 订单文件内容
-        val addr = dto.getAddress();
+        final UserAddressDto addr = dto.getAddress();
         StringBuilder sb = new StringBuilder();
         sb.append("订单号：").append(dto.getId()).append('\n');
         sb.append("订单状态：").append(dto.getType()).append('\n');
@@ -462,7 +456,7 @@ public class OrderServiceImpl implements OrderService, Serializable {
                 .append("  ").append(addr.getDetailAddress()).append('\n');
         sb.append("订单信息：\n");
         sb.append("书名\t\t\t\t\t\t单价\t\t数量\t\t总价\n");
-        for (val item : dto.getProducts()) {
+        for (final OrderItemDto item : dto.getProducts()) {
             sb.append(String.format("%s\t\t\t\t\t\t%s\t\t%s\t\t%s\n",
                     item.getProduct().getName(),
                     item.getProduct().getPrice(),

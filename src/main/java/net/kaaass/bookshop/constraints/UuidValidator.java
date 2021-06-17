@@ -1,7 +1,5 @@
 package net.kaaass.bookshop.constraints;
 
-import lombok.val;
-
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
@@ -25,9 +23,9 @@ public class UuidValidator implements ConstraintValidator<Uuid, String> {
             return false;
         }
 
-        for (val ch : s.toCharArray()) {
-            val digit = '0' <= ch && ch <= '9';
-            val alphabet = 'a' <= ch && ch <= 'z';
+        for (char ch : s.toCharArray()) {
+            boolean digit = '0' <= ch && ch <= '9';
+            boolean alphabet = 'a' <= ch && ch <= 'z';
             if (!(digit || alphabet)) {
                 return false;
             }

@@ -5,7 +5,6 @@ import java8.util.function.Function;
 import java8.util.function.Supplier;
 import java8.util.stream.Collectors;
 import java8.util.stream.StreamSupport;
-import lombok.val;
 import net.kaaass.bookshop.dao.entity.ProductMetadataEntity;
 import net.kaaass.bookshop.dao.repository.ProductMetadataRepository;
 import net.kaaass.bookshop.util.TimeUtils;
@@ -56,11 +55,11 @@ public class MetadataManager implements Serializable {
     }
 
     public void setForProduct(final String productId, final String key, String value) {
-        val metadata = productMetadataRepository.findByProductIdAndKey(productId, key)
+        final ProductMetadataEntity metadata = productMetadataRepository.findByProductIdAndKey(productId, key)
                 .orElseGet(new Supplier<ProductMetadataEntity>() {
                     @Override
                     public ProductMetadataEntity get() {
-                        val newEntity = new ProductMetadataEntity();
+                        final ProductMetadataEntity newEntity = new ProductMetadataEntity();
                         newEntity.setProductId(productId);
                         newEntity.setKey(key);
                         return newEntity;

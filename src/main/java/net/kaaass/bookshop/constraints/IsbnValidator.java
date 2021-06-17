@@ -1,6 +1,5 @@
 package net.kaaass.bookshop.constraints;
 
-import lombok.val;
 import net.kaaass.bookshop.exception.BadRequestException;
 
 import javax.validation.ConstraintValidator;
@@ -29,25 +28,25 @@ public class IsbnValidator implements ConstraintValidator<Isbn, String> {
         if (id.length() != 13) {
             throw new BadRequestException("ISBN长度必须为13！");
         }
-        for (val ch : id.toCharArray()) {
+        for (char ch : id.toCharArray()) {
             if (!Character.isDigit(ch)) {
                 throw new BadRequestException("ISBN必须为13位数字！");
             }
         }
 
-        val prefix = id.substring(0, 3);
+        String prefix = id.substring(0, 3);
         if (!"978".equals(prefix)) {
             throw new BadRequestException("ISBN开头3位必须为978！");
         }
 
-        val countryCode = id.substring(3, 4);
-        val publisher = id.substring(4, 8);
-        val pubNumber = id.substring(8, 12);
-        val validate = id.substring(12, 13);
+        String countryCode = id.substring(3, 4);
+        String publisher = id.substring(4, 8);
+        String pubNumber = id.substring(8, 12);
+        String validate = id.substring(12, 13);
 
         int actual = 0;
         for (int i = 0; i < 12; i++) {
-            val ch = id.charAt(i);
+            char ch = id.charAt(i);
             if (i % 2 == 0) {
                 actual += (ch - '0');
             } else {
