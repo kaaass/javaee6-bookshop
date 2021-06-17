@@ -57,15 +57,26 @@
 
 <main role="main" class="py-5 mt-3">
 
-    <!--TODO 未完成-->
+    <!--TODO 头像更改-->
 
     <div class="container pt-4 py-3">
         <div class="row m-1">
             <h2>设置</h2>
         </div>
         <div class="row text-secondary ml-1">
-            <small>地址设置</small>
+            <small>用户设置</small>
         </div>
+    </div>
+
+    <div class="container d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h4 class="h4">收货地址管理</h4>
+        <div class="btn-toolbar mb-2 mb-md-0">
+            <button type="button" id="btn-create" class="btn btn-sm btn-outline-success">
+                新增商品
+            </button>
+        </div>
+    </div>
+    <div class="container table-responsive">
     </div>
 
 </main>
@@ -79,6 +90,48 @@
         <p>Powered By Java EE 6 + Bootstrap v4</p>
     </div>
 </footer>
+
+<!-- 新增地址模态框 -->
+<div class="modal fade" id="addressModal" tabindex="-1" role="dialog" aria-labelledby="pluginModalTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="pluginModalTitle">添加收货地址</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="pluginModalBody">
+                <div class="plugin-form">
+                    <div class="form-group">
+                        <label for="fname">姓名</label>
+                        <input type="text" class="form-control" id="fname"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">手机</label>
+                        <input type="text" class="form-control" id="phone"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="area">地区</label>
+                        <input type="text" class="form-control" id="area"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="detailAddress">详细地址</label>
+                        <input type="text" class="form-control" id="detailAddress"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="mailCode">邮编</label>
+                        <input type="text" class="form-control" id="mailCode"/>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="btn-add" type="button" class="btn btn-primary" data-dismiss="modal">添加</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script src="https://cdn.bootcss.com/require.js/2.3.6/require.min.js"></script>
 <script src="../js/config.js"></script>

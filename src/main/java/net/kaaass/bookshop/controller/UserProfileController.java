@@ -4,7 +4,9 @@ import java8.util.function.Function;
 import java8.util.function.Predicate;
 import java8.util.stream.Collectors;
 import java8.util.stream.StreamSupport;
+import lombok.val;
 import lombok.var;
+import net.kaaass.bookshop.controller.request.UserAddressRequest;
 import net.kaaass.bookshop.controller.request.UserInfoModifyRequest;
 import net.kaaass.bookshop.controller.response.UserProfileResponse;
 import net.kaaass.bookshop.dao.entity.UserAddressEntity;
@@ -24,12 +26,14 @@ import net.kaaass.bookshop.service.UserService;
 import net.kaaass.bookshop.service.metadata.ResourceManager;
 import net.kaaass.bookshop.util.TimeUtils;
 
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.validation.Validator;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
+@Stateless
 @Path("/user/profile")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
@@ -110,31 +114,67 @@ public class UserProfileController extends BaseController {
     @Path("/address/{id}/")
     @Secured(SecurityRole.USER)
     public UserAddressDto getAddressDtoById(@PathParam("id") String id) throws NotFoundException {
+        return userMapper.userAddressEntityToDto(getAddressById(id));
+    }
+
+    @PUT
+    @Path("/address/")
+    @Secured(SecurityRole.USER)
+    public UserAddressDto addUserAddress(UserAddressRequest request) throws BadRequestException, NotFoundException {
+        validateBean(validator, request);
+        val entity = userMapper.userAddressRequestToEntity(request);
+        val auth = userService.getAuthEntityById(getUid(identity));
+        entity.setUser(auth);
+        entity.setLastUpdateTime(TimeUtils.nowTimestamp());
+        val result = addressRepository.save(entity);
+        return userMapper.userAddressEntityToDto(result);
+    }
+
+    @PUT
+    @Path("/address/{id}/")
+    @Secured(SecurityRole.USER)
+    public UserAddressDto editUserAddress(@PathParam("id") String id, UserAddressRequest request) throws NotFoundException {
+        val oldEntity = getAddressById(id);
+        val entity = userMapper.userAddressRequestToEntity(request);
+        val auth = userService.getAuthEntityById(getUid(identity));
+        entity.setId(id);
+        entity.setUser(auth);
+        entity.setLastUpdateTime(TimeUtils.nowTimestamp());
+        val result = addressRepository.save(entity);
+        return userMapper.userAddressEntityToDto(result);
+    }
+
+    @DELETE
+    @Path("/address/{id}/")
+    @Secured(SecurityRole.USER)
+    public boolean removeUserAddress(@PathParam("id") String id) throws NotFoundException {
+        val entity = getAddressById(id);
+        addressRepository.delete(entity);
+        return true;
+    }
+
+    @POST
+    @Path("/address/{id}/default/")
+    @Secured(SecurityRole.USER)
+    public boolean setUserDefaultAddress(@PathParam("id") String id) throws NotFoundException {
+        val entity = getAddressById(id);
+        // 设置其他为非默认、当前为默认
+        val auth = entity.getUser();
+        for (val addr : auth.getAddresses()) {
+            addr.setDefaultAddress(addr.getId().equals(id));
+            addressRepository.save(addr);
+        }
+        return true;
+    }
+
+    private UserAddressEntity getAddressById(String id) throws NotFoundException {
         return addressRepository.findById(id)
                 .filter(new Predicate<UserAddressEntity>() {
                     @Override
                     public boolean test(UserAddressEntity addressEntity) {
-                        return addressEntity.getUid().equals(getUid(identity));
+                        return addressEntity.getUser().getId().equals(getUid(identity));
                     }
                 }) // 本人收货地址
-                .map(new Function<UserAddressEntity, UserAddressDto>() {
-                    @Override
-                    public UserAddressDto apply(UserAddressEntity userAddressEntity) {
-                        return userMapper.userAddressEntityToDto(userAddressEntity);
-                    }
-                })
                 .orElseThrow(BaseException.supplier(NotFoundException.class, "未找到此收货地址！"));
-    }
-
-    @POST
-    @Path("/address/")
-    @Secured(SecurityRole.USER)
-    public UserAddressDto addUserAddress(UserAddressDto userAddressDto) throws BadRequestException {
-        validateBean(validator, userAddressDto);
-        var entity = userMapper.userAddressDtoToEntity(userAddressDto);
-        entity.setUid(getUid(identity));
-        entity.setLastUpdateTime(TimeUtils.nowTimestamp());
-        var result = addressRepository.save(entity);
-        return userMapper.userAddressEntityToDto(result);
     }
 }

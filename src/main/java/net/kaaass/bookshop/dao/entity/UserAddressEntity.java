@@ -19,8 +19,9 @@ public class UserAddressEntity implements IEntity<String> {
     @GeneratedValue(generator = Constants.ID_GENERATOR)
     private String id;
 
-    @Column(name = "uid")
-    private String uid; // TODO 改为ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
+    @JoinColumn(name = "uid")
+    private UserAuthEntity user;
 
     @Column(name = "area",
             columnDefinition = "TEXT DEFAULT NULL")

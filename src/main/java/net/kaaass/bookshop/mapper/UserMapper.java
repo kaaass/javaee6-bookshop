@@ -1,5 +1,6 @@
 package net.kaaass.bookshop.mapper;
 
+import net.kaaass.bookshop.controller.request.UserAddressRequest;
 import net.kaaass.bookshop.dao.entity.CommentEntity;
 import net.kaaass.bookshop.dao.entity.UserAddressEntity;
 import net.kaaass.bookshop.dao.entity.UserAuthEntity;
@@ -25,6 +26,8 @@ public interface UserMapper {
     UserAuthDto userAuthEntityToDto(UserAuthEntity authEntity);
 
     UserAuthVo userAuthDtoToVo(UserAuthDto authDto);
+
+    UserAddressEntity userAddressRequestToEntity(UserAddressRequest request);
 
     UserAddressDto userAddressEntityToDto(UserAddressEntity addressEntity);
 

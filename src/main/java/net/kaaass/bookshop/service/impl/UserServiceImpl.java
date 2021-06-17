@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService, Serializable {
                 .filter(new Predicate<UserAddressEntity>() {
                     @Override
                     public boolean test(UserAddressEntity addressEntity) {
-                        return addressEntity.getUid().equals(uid);
+                        return addressEntity.getUser().getId().equals(uid);
                     }
                 })
                 .orElseThrow(BaseException.supplier(NotFoundException.class, "未找到该地址！"));

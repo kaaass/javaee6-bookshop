@@ -245,7 +245,9 @@ public class ProductServiceImpl implements ProductService, Serializable {
         extra.setDetail(metadataManager.getForProduct(id, Constants.METAKEY_DETAIL));
         String defaultAddress = null;
         try {
-            defaultAddress = userService.getDefaultAddressEntityById(uid).getId();
+            if (uid != null) {
+                defaultAddress = userService.getDefaultAddressEntityById(uid).getId();
+            }
         } catch (NotFoundException ignored) {
         }
         val entity = getEntityById(id);
