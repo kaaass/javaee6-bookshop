@@ -1,6 +1,5 @@
 package net.kaaass.bookshop.service.impl;
 
-import java8.util.function.Consumer;
 import java8.util.function.Function;
 import java8.util.stream.Collectors;
 import java8.util.stream.StreamSupport;
@@ -27,7 +26,8 @@ import net.kaaass.bookshop.event.GotOrderContextEvent;
 import net.kaaass.bookshop.event.PostOrderContextEvent;
 import net.kaaass.bookshop.eventhandle.EventManager;
 import net.kaaass.bookshop.exception.*;
-import net.kaaass.bookshop.mapper.OrderMapper;
+import net.kaaass.bookshop.mapper.EntityCreator;
+import net.kaaass.bookshop.mapper.PojoMapper;
 import net.kaaass.bookshop.promote.OrderPromoteContextFactory;
 import net.kaaass.bookshop.promote.OrderPromoteResult;
 import net.kaaass.bookshop.promote.PromoteManager;
@@ -86,7 +86,10 @@ public class OrderServiceImpl implements OrderService, Serializable {
     private ProductService productService;
 
     @Inject
-    private OrderMapper orderMapper;
+    private PojoMapper pojoMapper;
+
+    @Inject
+    private EntityCreator entityCreator;
 
     @Override
     public OrderEntity getEntityById(String id) throws NotFoundException {
@@ -119,12 +122,12 @@ public class OrderServiceImpl implements OrderService, Serializable {
 
     @Override
     public OrderDto getById(String id) throws NotFoundException {
-        return orderMapper.orderEntityToDto(this.getEntityById(id));
+        return pojoMapper.entityToDto(this.getEntityById(id));
     }
 
     @Override
     public OrderDto getByIdAndCheck(String id, String uid) throws NotFoundException, ForbiddenException {
-        return orderMapper.orderEntityToDto(this.getEntityByIdAndCheck(id, uid));
+        return pojoMapper.entityToDto(this.getEntityByIdAndCheck(id, uid));
     }
 
     @Override
@@ -133,7 +136,7 @@ public class OrderServiceImpl implements OrderService, Serializable {
                 .map(new Function<OrderEntity, OrderDto>() {
                     @Override
                     public OrderDto apply(OrderEntity orderEntity) {
-                        return orderMapper.orderEntityToDto(orderEntity);
+                        return pojoMapper.entityToDto(orderEntity);
                     }
                 })
                 .collect(Collectors.<OrderDto>toList());
@@ -145,7 +148,7 @@ public class OrderServiceImpl implements OrderService, Serializable {
                 .map(new Function<OrderEntity, OrderDto>() {
                     @Override
                     public OrderDto apply(OrderEntity orderEntity) {
-                        return orderMapper.orderEntityToDto(orderEntity);
+                        return pojoMapper.entityToDto(orderEntity);
                     }
                 })
                 .collect(Collectors.<OrderDto>toList());
@@ -169,7 +172,7 @@ public class OrderServiceImpl implements OrderService, Serializable {
                 .map(new Function<OrderEntity, OrderDto>() {
                     @Override
                     public OrderDto apply(OrderEntity orderEntity) {
-                        return orderMapper.orderEntityToDto(orderEntity);
+                        return pojoMapper.entityToDto(orderEntity);
                     }
                 })
                 .collect(Collectors.<OrderDto>toList());
@@ -181,7 +184,7 @@ public class OrderServiceImpl implements OrderService, Serializable {
                 .map(new Function<OrderEntity, OrderDto>() {
                     @Override
                     public OrderDto apply(OrderEntity orderEntity) {
-                        return orderMapper.orderEntityToDto(orderEntity);
+                        return pojoMapper.entityToDto(orderEntity);
                     }
                 })
                 .collect(Collectors.<OrderDto>toList());
@@ -194,7 +197,7 @@ public class OrderServiceImpl implements OrderService, Serializable {
                 .map(new Function<OrderEntity, OrderDto>() {
                     @Override
                     public OrderDto apply(OrderEntity orderEntity) {
-                        return orderMapper.orderEntityToDto(orderEntity);
+                        return pojoMapper.entityToDto(orderEntity);
                     }
                 })
                 .collect(Collectors.<OrderDto>toList());
@@ -290,20 +293,11 @@ public class OrderServiceImpl implements OrderService, Serializable {
             entity.setProducts(StreamSupport.stream(promoteResult.getProducts())
                     .map(new Function<OrderItemDto, OrderItemEntity>() {
                         @Override
-                        public OrderItemEntity apply(OrderItemDto orderItemDto) {
-                            return orderMapper.orderItemDtoToEntity(orderItemDto);
-                        }
-                    })
-                    .peek(new Consumer<OrderItemEntity>() {
-                        @Override
-                        public void accept(OrderItemEntity orderItemEntity) {
-                            orderItemEntity.setUser(user);
-                        }
-                    })
-                    .peek(new Consumer<OrderItemEntity>() {
-                        @Override
-                        public void accept(OrderItemEntity orderItemEntity) {
-                            orderItemEntity.setOrder(entity);
+                        public OrderItemEntity apply(OrderItemDto dto) {
+                            val itemEntity = entityCreator.createOrderItemEntity(dto);
+                            itemEntity.setUser(user);
+                            itemEntity.setOrder(entity);
+                            return itemEntity;
                         }
                     })
                     .collect(Collectors.<OrderItemEntity>toList()));
@@ -348,7 +342,7 @@ public class OrderServiceImpl implements OrderService, Serializable {
           写订单文件
          */
         printOrderFile(entity);
-        return orderMapper.orderEntityToDto(orderRepository.save(entity));
+        return pojoMapper.entityToDto(orderRepository.save(entity));
     }
 
     @Override
@@ -364,7 +358,7 @@ public class OrderServiceImpl implements OrderService, Serializable {
           写订单文件
          */
         printOrderFile(entity);
-        return orderMapper.orderEntityToDto(orderRepository.save(entity));
+        return pojoMapper.entityToDto(orderRepository.save(entity));
     }
 
     @Override
@@ -379,7 +373,7 @@ public class OrderServiceImpl implements OrderService, Serializable {
           写订单文件
          */
         printOrderFile(entity);
-        return orderMapper.orderEntityToDto(orderRepository.save(entity));
+        return pojoMapper.entityToDto(orderRepository.save(entity));
     }
 
     @Override
@@ -394,7 +388,7 @@ public class OrderServiceImpl implements OrderService, Serializable {
           写订单文件
          */
         printOrderFile(entity);
-        return orderMapper.orderEntityToDto(orderRepository.save(entity));
+        return pojoMapper.entityToDto(orderRepository.save(entity));
     }
 
     @Override
@@ -422,7 +416,7 @@ public class OrderServiceImpl implements OrderService, Serializable {
           写订单文件
          */
         printOrderFile(entity);
-        return orderMapper.orderEntityToDto(orderRepository.save(entity));
+        return pojoMapper.entityToDto(orderRepository.save(entity));
     }
 
     private String getLastOrderId() {
@@ -440,7 +434,7 @@ public class OrderServiceImpl implements OrderService, Serializable {
     }
 
     private void printOrderFile(OrderEntity entity) {
-        val dto = orderMapper.orderEntityToDto(entity);
+        val dto = pojoMapper.entityToDto(entity);
         String filename = String.format("%s.txt", entity.getId());
         File file = new File(Constants.ORDER_FOLDER, filename);
         if (file.exists()) {

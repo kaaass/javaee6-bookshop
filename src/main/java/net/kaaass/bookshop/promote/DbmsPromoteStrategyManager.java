@@ -11,7 +11,7 @@ import net.kaaass.bookshop.dto.PromoteStrategyDto;
 import net.kaaass.bookshop.exception.BadRequestException;
 import net.kaaass.bookshop.exception.BaseException;
 import net.kaaass.bookshop.exception.NotFoundException;
-import net.kaaass.bookshop.mapper.OrderMapper;
+import net.kaaass.bookshop.mapper.PojoMapper;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -29,7 +29,7 @@ public class DbmsPromoteStrategyManager {
     private PromoteStrategyRepository promoteStrategyRepository;
 
     @Inject
-    private OrderMapper orderMapper;
+    private PojoMapper pojoMapper;
 
     /**
      * 依照优先级获得策略顺序
@@ -41,7 +41,7 @@ public class DbmsPromoteStrategyManager {
                 .map(new Function<PromoteStrategyEntity, PromoteStrategyDto>() {
                     @Override
                     public PromoteStrategyDto apply(PromoteStrategyEntity promoteStrategyEntity) {
-                        return orderMapper.promoteStrategyEntitiyToDto(promoteStrategyEntity);
+                        return pojoMapper.entityToDto(promoteStrategyEntity);
                     }
                 })
                 .collect(Collectors.<PromoteStrategyDto>toList());
@@ -63,7 +63,7 @@ public class DbmsPromoteStrategyManager {
             val constructor = clazz.getConstructor();
             BaseDbmsPromoteStrategy strategy = (BaseDbmsPromoteStrategy) constructor.newInstance();
             strategy.initialize(promoteStrategyDto, serviceAdapter);
-            strategy.promoteStrategyInfoVo = orderMapper.promoteStrategyDtoToInfoVo(promoteStrategyDto);
+            strategy.promoteStrategyInfoVo = pojoMapper.dtoToVo(promoteStrategyDto);
             return strategy;
         } catch (ClassNotFoundException e) {
             log.info("找不到策略类：", e);

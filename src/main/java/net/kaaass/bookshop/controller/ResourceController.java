@@ -10,7 +10,7 @@ import net.kaaass.bookshop.dao.entity.MediaEntity;
 import net.kaaass.bookshop.dao.repository.MediaRepository;
 import net.kaaass.bookshop.dto.MediaDto;
 import net.kaaass.bookshop.exception.BadRequestException;
-import net.kaaass.bookshop.mapper.CommenMapper;
+import net.kaaass.bookshop.mapper.PojoMapper;
 import net.kaaass.bookshop.security.Secured;
 import net.kaaass.bookshop.security.SecurityIdentity;
 import net.kaaass.bookshop.security.SecurityRole;
@@ -44,7 +44,7 @@ public class ResourceController extends BaseController {
     private SecurityIdentity identity;
 
     @Inject
-    private CommenMapper commenMapper;
+    private PojoMapper pojoMapper;
 
     @GET
     @Path("/")
@@ -54,7 +54,7 @@ public class ResourceController extends BaseController {
                 .map(new Function<MediaEntity, MediaDto>() {
                     @Override
                     public MediaDto apply(MediaEntity mediaEntity) {
-                        return commenMapper.mediaEntityToDto(mediaEntity);
+                        return pojoMapper.entityToDto(mediaEntity);
                     }
                 })
                 .collect(Collectors.<MediaDto>toList());
@@ -69,7 +69,7 @@ public class ResourceController extends BaseController {
         entity.setUrl(request.getUrl());
         entity.setUploaderUid(getUid(identity));
         val result = mediaRepository.save(entity);
-        return commenMapper.mediaEntityToDto(result);
+        return pojoMapper.entityToDto(result);
     }
 
     @DELETE
@@ -108,6 +108,6 @@ public class ResourceController extends BaseController {
         entity.setUploaderUid(getUid(identity));
 
         val result = mediaRepository.save(entity);
-        return commenMapper.mediaEntityToDto(result);
+        return pojoMapper.entityToDto(result);
     }
 }

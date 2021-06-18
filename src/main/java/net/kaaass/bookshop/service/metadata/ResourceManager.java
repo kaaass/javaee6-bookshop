@@ -5,7 +5,7 @@ import java8.util.function.Function;
 import net.kaaass.bookshop.dao.entity.MediaEntity;
 import net.kaaass.bookshop.dao.repository.MediaRepository;
 import net.kaaass.bookshop.dto.MediaDto;
-import net.kaaass.bookshop.mapper.CommenMapper;
+import net.kaaass.bookshop.mapper.PojoMapper;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -18,7 +18,7 @@ public class ResourceManager implements Serializable {
     private MediaRepository mediaRepository;
 
     @Inject
-    private CommenMapper commenMapper;
+    private PojoMapper pojoMapper;
 
     public Optional<MediaEntity> getEntity(String id) {
         return mediaRepository.findById(id);
@@ -28,7 +28,7 @@ public class ResourceManager implements Serializable {
         return getEntity(id).map(new Function<MediaEntity, MediaDto>() {
             @Override
             public MediaDto apply(MediaEntity mediaEntity) {
-                return commenMapper.mediaEntityToDto(mediaEntity);
+                return pojoMapper.entityToDto(mediaEntity);
             }
         });
     }

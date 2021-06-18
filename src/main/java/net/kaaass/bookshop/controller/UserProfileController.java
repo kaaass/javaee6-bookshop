@@ -16,7 +16,8 @@ import net.kaaass.bookshop.dto.UserInfoDto;
 import net.kaaass.bookshop.exception.BadRequestException;
 import net.kaaass.bookshop.exception.BaseException;
 import net.kaaass.bookshop.exception.NotFoundException;
-import net.kaaass.bookshop.mapper.UserMapper;
+import net.kaaass.bookshop.mapper.EntityCreator;
+import net.kaaass.bookshop.mapper.PojoMapper;
 import net.kaaass.bookshop.security.Secured;
 import net.kaaass.bookshop.security.SecurityIdentity;
 import net.kaaass.bookshop.security.SecurityRole;
@@ -60,7 +61,10 @@ public class UserProfileController extends BaseController {
     private OrderService orderService;
 
     @Inject
-    private UserMapper userMapper;
+    private PojoMapper pojoMapper;
+
+    @Inject
+    private EntityCreator entityCreator;
 
     @GET
     @Path("/")
@@ -68,7 +72,7 @@ public class UserProfileController extends BaseController {
     public UserProfileResponse getUserProfile() throws NotFoundException {
         val result = new UserProfileResponse();
         val auth = userService.getAuthEntityById(getUid(identity));
-        val info = userMapper.userInfoEntityToDto(userInfoRepository.findByAuth(auth));
+        val info = pojoMapper.entityToDto(userInfoRepository.findByAuth(auth));
         result.setInfo(info);
         result.setOrderCount(orderService.getUserOrderCount(getUid(identity)));
         return result;
@@ -88,7 +92,7 @@ public class UserProfileController extends BaseController {
         entity.setWechat(request.getWechat());
         entity.setLastUpdateTime(TimeUtils.nowTimestamp());
         val result = userInfoRepository.save(entity);
-        return userMapper.userInfoEntityToDto(result);
+        return pojoMapper.entityToDto(result);
     }
 
     /*
@@ -103,7 +107,7 @@ public class UserProfileController extends BaseController {
                 .map(new Function<UserAddressEntity, UserAddressDto>() {
                     @Override
                     public UserAddressDto apply(UserAddressEntity userAddressEntity) {
-                        return userMapper.userAddressEntityToDto(userAddressEntity);
+                        return pojoMapper.entityToDto(userAddressEntity);
                     }
                 })
                 .collect(Collectors.<UserAddressDto>toList());
@@ -113,7 +117,7 @@ public class UserProfileController extends BaseController {
     @Path("/address/{id}/")
     @Secured(SecurityRole.USER)
     public UserAddressDto getAddressDtoById(@PathParam("id") String id) throws NotFoundException {
-        return userMapper.userAddressEntityToDto(getAddressById(id));
+        return pojoMapper.entityToDto(getAddressById(id));
     }
 
     @PUT
@@ -121,12 +125,12 @@ public class UserProfileController extends BaseController {
     @Secured(SecurityRole.USER)
     public UserAddressDto addUserAddress(UserAddressRequest request) throws BadRequestException, NotFoundException {
         validateBean(validator, request);
-        val entity = userMapper.userAddressRequestToEntity(request);
+        val entity = entityCreator.createUserAddressEntity(request);
         val auth = userService.getAuthEntityById(getUid(identity));
         entity.setUser(auth);
         entity.setLastUpdateTime(TimeUtils.nowTimestamp());
         val result = addressRepository.save(entity);
-        return userMapper.userAddressEntityToDto(result);
+        return pojoMapper.entityToDto(result);
     }
 
     @PUT
@@ -134,13 +138,13 @@ public class UserProfileController extends BaseController {
     @Secured(SecurityRole.USER)
     public UserAddressDto editUserAddress(@PathParam("id") String id, UserAddressRequest request) throws NotFoundException {
         val oldEntity = getAddressById(id);
-        val entity = userMapper.userAddressRequestToEntity(request);
+        val entity = entityCreator.createUserAddressEntity(request);
         val auth = userService.getAuthEntityById(getUid(identity));
         entity.setId(id);
         entity.setUser(auth);
         entity.setLastUpdateTime(TimeUtils.nowTimestamp());
         val result = addressRepository.save(entity);
-        return userMapper.userAddressEntityToDto(result);
+        return pojoMapper.entityToDto(result);
     }
 
     @DELETE

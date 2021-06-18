@@ -13,7 +13,7 @@ import net.kaaass.bookshop.dao.repository.CategoryRepository;
 import net.kaaass.bookshop.dto.CategoryDto;
 import net.kaaass.bookshop.exception.BaseException;
 import net.kaaass.bookshop.exception.NotFoundException;
-import net.kaaass.bookshop.mapper.ProductMapper;
+import net.kaaass.bookshop.mapper.PojoMapper;
 import net.kaaass.bookshop.service.CategoryService;
 
 import javax.ejb.Stateless;
@@ -30,7 +30,7 @@ public class CategoryServiceImpl implements CategoryService, Serializable {
     private CategoryRepository categoryRepository;
 
     @Inject
-    private ProductMapper productMapper;
+    private PojoMapper pojoMapper;
 
     @Override
     public Optional<CategoryDto> add(CategoryAddRequest categoryDto) {
@@ -50,7 +50,7 @@ public class CategoryServiceImpl implements CategoryService, Serializable {
                     .map(new Function<CategoryEntity, CategoryDto>() {
                         @Override
                         public CategoryDto apply(CategoryEntity categoryEntity) {
-                            return productMapper.categoryEntityToDto(categoryEntity);
+                            return pojoMapper.entityToDto(categoryEntity);
                         }
                     });
         } catch (Exception e) {
@@ -65,7 +65,7 @@ public class CategoryServiceImpl implements CategoryService, Serializable {
                 .map(new Function<CategoryEntity, CategoryDto>() {
                     @Override
                     public CategoryDto apply(CategoryEntity categoryEntity) {
-                        return productMapper.categoryEntityToDto(categoryEntity);
+                        return pojoMapper.entityToDto(categoryEntity);
                     }
                 })
                 .orElseThrow(BaseException.supplier(NotFoundException.class, "未找到此分类！"));
@@ -83,7 +83,7 @@ public class CategoryServiceImpl implements CategoryService, Serializable {
                 .map(new Function<CategoryEntity, CategoryDto>() {
                     @Override
                     public CategoryDto apply(CategoryEntity categoryEntity) {
-                        return productMapper.categoryEntityToDto(categoryEntity);
+                        return pojoMapper.entityToDto(categoryEntity);
                     }
                 })
                 .collect(Collectors.<CategoryDto>toList());

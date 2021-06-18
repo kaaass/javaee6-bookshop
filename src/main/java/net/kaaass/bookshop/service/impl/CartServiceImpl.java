@@ -11,7 +11,7 @@ import net.kaaass.bookshop.dto.CartDto;
 import net.kaaass.bookshop.exception.BadRequestException;
 import net.kaaass.bookshop.exception.BaseException;
 import net.kaaass.bookshop.exception.NotFoundException;
-import net.kaaass.bookshop.mapper.ProductMapper;
+import net.kaaass.bookshop.mapper.PojoMapper;
 import net.kaaass.bookshop.service.CartService;
 import net.kaaass.bookshop.service.ProductService;
 import net.kaaass.bookshop.util.StringUtils;
@@ -36,7 +36,7 @@ public class CartServiceImpl implements CartService, Serializable {
     private ProductService productService;
 
     @Inject
-    private ProductMapper productMapper;
+    private PojoMapper pojoMapper;
 
     @Override
     public CartDto getById(String id) throws NotFoundException {
@@ -52,7 +52,7 @@ public class CartServiceImpl implements CartService, Serializable {
                     @Override
                     public CartDto get() {
                         val newEntity = new CartDto();
-                        newEntity.setProduct(productMapper.productEntityToDto(product));
+                        newEntity.setProduct(pojoMapper.entityToDto(product));
                         newEntity.setCount(0);
                         return newEntity;
                     }

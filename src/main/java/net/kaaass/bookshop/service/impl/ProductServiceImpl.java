@@ -23,8 +23,7 @@ import net.kaaass.bookshop.exception.BadRequestException;
 import net.kaaass.bookshop.exception.BaseException;
 import net.kaaass.bookshop.exception.InternalErrorExeption;
 import net.kaaass.bookshop.exception.NotFoundException;
-import net.kaaass.bookshop.mapper.ProductMapper;
-import net.kaaass.bookshop.mapper.UserMapper;
+import net.kaaass.bookshop.mapper.PojoMapper;
 import net.kaaass.bookshop.service.CategoryService;
 import net.kaaass.bookshop.service.ProductService;
 import net.kaaass.bookshop.service.PromoteService;
@@ -79,10 +78,7 @@ public class ProductServiceImpl implements ProductService, Serializable {
     private CommentRepository commentRepository;
 
     @Inject
-    private ProductMapper productMapper;
-
-    @Inject
-    private UserMapper userMapper;
+    private PojoMapper pojoMapper;
 
     /**
      * 待添加缓存
@@ -98,7 +94,7 @@ public class ProductServiceImpl implements ProductService, Serializable {
     public ProductDto addProduct(ProductAddRequest productToAdd) throws NotFoundException {
         val entity = new ProductEntity();
         requestToEntity(productToAdd, entity);
-        return this.productMapper.productEntityToDto(productRepository.save(entity));
+        return this.pojoMapper.entityToDto(productRepository.save(entity));
     }
 
     /**
@@ -139,7 +135,7 @@ public class ProductServiceImpl implements ProductService, Serializable {
                 .orElseThrow(BaseException.supplier(NotFoundException.class, "未找到此商品！"));
         try {
             requestToEntity(productToAdd, entity);
-            return productMapper.productEntityToDto(productRepository.save(entity));
+            return pojoMapper.entityToDto(productRepository.save(entity));
         } catch (NotFoundException e) {
             throw e;
         } catch (Exception e) {
@@ -158,7 +154,7 @@ public class ProductServiceImpl implements ProductService, Serializable {
      */
     @Override
     public ProductDto getById(String id) throws NotFoundException {
-        return productMapper.productEntityToDto(getEntityById(id));
+        return pojoMapper.entityToDto(getEntityById(id));
     }
 
     @Override
@@ -168,7 +164,7 @@ public class ProductServiceImpl implements ProductService, Serializable {
         entity.setId(fakeId);
         requestToEntity(request, entity);
         this.productCache.put(fakeId, entity);
-        return this.productMapper.productEntityToDto(entity);
+        return this.pojoMapper.entityToDto(entity);
     }
 
     @Override
@@ -181,7 +177,7 @@ public class ProductServiceImpl implements ProductService, Serializable {
         val entity = this.productCache.get(fakeId);
         requestToEntity(request, entity);
         this.productCache.put(fakeId, entity);
-        return this.productMapper.productEntityToDto(entity);
+        return this.pojoMapper.entityToDto(entity);
     }
 
     @Override
@@ -210,7 +206,7 @@ public class ProductServiceImpl implements ProductService, Serializable {
                         // 提交数据库
                         entity = productRepository.save(entity);
                         // 映射
-                        return productMapper.productEntityToDto(entity);
+                        return pojoMapper.entityToDto(entity);
                     }
                 }).collect(Collectors.<ProductDto>toList());
         clearProductCache();
@@ -228,7 +224,7 @@ public class ProductServiceImpl implements ProductService, Serializable {
                 .map(new Function<ProductEntity, ProductDto>() {
                     @Override
                     public ProductDto apply(ProductEntity productEntity) {
-                        return productMapper.productEntityToDto(productEntity);
+                        return pojoMapper.entityToDto(productEntity);
                     }
                 })
                 .collect(Collectors.<ProductDto>toList());
@@ -268,7 +264,7 @@ public class ProductServiceImpl implements ProductService, Serializable {
                 .map(new Function<ProductEntity, ProductDto>() {
                     @Override
                     public ProductDto apply(ProductEntity productEntity) {
-                        return productMapper.productEntityToDto(productEntity);
+                        return pojoMapper.entityToDto(productEntity);
                     }
                 })
                 .collect(Collectors.<ProductDto>toList());
@@ -280,7 +276,7 @@ public class ProductServiceImpl implements ProductService, Serializable {
                 .map(new Function<ProductEntity, ProductDto>() {
                     @Override
                     public ProductDto apply(ProductEntity productEntity) {
-                        return productMapper.productEntityToDto(productEntity);
+                        return pojoMapper.entityToDto(productEntity);
                     }
                 })
                 .collect(Collectors.<ProductDto>toList());
@@ -296,7 +292,7 @@ public class ProductServiceImpl implements ProductService, Serializable {
                 .map(new Function<ProductEntity, ProductDto>() {
                     @Override
                     public ProductDto apply(ProductEntity productEntity) {
-                        return productMapper.productEntityToDto(productEntity);
+                        return pojoMapper.entityToDto(productEntity);
                     }
                 })
                 .collect(Collectors.<ProductDto>toList());
@@ -314,7 +310,7 @@ public class ProductServiceImpl implements ProductService, Serializable {
                 .map(new Function<ProductEntity, ProductDto>() {
                     @Override
                     public ProductDto apply(ProductEntity productEntity) {
-                        return productMapper.productEntityToDto(productEntity);
+                        return pojoMapper.entityToDto(productEntity);
                     }
                 })
                 .collect(Collectors.<ProductDto>toList());
@@ -327,7 +323,7 @@ public class ProductServiceImpl implements ProductService, Serializable {
                 .map(new Function<CommentEntity, CommentVo>() {
                     @Override
                     public CommentVo apply(CommentEntity commentEntity) {
-                        return userMapper.commentEntityToVo(commentEntity);
+                        return pojoMapper.entityToVo(commentEntity);
                     }
                 })
                 .collect(Collectors.<CommentVo>toList());
@@ -359,7 +355,7 @@ public class ProductServiceImpl implements ProductService, Serializable {
                 .map(new Function<ProductEntity, ProductDto>() {
                     @Override
                     public ProductDto apply(ProductEntity productEntity) {
-                        return productMapper.productEntityToDto(productEntity);
+                        return pojoMapper.entityToDto(productEntity);
                     }
                 })
                 .collect(Collectors.<ProductDto>toList());
@@ -371,7 +367,7 @@ public class ProductServiceImpl implements ProductService, Serializable {
                 .map(new Function<ProductEntity, ProductDto>() {
                     @Override
                     public ProductDto apply(ProductEntity productEntity) {
-                        return productMapper.productEntityToDto(productEntity);
+                        return pojoMapper.entityToDto(productEntity);
                     }
                 })
                 .collect(Collectors.<ProductDto>toList());
@@ -383,7 +379,7 @@ public class ProductServiceImpl implements ProductService, Serializable {
                 .map(new Function<ProductEntity, ProductDto>() {
                     @Override
                     public ProductDto apply(ProductEntity productEntity) {
-                        return productMapper.productEntityToDto(productEntity);
+                        return pojoMapper.entityToDto(productEntity);
                     }
                 })
                 .collect(Collectors.<ProductDto>toList());
@@ -398,7 +394,7 @@ public class ProductServiceImpl implements ProductService, Serializable {
                 .map(new Function<ProductEntity, ProductDto>() {
                     @Override
                     public ProductDto apply(ProductEntity productEntity) {
-                        return productMapper.productEntityToDto(productEntity);
+                        return pojoMapper.entityToDto(productEntity);
                     }
                 })
                 .collect(Collectors.<ProductDto>toList());
@@ -410,7 +406,7 @@ public class ProductServiceImpl implements ProductService, Serializable {
                 .map(new Function<ProductEntity, ProductDto>() {
                     @Override
                     public ProductDto apply(ProductEntity productEntity) {
-                        return productMapper.productEntityToDto(productEntity);
+                        return pojoMapper.entityToDto(productEntity);
                     }
                 })
                 .collect(Collectors.<ProductDto>toList());

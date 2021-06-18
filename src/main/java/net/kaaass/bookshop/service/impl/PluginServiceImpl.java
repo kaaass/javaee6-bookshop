@@ -12,7 +12,7 @@ import net.kaaass.bookshop.dto.PluginDto;
 import net.kaaass.bookshop.exception.BadRequestException;
 import net.kaaass.bookshop.exception.BaseException;
 import net.kaaass.bookshop.exception.NotFoundException;
-import net.kaaass.bookshop.mapper.CommenMapper;
+import net.kaaass.bookshop.mapper.PojoMapper;
 import net.kaaass.bookshop.plugin.PluginManager;
 import net.kaaass.bookshop.service.PluginService;
 import net.kaaass.bookshop.util.TimeUtils;
@@ -33,7 +33,7 @@ public class PluginServiceImpl implements PluginService, Serializable {
     private PluginManager pluginManager;
 
     @Inject
-    private CommenMapper commenMapper;
+    private PojoMapper pojoMapper;
 
     @Override
     public List<PluginDto> getAll() {
@@ -41,7 +41,7 @@ public class PluginServiceImpl implements PluginService, Serializable {
                 .map(new Function<PluginEntity, PluginDto>() {
                     @Override
                     public PluginDto apply(PluginEntity pluginEntity) {
-                        return commenMapper.pluginEntityToDto(pluginEntity);
+                        return pojoMapper.entityToDto(pluginEntity);
                     }
                 })
                 .collect(Collectors.<PluginDto>toList());
@@ -76,7 +76,7 @@ public class PluginServiceImpl implements PluginService, Serializable {
         entity = pluginRepository.save(entity);
         log.info("启用插件 entity = {}", entity);
         pluginManager.loadPlugin(entity.getId(), entity.getFilename());
-        return commenMapper.pluginEntityToDto(pluginRepository.save(entity));
+        return pojoMapper.entityToDto(pluginRepository.save(entity));
     }
 
     @Override

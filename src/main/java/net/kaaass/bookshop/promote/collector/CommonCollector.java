@@ -5,7 +5,7 @@ import java8.util.stream.Collectors;
 import java8.util.stream.StreamSupport;
 import lombok.val;
 import net.kaaass.bookshop.dto.OrderItemDto;
-import net.kaaass.bookshop.mapper.PromoteMapper;
+import net.kaaass.bookshop.mapper.EntityCreator;
 import net.kaaass.bookshop.promote.*;
 
 public class CommonCollector implements IPromoteCollector<OrderPromoteContext> {
@@ -28,7 +28,7 @@ public class CommonCollector implements IPromoteCollector<OrderPromoteContext> {
                 .map(new Function<PromoteItem, OrderItemDto>() {
                     @Override
                     public OrderItemDto apply(PromoteItem promoteItem) {
-                        return PromoteMapper.INSTANCE.promoteItemToOrderItemDto(promoteItem);
+                        return EntityCreator.INSTANCE.createOrderItemDto(promoteItem);
                     }
                 })
                 .collect(Collectors.<OrderItemDto>toList()));

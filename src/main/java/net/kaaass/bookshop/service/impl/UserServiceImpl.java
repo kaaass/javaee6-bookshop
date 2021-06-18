@@ -15,7 +15,7 @@ import net.kaaass.bookshop.dto.UserAddressDto;
 import net.kaaass.bookshop.dto.UserInfoDto;
 import net.kaaass.bookshop.exception.BaseException;
 import net.kaaass.bookshop.exception.NotFoundException;
-import net.kaaass.bookshop.mapper.UserMapper;
+import net.kaaass.bookshop.mapper.PojoMapper;
 import net.kaaass.bookshop.service.UserService;
 
 import javax.ejb.Stateless;
@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService, Serializable {
     private UserAuthRepository userAuthRepository;
 
     @Inject
-    private UserMapper userMapper;
+    private PojoMapper pojoMapper;
 
     @Override
     public UserAuthEntity getAuthEntityById(String uid) throws NotFoundException {
@@ -65,7 +65,7 @@ public class UserServiceImpl implements UserService, Serializable {
 
     @Override
     public UserAddressDto getAddressById(String id) throws NotFoundException {
-        return userMapper.userAddressEntityToDto(getAddressEntityById(id));
+        return pojoMapper.entityToDto(getAddressEntityById(id));
     }
 
     @Override
@@ -80,7 +80,7 @@ public class UserServiceImpl implements UserService, Serializable {
                 .map(new Function<UserInfoEntity, UserInfoDto>() {
                     @Override
                     public UserInfoDto apply(UserInfoEntity userInfoEntity) {
-                        return userMapper.userInfoEntityToDto(userInfoEntity);
+                        return pojoMapper.entityToDto(userInfoEntity);
                     }
                 })
                 .collect(Collectors.<UserInfoDto>toList());

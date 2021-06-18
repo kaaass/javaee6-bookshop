@@ -14,7 +14,7 @@ import net.kaaass.bookshop.dto.UserAuthDto;
 import net.kaaass.bookshop.exception.BaseException;
 import net.kaaass.bookshop.exception.ForbiddenException;
 import net.kaaass.bookshop.exception.NotFoundException;
-import net.kaaass.bookshop.mapper.UserMapper;
+import net.kaaass.bookshop.mapper.PojoMapper;
 import net.kaaass.bookshop.security.SecurityRole;
 import net.kaaass.bookshop.service.AuthService;
 import net.kaaass.bookshop.vo.AuthTokenVo;
@@ -43,7 +43,7 @@ public class AuthServiceImpl implements AuthService, Serializable {
     private UserInfoRepository infoRepository;
 
     @Inject
-    private UserMapper userMapper;
+    private PojoMapper pojoMapper;
 
     @Override
     public Optional<UserAuthDto> register(RegisterRequest request) {
@@ -69,7 +69,7 @@ public class AuthServiceImpl implements AuthService, Serializable {
         infoEntity.setAuth(authEntity);
         infoRepository.save(infoEntity);
         // 拼接结果
-        return Optional.of(userMapper.userAuthEntityToDto(authEntity));
+        return Optional.of(pojoMapper.entityToDto(authEntity));
     }
 
     @Override
@@ -111,7 +111,7 @@ public class AuthServiceImpl implements AuthService, Serializable {
                 .map(new Function<UserAuthEntity, UserAuthDto>() {
                     @Override
                     public UserAuthDto apply(UserAuthEntity entity) {
-                        return userMapper.userAuthEntityToDto(entity);
+                        return pojoMapper.entityToDto(entity);
                     }
                 })
                 .orElseThrow(BaseException.supplier(ForbiddenException.class, "鉴权令牌不存在"));

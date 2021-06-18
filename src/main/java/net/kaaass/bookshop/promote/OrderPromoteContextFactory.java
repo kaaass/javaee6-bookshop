@@ -6,8 +6,8 @@ import net.kaaass.bookshop.controller.request.OrderCreateMultiRequest;
 import net.kaaass.bookshop.controller.request.OrderCreateSingleRequest;
 import net.kaaass.bookshop.dto.ProductDto;
 import net.kaaass.bookshop.exception.NotFoundException;
-import net.kaaass.bookshop.mapper.ProductMapper;
-import net.kaaass.bookshop.mapper.PromoteMapper;
+import net.kaaass.bookshop.mapper.EntityCreator;
+import net.kaaass.bookshop.mapper.PojoMapper;
 import net.kaaass.bookshop.service.OrderRequestContext;
 import net.kaaass.bookshop.service.ProductService;
 import net.kaaass.bookshop.service.UserService;
@@ -28,10 +28,10 @@ public class OrderPromoteContextFactory {
     private ProductService productService;
 
     @Inject
-    private PromoteMapper promoteMapper;
+    private EntityCreator entityCreator;
 
     @Inject
-    private ProductMapper productMapper;
+    private PojoMapper pojoMapper;
 
     /**
      * 从请求中建立订单打折上下文
@@ -43,14 +43,14 @@ public class OrderPromoteContextFactory {
         // 商品
         if (request instanceof OrderCreateMultiRequest) {
             for (val cartItem : ((OrderCreateMultiRequest) request).getCachedCartItems()) {
-                val item = promoteMapper.cartDtoToPromoteItem(cartItem);
+                val item = entityCreator.createPromoteItem(cartItem);
                 item.setPrice(item.getProduct().getPrice());
                 products.add(item);
             }
         } else if (request instanceof OrderCreateSingleRequest) {
             val entity = productService.getEntityById(((OrderCreateSingleRequest) request).getProductId());
             val item = new PromoteItem();
-            item.setProduct(productMapper.productEntityToDto(entity));
+            item.setProduct(pojoMapper.entityToDto(entity));
             item.setCount(1);
             item.setPrice(item.getProduct().getPrice());
             products.add(item);
