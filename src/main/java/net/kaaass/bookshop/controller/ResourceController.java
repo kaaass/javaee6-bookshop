@@ -66,11 +66,11 @@ public class ResourceController extends BaseController {
     @Path("/")
     @Secured(SecurityRole.ADMIN)
     public MediaDto addNetworkResource(AddUrlResourceRequest request) {
-        var entity = new MediaEntity();
+        val entity = new MediaEntity();
         entity.setType(request.getType());
         entity.setUrl(request.getUrl());
         entity.setUploaderUid(getUid(identity));
-        var result = mediaRepository.save(entity);
+        val result = mediaRepository.save(entity);
         return commenMapper.mediaEntityToDto(result);
     }
 
@@ -90,8 +90,8 @@ public class ResourceController extends BaseController {
         val uploadForm = input.getFormDataMap();
         val originalFilename = uploadForm.get("fileName").get(0).getBodyAsString();
         val inputParts = uploadForm.get("file");
-        var suffix = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
-        var newFileName = StringUtils.uuid() + "." + suffix;
+        val suffix = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
+        val newFileName = StringUtils.uuid() + "." + suffix;
         // TODO 检查suffix
 
         // 保存文件
@@ -104,12 +104,12 @@ public class ResourceController extends BaseController {
         File destFile = new File(Constants.UPLOAD_FOLDER + newFileName);
         FileUtils.saveToFile(inputStream, destFile);
 
-        var entity = new MediaEntity();
+        val entity = new MediaEntity();
         entity.setType(Constants.MEDIA_TYPE_IMAGE);
         entity.setUrl(Constants.UPLOAD_URL_PREFIX + newFileName);
         entity.setUploaderUid(getUid(identity));
 
-        var result = mediaRepository.save(entity);
+        val result = mediaRepository.save(entity);
         return commenMapper.mediaEntityToDto(result);
     }
 }

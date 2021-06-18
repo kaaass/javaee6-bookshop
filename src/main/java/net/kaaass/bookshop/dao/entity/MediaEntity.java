@@ -30,9 +30,6 @@ public class MediaEntity implements IEntity<String> {
     @Column(name = "uploader_uid")
     private String uploaderUid = "00000000000000000000000000000000";
 
-    @OneToMany(mappedBy = "thumbnail", cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
-    private List<ProductEntity> products = new ArrayList<>();
-
     @Column(name = "upload_time",
             columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @Generated(GenerationTime.INSERT)

@@ -30,6 +30,7 @@ import net.kaaass.bookshop.eventhandle.EventManager;
 import net.kaaass.bookshop.exception.*;
 import net.kaaass.bookshop.mapper.OrderMapper;
 import net.kaaass.bookshop.promote.OrderPromoteContextFactory;
+import net.kaaass.bookshop.promote.OrderPromoteResult;
 import net.kaaass.bookshop.promote.PromoteManager;
 import net.kaaass.bookshop.service.*;
 import net.kaaass.bookshop.service.mq.OrderMessageProducer;
@@ -213,7 +214,7 @@ public class OrderServiceImpl implements OrderService, Serializable {
             }
         }
         // 订单处理
-        var context = new OrderRequestContext();
+        OrderRequestContext context = new OrderRequestContext();
         context.setRequest(request);
         context.setUid(uid);
         context.setRequestId(requestId);
@@ -253,7 +254,7 @@ public class OrderServiceImpl implements OrderService, Serializable {
         try {
             // 触发事件
             val event = new GotOrderContextEvent(context);
-            var cancel = EventManager.EVENT_BUS.post(event);
+            boolean cancel = EventManager.EVENT_BUS.post(event);
             context = event.getContext();
             if (cancel) {
                 throw new BadRequestException("订单处理被取消！");
@@ -272,7 +273,7 @@ public class OrderServiceImpl implements OrderService, Serializable {
                 }
             }
             // 打折处理
-            var promoteResult = promoteManager.doOnOrder(promoteContext);
+            OrderPromoteResult promoteResult = promoteManager.doOnOrder(promoteContext);
             log.info("打折结果：{}", promoteResult);
             // 触发事件
             val promoteEvent = new AfterOrderPromoteEvent(promoteResult);

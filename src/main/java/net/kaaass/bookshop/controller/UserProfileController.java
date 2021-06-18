@@ -67,9 +67,9 @@ public class UserProfileController extends BaseController {
     @Path("/")
     @Secured(SecurityRole.USER)
     public UserProfileResponse getUserProfile() throws NotFoundException {
-        var result = new UserProfileResponse();
-        var auth = userService.getAuthEntityById(getUid(identity));
-        var info = userMapper.userInfoEntityToDto(userInfoRepository.findByAuth(auth));
+        val result = new UserProfileResponse();
+        val auth = userService.getAuthEntityById(getUid(identity));
+        val info = userMapper.userInfoEntityToDto(userInfoRepository.findByAuth(auth));
         result.setInfo(info);
         result.setOrderCount(orderService.getUserOrderCount(getUid(identity)));
         return result;
@@ -80,15 +80,15 @@ public class UserProfileController extends BaseController {
     @Secured(SecurityRole.USER)
     public UserInfoDto modifyUserProfile(UserInfoModifyRequest request) throws BadRequestException, NotFoundException {
         validateBean(validator, request);
-        var auth = userService.getAuthEntityById(getUid(identity));
-        var entity = userInfoRepository.findByAuth(auth);
+        val auth = userService.getAuthEntityById(getUid(identity));
+        val entity = userInfoRepository.findByAuth(auth);
         entity.setAuth(auth);
-        var avatar = resourceManager.getEntity(request.getAvatar())
+        val avatar = resourceManager.getEntity(request.getAvatar())
                         .orElseThrow(BaseException.supplier(BadRequestException.class, "头像资源不存在！"));
         entity.setAvatar(avatar);
         entity.setWechat(request.getWechat());
         entity.setLastUpdateTime(TimeUtils.nowTimestamp());
-        var result = userInfoRepository.save(entity);
+        val result = userInfoRepository.save(entity);
         return userMapper.userInfoEntityToDto(result);
     }
 

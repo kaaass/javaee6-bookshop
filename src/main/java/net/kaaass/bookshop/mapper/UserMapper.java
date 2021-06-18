@@ -31,11 +31,7 @@ public interface UserMapper {
 
     UserAddressDto userAddressEntityToDto(UserAddressEntity addressEntity);
 
-    UserAddressEntity userAddressDtoToEntity(UserAddressDto addressEntity);
-
     UserInfoDto userInfoEntityToDto(UserInfoEntity userInfoEntity);
-
-    CommentDto commentEntityToDto(CommentEntity commentEntity);
 
     @Mapping(target = "avatar", source = "user", qualifiedByName = "getAvatarFromAuth")
     CommentVo commentEntityToVo(CommentEntity commentEntity);

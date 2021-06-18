@@ -57,7 +57,7 @@ public class PluginServiceImpl implements PluginService, Serializable {
 
     @Override
     public PluginDto enable(final String path) throws BadRequestException {
-        var entity = pluginRepository.findFirstByFilename(path)
+        PluginEntity entity = pluginRepository.findFirstByFilename(path)
                 .orElseGet(new Supplier<PluginEntity>() {
                     @Override
                     public PluginEntity get() {

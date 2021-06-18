@@ -29,9 +29,6 @@ public class CategoryEntity implements IEntity<String> {
     @JoinColumn(name = "parent_id")
     private CategoryEntity parent = null;
 
-    @OneToMany(mappedBy = "category", cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
-    private List<ProductEntity> products = new ArrayList<>();
-
     @Column(name = "create_time",
             columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP",
             updatable = false)
