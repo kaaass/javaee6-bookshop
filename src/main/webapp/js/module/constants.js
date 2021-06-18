@@ -3,7 +3,7 @@
  */
 define([], function () {
 
-    const BASE_URL = "/web";
+    const BASE_URL = window.BASE_URL;
     const API_BASE_URL = BASE_URL + "/api";
 
     return {
