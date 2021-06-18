@@ -7,7 +7,6 @@
         <th>分类</th>
         <th>首页顺序</th>
         <th>剩余库存</th>
-        <th>开售时间</th>
         <th>操作</th>
     </tr>
     </thead>
@@ -20,7 +19,6 @@
             <td>{{category.name}}</td>
             <td>{{indexOrder}}</td>
             <td>{{storage.rest}}</td>
-            <td>{{startSellTimeReadable}}</td>
             <td>
                 <button class="btn btn-success btn-cache-edit btn-sm" product-id="{{id}}">编辑</button>
                 <button class="btn btn-danger btn-cache-remove btn-sm" product-id="{{id}}">移除</button>

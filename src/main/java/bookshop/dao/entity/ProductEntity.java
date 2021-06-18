@@ -31,10 +31,6 @@ public class ProductEntity implements IEntity<String> {
     @Column(name = "mail_price")
     private float mailPrice;
 
-    @Column(name = "buy_limit",
-            columnDefinition = "INT DEFAULT -1")
-    private int buyLimit = -1;
-
     @ManyToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "category_id")
     private CategoryEntity category;
@@ -59,10 +55,6 @@ public class ProductEntity implements IEntity<String> {
     @JoinColumn(name = "storage_id")
     private ProductStorageEntity storage;
 
-    @Column(name = "start_sell_time",
-            columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private Timestamp startSellTime;
-
     @Column(name = "create_time",
             columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP",
             updatable = false)
@@ -77,6 +69,7 @@ public class ProductEntity implements IEntity<String> {
     public ProductEntity() {
     }
 
+    @Override
     public String getId() {
         return this.id;
     }
@@ -95,10 +88,6 @@ public class ProductEntity implements IEntity<String> {
 
     public float getMailPrice() {
         return this.mailPrice;
-    }
-
-    public int getBuyLimit() {
-        return this.buyLimit;
     }
 
     public CategoryEntity getCategory() {
@@ -123,10 +112,6 @@ public class ProductEntity implements IEntity<String> {
 
     public ProductStorageEntity getStorage() {
         return this.storage;
-    }
-
-    public Timestamp getStartSellTime() {
-        return this.startSellTime;
     }
 
     public Timestamp getCreateTime() {
@@ -157,10 +142,6 @@ public class ProductEntity implements IEntity<String> {
         this.mailPrice = mailPrice;
     }
 
-    public void setBuyLimit(int buyLimit) {
-        this.buyLimit = buyLimit;
-    }
-
     public void setCategory(CategoryEntity category) {
         this.category = category;
     }
@@ -185,10 +166,6 @@ public class ProductEntity implements IEntity<String> {
         this.storage = storage;
     }
 
-    public void setStartSellTime(Timestamp startSellTime) {
-        this.startSellTime = startSellTime;
-    }
-
     public void setCreateTime(Timestamp createTime) {
         this.createTime = createTime;
     }
@@ -197,6 +174,7 @@ public class ProductEntity implements IEntity<String> {
         this.lastUpdateTime = lastUpdateTime;
     }
 
+    @Override
     public boolean equals(final Object o) {
         if (o == this) return true;
         if (!(o instanceof ProductEntity)) return false;
@@ -213,7 +191,6 @@ public class ProductEntity implements IEntity<String> {
         if (this$thumbnail == null ? other$thumbnail != null : !this$thumbnail.equals(other$thumbnail)) return false;
         if (Float.compare(this.getPrice(), other.getPrice()) != 0) return false;
         if (Float.compare(this.getMailPrice(), other.getMailPrice()) != 0) return false;
-        if (this.getBuyLimit() != other.getBuyLimit()) return false;
         final Object this$category = this.getCategory();
         final Object other$category = other.getCategory();
         if (this$category == null ? other$category != null : !this$category.equals(other$category)) return false;
@@ -231,10 +208,6 @@ public class ProductEntity implements IEntity<String> {
         final Object this$storage = this.getStorage();
         final Object other$storage = other.getStorage();
         if (this$storage == null ? other$storage != null : !this$storage.equals(other$storage)) return false;
-        final Object this$startSellTime = this.getStartSellTime();
-        final Object other$startSellTime = other.getStartSellTime();
-        if (this$startSellTime == null ? other$startSellTime != null : !this$startSellTime.equals(other$startSellTime))
-            return false;
         final Object this$createTime = this.getCreateTime();
         final Object other$createTime = other.getCreateTime();
         if (this$createTime == null ? other$createTime != null : !this$createTime.equals(other$createTime))
@@ -248,6 +221,7 @@ public class ProductEntity implements IEntity<String> {
         return other instanceof ProductEntity;
     }
 
+    @Override
     public int hashCode() {
         final int PRIME = 59;
         int result = 1;
@@ -259,7 +233,6 @@ public class ProductEntity implements IEntity<String> {
         result = result * PRIME + ($thumbnail == null ? 43 : $thumbnail.hashCode());
         result = result * PRIME + Float.floatToIntBits(this.getPrice());
         result = result * PRIME + Float.floatToIntBits(this.getMailPrice());
-        result = result * PRIME + this.getBuyLimit();
         final Object $category = this.getCategory();
         result = result * PRIME + ($category == null ? 43 : $category.hashCode());
         result = result * PRIME + this.getIndexOrder();
@@ -271,8 +244,6 @@ public class ProductEntity implements IEntity<String> {
         result = result * PRIME + ($publishDate == null ? 43 : $publishDate.hashCode());
         final Object $storage = this.getStorage();
         result = result * PRIME + ($storage == null ? 43 : $storage.hashCode());
-        final Object $startSellTime = this.getStartSellTime();
-        result = result * PRIME + ($startSellTime == null ? 43 : $startSellTime.hashCode());
         final Object $createTime = this.getCreateTime();
         result = result * PRIME + ($createTime == null ? 43 : $createTime.hashCode());
         final Object $lastUpdateTime = this.getLastUpdateTime();
@@ -280,7 +251,8 @@ public class ProductEntity implements IEntity<String> {
         return result;
     }
 
+    @Override
     public String toString() {
-        return "ProductEntity(id=" + this.getId() + ", name=" + this.getName() + ", thumbnail=" + this.getThumbnail() + ", price=" + this.getPrice() + ", mailPrice=" + this.getMailPrice() + ", buyLimit=" + this.getBuyLimit() + ", category=" + this.getCategory() + ", indexOrder=" + this.getIndexOrder() + ", isbn=" + this.getIsbn() + ", author=" + this.getAuthor() + ", publishDate=" + this.getPublishDate() + ", storage=" + this.getStorage() + ", startSellTime=" + this.getStartSellTime() + ", createTime=" + this.getCreateTime() + ", lastUpdateTime=" + this.getLastUpdateTime() + ")";
+        return "ProductEntity(id=" + this.getId() + ", name=" + this.getName() + ", thumbnail=" + this.getThumbnail() + ", price=" + this.getPrice() + ", mailPrice=" + this.getMailPrice() + ", category=" + this.getCategory() + ", indexOrder=" + this.getIndexOrder() + ", isbn=" + this.getIsbn() + ", author=" + this.getAuthor() + ", publishDate=" + this.getPublishDate() + ", storage=" + this.getStorage() + ", createTime=" + this.getCreateTime() + ", lastUpdateTime=" + this.getLastUpdateTime() + ")";
     }
 }

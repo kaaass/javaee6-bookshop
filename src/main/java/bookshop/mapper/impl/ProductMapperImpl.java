@@ -29,14 +29,12 @@ public class ProductMapperImpl implements ProductMapper {
         productDto.setThumbnail(mediaEntityToMediaDto(productEntity.getThumbnail()));
         productDto.setPrice(productEntity.getPrice());
         productDto.setMailPrice(productEntity.getMailPrice());
-        productDto.setBuyLimit(productEntity.getBuyLimit());
         productDto.setCategory(categoryEntityToDto(productEntity.getCategory()));
         productDto.setIsbn(productEntity.getIsbn());
         productDto.setAuthor(productEntity.getAuthor());
         productDto.setPublishDate(productEntity.getPublishDate());
         productDto.setIndexOrder(productEntity.getIndexOrder());
         productDto.setStorage(productStorageEntityToDto(productEntity.getStorage()));
-        productDto.setStartSellTime(productEntity.getStartSellTime());
 
         return productDto;
     }
@@ -54,7 +52,6 @@ public class ProductMapperImpl implements ProductMapper {
         productEntity1.setThumbnail(mediaDtoToMediaEntity(productEntity.getThumbnail()));
         productEntity1.setPrice(productEntity.getPrice());
         productEntity1.setMailPrice(productEntity.getMailPrice());
-        productEntity1.setBuyLimit(productEntity.getBuyLimit());
         productEntity1.setCategory(categoryDtoToCategoryEntity(productEntity.getCategory()));
         productEntity1.setIndexOrder(productEntity.getIndexOrder());
         productEntity1.setIsbn(productEntity.getIsbn());
@@ -63,9 +60,6 @@ public class ProductMapperImpl implements ProductMapper {
             productEntity1.setPublishDate(new Timestamp(productEntity.getPublishDate().getTime()));
         }
         productEntity1.setStorage(productStorageDtoToProductStorageEntity(productEntity.getStorage()));
-        if (productEntity.getStartSellTime() != null) {
-            productEntity1.setStartSellTime(new Timestamp(productEntity.getStartSellTime().getTime()));
-        }
 
         return productEntity1;
     }

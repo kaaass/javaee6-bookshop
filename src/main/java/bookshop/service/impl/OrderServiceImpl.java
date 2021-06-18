@@ -267,16 +267,6 @@ public class OrderServiceImpl implements OrderService, Serializable {
                     }
                 }
             }
-            // 检查购买限制
-            for (final OrderItemDto orderItem : products) {
-                final int buyLimit = orderItem.getProduct().getBuyLimit();
-                if (buyLimit > 0 && orderItem.getCount() > buyLimit) {
-                    throw new BadRequestException(String.format("本商品限购%d件！", buyLimit));
-                }
-                if (new Date().before(orderItem.getProduct().getStartSellTime())) {
-                    throw new BadRequestException("商品还未开卖！");
-                }
-            }
             // 处理返回
             entity.setPrice(price + mailPrice);
             entity.setMailPrice(mailPrice);

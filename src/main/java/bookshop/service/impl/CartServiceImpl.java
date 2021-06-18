@@ -58,13 +58,8 @@ public class CartServiceImpl implements CartService, Serializable {
                     }
                 });
         // 检查购买限制
-        final int limit = product.getBuyLimit();
         final int dest = entity.getCount() + request.getCount();
-        if (limit != -1 && dest > limit) {
-            throw new BadRequestException(String.format("本商品限购%d件！", limit));
-        } else {
-            entity.setCount(dest);
-        }
+        entity.setCount(dest);
         return save(entity);
     }
 
@@ -79,12 +74,7 @@ public class CartServiceImpl implements CartService, Serializable {
         final CartDto entity = this.getById(id);
         final ProductDto product = entity.getProduct();
         // 检查购买限制
-        final int limit = product.getBuyLimit();
-        if (limit != -1 && count > limit) {
-            throw new BadRequestException(String.format("本商品限购%d件！", limit));
-        } else {
-            entity.setCount(count);
-        }
+        entity.setCount(count);
         return save(entity);
     }
 

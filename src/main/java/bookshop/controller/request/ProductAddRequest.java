@@ -27,9 +27,6 @@ public class ProductAddRequest {
     @Min(value = 0, message = "价格不能为负")
     private float mailPrice;
 
-    @Min(value = -1, message = "购买限制最小为-1")
-    private int buyLimit;
-
     @Isbn(message = "ISBN格式错误")
     private String isbn;
 
@@ -48,9 +45,6 @@ public class ProductAddRequest {
 
     @Uuid(message = "分类格式错误")
     private String categoryId;
-
-    @JsonDeserialize(using = LongToDateDeserializer.class)
-    private Date startSellTime;
 
     @Min(value = 0, message = "库存不能为负")
     private int rest;
@@ -74,10 +68,6 @@ public class ProductAddRequest {
         return this.mailPrice;
     }
 
-    public int getBuyLimit() {
-        return this.buyLimit;
-    }
-
     public String getIsbn() {
         return this.isbn;
     }
@@ -96,10 +86,6 @@ public class ProductAddRequest {
 
     public String getCategoryId() {
         return this.categoryId;
-    }
-
-    public Date getStartSellTime() {
-        return this.startSellTime;
     }
 
     public int getRest() {
@@ -122,10 +108,6 @@ public class ProductAddRequest {
         this.mailPrice = mailPrice;
     }
 
-    public void setBuyLimit(int buyLimit) {
-        this.buyLimit = buyLimit;
-    }
-
     public void setIsbn(String isbn) {
         this.isbn = isbn;
     }
@@ -146,14 +128,11 @@ public class ProductAddRequest {
         this.categoryId = categoryId;
     }
 
-    public void setStartSellTime(Date startSellTime) {
-        this.startSellTime = startSellTime;
-    }
-
     public void setRest(int rest) {
         this.rest = rest;
     }
 
+    @Override
     public boolean equals(final Object o) {
         if (o == this) return true;
         if (!(o instanceof ProductAddRequest)) return false;
@@ -168,7 +147,6 @@ public class ProductAddRequest {
             return false;
         if (Float.compare(this.getPrice(), other.getPrice()) != 0) return false;
         if (Float.compare(this.getMailPrice(), other.getMailPrice()) != 0) return false;
-        if (this.getBuyLimit() != other.getBuyLimit()) return false;
         final Object this$isbn = this.getIsbn();
         final Object other$isbn = other.getIsbn();
         if (this$isbn == null ? other$isbn != null : !this$isbn.equals(other$isbn)) return false;
@@ -184,10 +162,6 @@ public class ProductAddRequest {
         final Object other$categoryId = other.getCategoryId();
         if (this$categoryId == null ? other$categoryId != null : !this$categoryId.equals(other$categoryId))
             return false;
-        final Object this$startSellTime = this.getStartSellTime();
-        final Object other$startSellTime = other.getStartSellTime();
-        if (this$startSellTime == null ? other$startSellTime != null : !this$startSellTime.equals(other$startSellTime))
-            return false;
         return this.getRest() == other.getRest();
     }
 
@@ -195,6 +169,7 @@ public class ProductAddRequest {
         return other instanceof ProductAddRequest;
     }
 
+    @Override
     public int hashCode() {
         final int PRIME = 59;
         int result = 1;
@@ -204,7 +179,6 @@ public class ProductAddRequest {
         result = result * PRIME + ($thumbnailId == null ? 43 : $thumbnailId.hashCode());
         result = result * PRIME + Float.floatToIntBits(this.getPrice());
         result = result * PRIME + Float.floatToIntBits(this.getMailPrice());
-        result = result * PRIME + this.getBuyLimit();
         final Object $isbn = this.getIsbn();
         result = result * PRIME + ($isbn == null ? 43 : $isbn.hashCode());
         final Object $author = this.getAuthor();
@@ -214,13 +188,12 @@ public class ProductAddRequest {
         result = result * PRIME + ($publishDate == null ? 43 : $publishDate.hashCode());
         final Object $categoryId = this.getCategoryId();
         result = result * PRIME + ($categoryId == null ? 43 : $categoryId.hashCode());
-        final Object $startSellTime = this.getStartSellTime();
-        result = result * PRIME + ($startSellTime == null ? 43 : $startSellTime.hashCode());
         result = result * PRIME + this.getRest();
         return result;
     }
 
+    @Override
     public String toString() {
-        return "ProductAddRequest(name=" + this.getName() + ", thumbnailId=" + this.getThumbnailId() + ", price=" + this.getPrice() + ", mailPrice=" + this.getMailPrice() + ", buyLimit=" + this.getBuyLimit() + ", isbn=" + this.getIsbn() + ", author=" + this.getAuthor() + ", indexOrder=" + this.getIndexOrder() + ", publishDate=" + this.getPublishDate() + ", categoryId=" + this.getCategoryId() + ", startSellTime=" + this.getStartSellTime() + ", rest=" + this.getRest() + ")";
+        return "ProductAddRequest(name=" + this.getName() + ", thumbnailId=" + this.getThumbnailId() + ", price=" + this.getPrice() + ", mailPrice=" + this.getMailPrice() + ", isbn=" + this.getIsbn() + ", author=" + this.getAuthor() + ", indexOrder=" + this.getIndexOrder() + ", publishDate=" + this.getPublishDate() + ", categoryId=" + this.getCategoryId() + ", rest=" + this.getRest() + ")";
     }
 }

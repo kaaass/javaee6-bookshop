@@ -97,8 +97,6 @@ public class ProductServiceImpl implements ProductService, Serializable {
         entity.setName(productToAdd.getName());
         entity.setPrice(productToAdd.getPrice());
         entity.setMailPrice(productToAdd.getMailPrice());
-        entity.setBuyLimit(productToAdd.getBuyLimit());
-        entity.setStartSellTime(TimeUtils.dateToTimestamp(productToAdd.getStartSellTime()));
         entity.setAuthor(productToAdd.getAuthor());
         entity.setIsbn(productToAdd.getIsbn());
         entity.setPublishDate(TimeUtils.dateToTimestamp(productToAdd.getPublishDate()));

@@ -22,9 +22,7 @@ require([
         $thumbnailId = $('#thumbnailId'),
         $price = $('#price'),
         $mailPrice = $('#mailPrice'),
-        $buyLimit = $('#buyLimit'),
         $categoryId = $('#categoryId'),
-        $startSellTime = $('#startSellTime'),
         $rest = $('#rest');
 
     let loadParam = (product) => {
@@ -32,9 +30,7 @@ require([
         $('#thumbnailId').val(product && product.thumbnail ? product.thumbnail.id : "");
         $('#price').val(product ? product.price : "");
         $('#mailPrice').val(product ? product.mailPrice : "");
-        $('#buyLimit').val(product ? product.buyLimit : "");
         $('#categoryId').val(product && product.category ? product.category.id : "");
-        $('#startSellTime').val(product ? product.startSellTimeReadable : "");
         $('#rest').val(product && product.storage ? product.storage.rest : "");
         $('#author').val(product ? product.author : "");
         $('#isbn').val(product ? product.isbn : "");
@@ -49,9 +45,7 @@ require([
             thumbnailId: $thumbnailId.val(),
             price: $price.val(),
             mailPrice: $mailPrice.val(),
-            buyLimit: $buyLimit.val(),
             categoryId: $categoryId.val(),
-            startSellTime: functions.dateToTs($startSellTime.val()),
             rest: $rest.val(),
             author: $('#author').val(),
             isbn: $('#isbn').val(),
@@ -154,7 +148,6 @@ require([
             storage: {
                 rest: createCache ? createCache.rest : ""
             },
-            startSellTimeReadable: createCache ? functions.dateFormatTs(createCache.startSellTime) : "",
             publishDateReadable: createCache ? functions.dateFormatTs(createCache.publishDate) : "",
         });
         // 添加商品

@@ -23,8 +23,6 @@ public class ProductDto {
 
     private float mailPrice;
 
-    private int buyLimit;
-
     private CategoryDto category;
 
     private String isbn;
@@ -38,10 +36,6 @@ public class ProductDto {
     private int indexOrder;
 
     private ProductStorageDto storage;
-
-    @JsonDeserialize(using = LongToDateDeserializer.class)
-    @JsonSerialize(using = DateToLongSerializer.class)
-    private Date startSellTime;
 
     public ProductDto() {
     }
@@ -64,10 +58,6 @@ public class ProductDto {
 
     public float getMailPrice() {
         return this.mailPrice;
-    }
-
-    public int getBuyLimit() {
-        return this.buyLimit;
     }
 
     public CategoryDto getCategory() {
@@ -94,10 +84,6 @@ public class ProductDto {
         return this.storage;
     }
 
-    public Date getStartSellTime() {
-        return this.startSellTime;
-    }
-
     public void setId(String id) {
         this.id = id;
     }
@@ -116,10 +102,6 @@ public class ProductDto {
 
     public void setMailPrice(float mailPrice) {
         this.mailPrice = mailPrice;
-    }
-
-    public void setBuyLimit(int buyLimit) {
-        this.buyLimit = buyLimit;
     }
 
     public void setCategory(CategoryDto category) {
@@ -146,10 +128,7 @@ public class ProductDto {
         this.storage = storage;
     }
 
-    public void setStartSellTime(Date startSellTime) {
-        this.startSellTime = startSellTime;
-    }
-
+    @Override
     public boolean equals(final Object o) {
         if (o == this) return true;
         if (!(o instanceof ProductDto)) return false;
@@ -166,7 +145,6 @@ public class ProductDto {
         if (this$thumbnail == null ? other$thumbnail != null : !this$thumbnail.equals(other$thumbnail)) return false;
         if (Float.compare(this.getPrice(), other.getPrice()) != 0) return false;
         if (Float.compare(this.getMailPrice(), other.getMailPrice()) != 0) return false;
-        if (this.getBuyLimit() != other.getBuyLimit()) return false;
         final Object this$category = this.getCategory();
         final Object other$category = other.getCategory();
         if (this$category == null ? other$category != null : !this$category.equals(other$category)) return false;
@@ -184,15 +162,14 @@ public class ProductDto {
         final Object this$storage = this.getStorage();
         final Object other$storage = other.getStorage();
         if (this$storage == null ? other$storage != null : !this$storage.equals(other$storage)) return false;
-        final Object this$startSellTime = this.getStartSellTime();
-        final Object other$startSellTime = other.getStartSellTime();
-        return this$startSellTime == null ? other$startSellTime == null : this$startSellTime.equals(other$startSellTime);
+        return true;
     }
 
     protected boolean canEqual(final Object other) {
         return other instanceof ProductDto;
     }
 
+    @Override
     public int hashCode() {
         final int PRIME = 59;
         int result = 1;
@@ -204,7 +181,6 @@ public class ProductDto {
         result = result * PRIME + ($thumbnail == null ? 43 : $thumbnail.hashCode());
         result = result * PRIME + Float.floatToIntBits(this.getPrice());
         result = result * PRIME + Float.floatToIntBits(this.getMailPrice());
-        result = result * PRIME + this.getBuyLimit();
         final Object $category = this.getCategory();
         result = result * PRIME + ($category == null ? 43 : $category.hashCode());
         final Object $isbn = this.getIsbn();
@@ -216,12 +192,11 @@ public class ProductDto {
         result = result * PRIME + this.getIndexOrder();
         final Object $storage = this.getStorage();
         result = result * PRIME + ($storage == null ? 43 : $storage.hashCode());
-        final Object $startSellTime = this.getStartSellTime();
-        result = result * PRIME + ($startSellTime == null ? 43 : $startSellTime.hashCode());
         return result;
     }
 
+    @Override
     public String toString() {
-        return "ProductDto(id=" + this.getId() + ", name=" + this.getName() + ", thumbnail=" + this.getThumbnail() + ", price=" + this.getPrice() + ", mailPrice=" + this.getMailPrice() + ", buyLimit=" + this.getBuyLimit() + ", category=" + this.getCategory() + ", isbn=" + this.getIsbn() + ", author=" + this.getAuthor() + ", publishDate=" + this.getPublishDate() + ", indexOrder=" + this.getIndexOrder() + ", storage=" + this.getStorage() + ", startSellTime=" + this.getStartSellTime() + ")";
+        return "ProductDto(id=" + this.getId() + ", name=" + this.getName() + ", thumbnail=" + this.getThumbnail() + ", price=" + this.getPrice() + ", mailPrice=" + this.getMailPrice() + ", category=" + this.getCategory() + ", isbn=" + this.getIsbn() + ", author=" + this.getAuthor() + ", publishDate=" + this.getPublishDate() + ", indexOrder=" + this.getIndexOrder() + ", storage=" + this.getStorage() + ")";
     }
 }

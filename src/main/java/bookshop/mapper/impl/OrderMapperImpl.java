@@ -164,14 +164,12 @@ public class OrderMapperImpl implements OrderMapper {
         productDto.setThumbnail(mediaEntityToMediaDto(productEntity.getThumbnail()));
         productDto.setPrice(productEntity.getPrice());
         productDto.setMailPrice(productEntity.getMailPrice());
-        productDto.setBuyLimit(productEntity.getBuyLimit());
         productDto.setCategory(categoryEntityToCategoryDto(productEntity.getCategory()));
         productDto.setIsbn(productEntity.getIsbn());
         productDto.setAuthor(productEntity.getAuthor());
         productDto.setPublishDate(productEntity.getPublishDate());
         productDto.setIndexOrder(productEntity.getIndexOrder());
         productDto.setStorage(productStorageEntityToProductStorageDto(productEntity.getStorage()));
-        productDto.setStartSellTime(productEntity.getStartSellTime());
 
         return productDto;
     }
@@ -236,7 +234,6 @@ public class OrderMapperImpl implements OrderMapper {
         productEntity.setThumbnail(mediaDtoToMediaEntity(productDto.getThumbnail()));
         productEntity.setPrice(productDto.getPrice());
         productEntity.setMailPrice(productDto.getMailPrice());
-        productEntity.setBuyLimit(productDto.getBuyLimit());
         productEntity.setCategory(categoryDtoToCategoryEntity(productDto.getCategory()));
         productEntity.setIndexOrder(productDto.getIndexOrder());
         productEntity.setIsbn(productDto.getIsbn());
@@ -245,9 +242,6 @@ public class OrderMapperImpl implements OrderMapper {
             productEntity.setPublishDate(new Timestamp(productDto.getPublishDate().getTime()));
         }
         productEntity.setStorage(productStorageDtoToProductStorageEntity(productDto.getStorage()));
-        if (productDto.getStartSellTime() != null) {
-            productEntity.setStartSellTime(new Timestamp(productDto.getStartSellTime().getTime()));
-        }
 
         return productEntity;
     }
