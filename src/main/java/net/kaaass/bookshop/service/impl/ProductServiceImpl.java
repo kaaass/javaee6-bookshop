@@ -87,10 +87,11 @@ public class ProductServiceImpl implements ProductService, Serializable {
     /**
      * 待添加缓存
      */
-    private Map<String, ProductEntity> productCache = new HashMap<>();
+    private final Map<String, ProductEntity> productCache = new HashMap<>();
 
     /**
      * 增加商品
+     *
      * @return
      */
     @Override

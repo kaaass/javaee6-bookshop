@@ -1,14 +1,9 @@
 package net.kaaass.bookshop.promote;
 
 import java8.util.function.Function;
+import java8.util.stream.Collectors;
 import java8.util.stream.StreamSupport;
 import lombok.extern.slf4j.Slf4j;
-
-import javax.ejb.Stateless;
-import javax.inject.Inject;
-import java.lang.reflect.InvocationTargetException;
-import java.util.List;
-import java8.util.stream.Collectors;
 import lombok.val;
 import net.kaaass.bookshop.dao.entity.PromoteStrategyEntity;
 import net.kaaass.bookshop.dao.repository.PromoteStrategyRepository;
@@ -17,6 +12,11 @@ import net.kaaass.bookshop.exception.BadRequestException;
 import net.kaaass.bookshop.exception.BaseException;
 import net.kaaass.bookshop.exception.NotFoundException;
 import net.kaaass.bookshop.mapper.OrderMapper;
+
+import javax.ejb.Stateless;
+import javax.inject.Inject;
+import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 
 /**
  * 管理数据库策略
@@ -33,6 +33,7 @@ public class DbmsPromoteStrategyManager {
 
     /**
      * 依照优先级获得策略顺序
+     *
      * @return 策略s
      */
     public List<PromoteStrategyDto> getAll() {
@@ -48,8 +49,9 @@ public class DbmsPromoteStrategyManager {
 
     /**
      * 使用反射，从数据库创建策略
+     *
      * @param promoteStrategyDto 策略DTO
-     * @param serviceAdapter 服务适配器
+     * @param serviceAdapter     服务适配器
      * @return 策略
      */
     public BaseDbmsPromoteStrategy createFromDbms(PromoteStrategyDto promoteStrategyDto, ServiceAdapter serviceAdapter) throws NotFoundException, BadRequestException {

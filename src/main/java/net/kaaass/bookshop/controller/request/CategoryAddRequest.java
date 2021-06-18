@@ -7,6 +7,7 @@ import javax.validation.constraints.Size;
 
 /**
  * 分类添加请求
+ *
  * @author kaaass
  */
 @Data

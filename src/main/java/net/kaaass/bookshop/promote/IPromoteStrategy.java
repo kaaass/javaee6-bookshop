@@ -7,6 +7,7 @@ import net.kaaass.bookshop.vo.PromoteStrategyInfoVo;
 
 /**
  * 打折策略接口
+ *
  * @param <S> 打折源类型
  * @param <T> 打折对象类型
  */
@@ -41,7 +42,7 @@ public interface IPromoteStrategy<S extends OrderPromoteContext, T extends Order
          */
         OK(5);
 
-        private int order;
+        private final int order;
 
         ResultType(int i) {
             order = i;
@@ -54,6 +55,7 @@ public interface IPromoteStrategy<S extends OrderPromoteContext, T extends Order
 
     /**
      * 结果对象
+     *
      * @param <T>
      */
     @Getter

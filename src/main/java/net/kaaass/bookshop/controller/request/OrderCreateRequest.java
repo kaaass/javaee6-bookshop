@@ -7,6 +7,7 @@ import org.codehaus.jackson.annotate.JsonTypeInfo;
 
 /**
  * 基础订单创建请求
+ *
  * @author kaaass
  */
 @Data

@@ -9,6 +9,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 /**
  * 打折策略信息 VO
+ *
  * @author kaaass
  */
 @Data

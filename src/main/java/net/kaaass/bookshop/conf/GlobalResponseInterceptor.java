@@ -13,6 +13,7 @@ import javax.ws.rs.ext.Provider;
 
 /**
  * 统一输出拦截器
+ *
  * @author kaaass
  */
 @EncoderPrecedence

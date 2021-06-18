@@ -9,6 +9,7 @@ import java.util.List;
 
 /**
  * 创建多商品订单请求
+ *
  * @author kaaass
  */
 @EqualsAndHashCode(callSuper = true)

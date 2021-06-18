@@ -8,11 +8,9 @@ import net.kaaass.bookshop.dto.OrderItemDto;
 import net.kaaass.bookshop.dto.PromoteStrategyDto;
 import net.kaaass.bookshop.vo.PromoteStrategyInfoVo;
 import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "cdi", uses = CommonTransform.class)
 public interface OrderMapper {
-    OrderMapper INSTANCE = Mappers.getMapper(OrderMapper.class);
 
     OrderDto orderEntityToDto(OrderEntity orderEntity);
 

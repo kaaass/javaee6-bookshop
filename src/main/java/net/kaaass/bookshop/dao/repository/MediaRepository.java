@@ -8,6 +8,7 @@ import java.util.List;
 
 /**
  * 媒体资源 DAO
+ *
  * @author kaaass
  */
 public class MediaRepository extends BaseRepository<MediaEntity, String> {

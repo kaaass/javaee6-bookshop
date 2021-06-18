@@ -29,7 +29,7 @@ public class Event {
 
     private boolean isCanceled = false;
     private Result result = Result.DEFAULT;
-    private static ListenerList listeners = new ListenerList();
+    private static final ListenerList listeners = new ListenerList();
     private EventPriority phase = null;
 
     public Event() {
@@ -45,7 +45,7 @@ public class Event {
      * Events with the Cancelable annotation will have this method automatically added to return true.
      */
     public boolean isCancelable() {
-        for (val annotation: this.getClass().getAnnotations()) {
+        for (val annotation : this.getClass().getAnnotations()) {
             if (Cancelable.class.isAssignableFrom(annotation.getClass())) {
                 return true;
             }

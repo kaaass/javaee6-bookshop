@@ -8,7 +8,6 @@ import net.kaaass.bookshop.security.SecurityIdentity;
 import net.kaaass.bookshop.security.SecurityRole;
 
 import javax.inject.Inject;
-import javax.validation.Validator;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

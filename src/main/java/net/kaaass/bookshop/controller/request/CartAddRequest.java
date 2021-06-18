@@ -4,6 +4,7 @@ import lombok.Data;
 
 /**
  * 购物车添加请求
+ *
  * @author kaaass
  */
 @Data

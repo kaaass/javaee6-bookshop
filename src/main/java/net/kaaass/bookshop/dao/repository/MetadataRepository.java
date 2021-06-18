@@ -6,6 +6,7 @@ import net.kaaass.bookshop.dao.entity.MetadataEntity;
 
 /**
  * 全局元数据
+ *
  * @author kaaass
  */
 public class MetadataRepository extends BaseRepository<MetadataEntity, String> {

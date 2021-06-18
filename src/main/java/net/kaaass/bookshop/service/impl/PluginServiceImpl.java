@@ -6,7 +6,6 @@ import java8.util.stream.Collectors;
 import java8.util.stream.StreamSupport;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import lombok.var;
 import net.kaaass.bookshop.dao.entity.PluginEntity;
 import net.kaaass.bookshop.dao.repository.PluginRepository;
 import net.kaaass.bookshop.dto.PluginDto;
@@ -33,13 +32,16 @@ public class PluginServiceImpl implements PluginService, Serializable {
     @Inject
     private PluginManager pluginManager;
 
+    @Inject
+    private CommenMapper commenMapper;
+
     @Override
     public List<PluginDto> getAll() {
         return StreamSupport.stream(pluginRepository.findAll())
                 .map(new Function<PluginEntity, PluginDto>() {
                     @Override
                     public PluginDto apply(PluginEntity pluginEntity) {
-                        return CommenMapper.INSTANCE.pluginEntityToDto(pluginEntity);
+                        return commenMapper.pluginEntityToDto(pluginEntity);
                     }
                 })
                 .collect(Collectors.<PluginDto>toList());
@@ -74,7 +76,7 @@ public class PluginServiceImpl implements PluginService, Serializable {
         entity = pluginRepository.save(entity);
         log.info("启用插件 entity = {}", entity);
         pluginManager.loadPlugin(entity.getId(), entity.getFilename());
-        return CommenMapper.INSTANCE.pluginEntityToDto(pluginRepository.save(entity));
+        return commenMapper.pluginEntityToDto(pluginRepository.save(entity));
     }
 
     @Override

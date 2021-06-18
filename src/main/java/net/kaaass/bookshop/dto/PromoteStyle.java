@@ -4,6 +4,7 @@ import lombok.Getter;
 
 /**
  * 打折样式
+ *
  * @author kaaass
  */
 public enum PromoteStyle {
@@ -17,9 +18,10 @@ public enum PromoteStyle {
     NORMAL("badge-info");
 
     @Getter
-    private String style;
+    private final String style;
 
     PromoteStyle(String style) {
         this.style = style;
-    };
+    }
+
 }

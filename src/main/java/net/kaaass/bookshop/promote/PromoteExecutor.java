@@ -2,7 +2,6 @@ package net.kaaass.bookshop.promote;
 
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import lombok.var;
 
 import java.util.List;
 
@@ -12,9 +11,9 @@ import java.util.List;
 @Slf4j
 public class PromoteExecutor {
 
-    private List<IPromoteStrategy> strategies;
+    private final List<IPromoteStrategy> strategies;
 
-    private IPromoteCollector collector;
+    private final IPromoteCollector collector;
 
 
     PromoteExecutor(List<IPromoteStrategy> strategies, IPromoteCollector collector) {
@@ -30,7 +29,7 @@ public class PromoteExecutor {
         val acceptType = collector.getInfoType();
         for (val strategy : strategies) {
             val result = strategy.doPromote(currentContext);
-            log.info("打折结果: {}",  result);
+            log.info("打折结果: {}", result);
             if (acceptType.lessEq(result.resultType)) {
                 currentContext = result.getContext();
                 currentContext.getPromotes().add(strategy.getPromoteInfo()); // 添加打折信息

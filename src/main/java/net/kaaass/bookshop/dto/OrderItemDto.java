@@ -4,6 +4,7 @@ import lombok.Data;
 
 /**
  * 订单内容 DTO
+ *
  * @author kaaass
  */
 @Data

@@ -4,7 +4,6 @@ import java8.util.function.Function;
 import java8.util.stream.Collectors;
 import java8.util.stream.StreamSupport;
 import lombok.val;
-import lombok.var;
 import net.kaaass.bookshop.dto.OrderItemDto;
 import net.kaaass.bookshop.mapper.PromoteMapper;
 import net.kaaass.bookshop.promote.*;

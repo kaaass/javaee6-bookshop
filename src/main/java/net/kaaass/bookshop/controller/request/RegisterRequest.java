@@ -2,10 +2,11 @@ package net.kaaass.bookshop.controller.request;
 
 import lombok.Data;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.Pattern;
 
 /**
  * 账户注册请求
+ *
  * @author kaaass
  */
 @Data

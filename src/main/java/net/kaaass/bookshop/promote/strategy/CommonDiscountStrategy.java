@@ -2,7 +2,6 @@ package net.kaaass.bookshop.promote.strategy;
 
 import lombok.AllArgsConstructor;
 import lombok.val;
-import lombok.var;
 import net.kaaass.bookshop.dto.PromoteStyle;
 import net.kaaass.bookshop.promote.IPromoteStrategy;
 import net.kaaass.bookshop.promote.OrderPromoteContext;
@@ -13,13 +12,13 @@ import net.kaaass.bookshop.vo.PromoteStrategyInfoVo;
 
 /**
  * 商品正常打折策略
- *
+ * <p>
  * 将会从商品元数据读入打折信息，若互斥，需要指定DisableExtra TODO
  */
 @AllArgsConstructor
 public class CommonDiscountStrategy implements IPromoteStrategy<OrderPromoteContext, OrderPromoteContext> {
 
-    private MetadataManager metadataManager;
+    private final MetadataManager metadataManager;
 
     @Override
     public Result<OrderPromoteContext> doPromote(OrderPromoteContext context) {

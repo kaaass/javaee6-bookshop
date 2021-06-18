@@ -36,6 +36,9 @@ public class UserServiceImpl implements UserService, Serializable {
     @Inject
     private UserAuthRepository userAuthRepository;
 
+    @Inject
+    private UserMapper userMapper;
+
     @Override
     public UserAuthEntity getAuthEntityById(String uid) throws NotFoundException {
         return userAuthRepository.findById(uid)
@@ -62,7 +65,7 @@ public class UserServiceImpl implements UserService, Serializable {
 
     @Override
     public UserAddressDto getAddressById(String id) throws NotFoundException {
-        return UserMapper.INSTANCE.userAddressEntityToDto(getAddressEntityById(id));
+        return userMapper.userAddressEntityToDto(getAddressEntityById(id));
     }
 
     @Override
@@ -77,7 +80,7 @@ public class UserServiceImpl implements UserService, Serializable {
                 .map(new Function<UserInfoEntity, UserInfoDto>() {
                     @Override
                     public UserInfoDto apply(UserInfoEntity userInfoEntity) {
-                        return UserMapper.INSTANCE.userInfoEntityToDto(userInfoEntity);
+                        return userMapper.userInfoEntityToDto(userInfoEntity);
                     }
                 })
                 .collect(Collectors.<UserInfoDto>toList());

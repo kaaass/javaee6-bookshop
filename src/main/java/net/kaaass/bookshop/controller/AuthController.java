@@ -1,11 +1,13 @@
 package net.kaaass.bookshop.controller;
 
+import java8.util.function.Function;
 import net.kaaass.bookshop.controller.request.RegisterRequest;
 import net.kaaass.bookshop.controller.response.LoginResponse;
+import net.kaaass.bookshop.dto.UserAuthDto;
 import net.kaaass.bookshop.exception.BadRequestException;
 import net.kaaass.bookshop.exception.BaseException;
 import net.kaaass.bookshop.exception.ForbiddenException;
-import net.kaaass.bookshop.mapper.Mapper;
+import net.kaaass.bookshop.mapper.UserMapper;
 import net.kaaass.bookshop.service.AuthService;
 import net.kaaass.bookshop.vo.UserAuthVo;
 
@@ -25,6 +27,9 @@ public class AuthController extends BaseController {
     @Inject
     private Validator validator;
 
+    @Inject
+    private UserMapper userMapper;
+
     @POST
     @Path("/login")
     public LoginResponse login(
@@ -39,7 +44,12 @@ public class AuthController extends BaseController {
     public UserAuthVo register(RegisterRequest request) throws BadRequestException {
         validateBean(validator, request);
         return service.register(request)
-                .map(Mapper.userAuthDtoToVo)
+                .map(new Function<UserAuthDto, UserAuthVo>() {
+                    @Override
+                    public UserAuthVo apply(UserAuthDto dto) {
+                        return userMapper.userAuthDtoToVo(dto);
+                    }
+                })
                 .orElseThrow(BaseException.supplier(BadRequestException.class, "该手机号已被注册！"));
     }
 }

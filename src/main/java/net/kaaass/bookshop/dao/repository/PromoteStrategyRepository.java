@@ -7,6 +7,7 @@ import java.util.List;
 
 /**
  * 打折策略 DAO
+ *
  * @author kaaass
  */
 public class PromoteStrategyRepository extends BaseRepository<PromoteStrategyEntity, String> {

@@ -4,6 +4,7 @@ import lombok.Data;
 
 /**
  * 用户信息 DTO
+ *
  * @author kaaass
  */
 @Data

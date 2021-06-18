@@ -17,7 +17,7 @@ import java.util.List;
 public class OrderEntity implements IEntity<String> {
     /**
      * 订单号
-     *
+     * <p>
      * 格式：yyyyMMdd + 当日4位自增
      */
     @Id

@@ -15,7 +15,7 @@ public class ListenerList {
     private static List<ListenerList> allLists = Collections.unmodifiableList(Collections.<ListenerList>emptyList());
     private static int maxSize = 0;
 
-    private ListenerList parent;
+    private final ListenerList parent;
     private ListenerListInst[] lists = new ListenerListInst[0];
 
     public ListenerList() {
@@ -100,7 +100,7 @@ public class ListenerList {
     private class ListenerListInst {
         private boolean rebuild = true;
         private IEventListener[] listeners;
-        private ArrayList<ArrayList<IEventListener>> priorities;
+        private final ArrayList<ArrayList<IEventListener>> priorities;
         private ListenerListInst parent;
 
         private ListenerListInst() {

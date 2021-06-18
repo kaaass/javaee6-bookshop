@@ -7,12 +7,14 @@ import java.lang.reflect.Type;
 
 /**
  * 泛型常用方法
+ *
  * @author kaaass
  */
 public class GenericUtils {
 
     /**
      * 获得父类泛型参数
+     *
      * @param clazz 当前类
      */
     public static Class<?> getSuperClassGenericType(Class<?> clazz, int index) {

@@ -11,6 +11,7 @@ import java.util.List;
 
 /**
  * 产品 DAO
+ *
  * @author kaaass
  */
 public class ProductRepository extends BaseRepository<ProductEntity, String> {

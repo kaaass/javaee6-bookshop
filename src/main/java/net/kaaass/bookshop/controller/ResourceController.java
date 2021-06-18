@@ -1,15 +1,9 @@
 package net.kaaass.bookshop.controller;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
-
 import java8.util.function.Function;
 import java8.util.stream.Collectors;
 import java8.util.stream.StreamSupport;
 import lombok.val;
-import lombok.var;
 import net.kaaass.bookshop.controller.page.PageInfo;
 import net.kaaass.bookshop.controller.request.AddUrlResourceRequest;
 import net.kaaass.bookshop.dao.entity.MediaEntity;
@@ -29,6 +23,10 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
 
 @Stateless
 @Path("/resource")

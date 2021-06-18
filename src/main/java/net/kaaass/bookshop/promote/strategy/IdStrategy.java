@@ -15,6 +15,7 @@ public class IdStrategy implements IPromoteStrategy<OrderPromoteContext, OrderPr
 
     /**
      * 不应该被运行
+     *
      * @return
      */
     @Override

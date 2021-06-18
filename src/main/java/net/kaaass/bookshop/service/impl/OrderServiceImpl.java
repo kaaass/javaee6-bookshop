@@ -6,7 +6,6 @@ import java8.util.stream.Collectors;
 import java8.util.stream.StreamSupport;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import lombok.var;
 import net.kaaass.bookshop.controller.request.CommentRequest;
 import net.kaaass.bookshop.controller.request.OrderCreateMultiRequest;
 import net.kaaass.bookshop.controller.request.OrderCreateRequest;
@@ -43,7 +42,10 @@ import org.codehaus.jackson.map.ObjectMapper;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -285,7 +287,6 @@ public class OrderServiceImpl implements OrderService, Serializable {
             // 处理返回
             entity.setPrice(promoteResult.getPrice());
             entity.setMailPrice(promoteResult.getMailPrice());
-            final OrderRequestContext finalContext = context;
             entity.setProducts(StreamSupport.stream(promoteResult.getProducts())
                     .map(new Function<OrderItemDto, OrderItemEntity>() {
                         @Override

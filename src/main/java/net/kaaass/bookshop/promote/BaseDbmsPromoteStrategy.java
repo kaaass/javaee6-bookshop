@@ -1,7 +1,6 @@
 package net.kaaass.bookshop.promote;
 
 import lombok.val;
-import lombok.var;
 import net.kaaass.bookshop.dto.PromoteStrategyDto;
 import net.kaaass.bookshop.exception.BadRequestException;
 import net.kaaass.bookshop.exception.BaseException;
@@ -12,6 +11,7 @@ import java.io.IOException;
 
 /**
  * Dbms销售策略基类
+ *
  * @param <S>
  * @param <T>
  */
@@ -20,7 +20,8 @@ public abstract class BaseDbmsPromoteStrategy<S extends OrderPromoteContext, T e
 
     PromoteStrategyInfoVo promoteStrategyInfoVo;
 
-    public BaseDbmsPromoteStrategy() {}
+    public BaseDbmsPromoteStrategy() {
+    }
 
     protected abstract void initialize(PromoteStrategyDto promoteStrategyDto, ServiceAdapter serviceAdapter) throws BaseException;
 

@@ -9,7 +9,7 @@ import net.kaaass.bookshop.eventhandle.Event;
 
 /**
  * 用户注册事件
- *
+ * <p>
  * 值修改将会被忽略
  */
 @Getter

@@ -2,13 +2,13 @@ package net.kaaass.bookshop.dto;
 
 import java8.util.Optional;
 import java8.util.function.Predicate;
-import java8.util.stream.Stream;
 import java8.util.stream.StreamSupport;
 
 import java.util.Arrays;
 
 /**
  * 订单类型
+ *
  * @author kaaass
  */
 public enum OrderType {
@@ -47,7 +47,7 @@ public enum OrderType {
      */
     ERROR(6);
 
-    private int order;
+    private final int order;
 
     OrderType(int order) {
         this.order = order;

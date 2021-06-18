@@ -2,7 +2,6 @@ package net.kaaass.bookshop.plugin;
 
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import lombok.var;
 import net.kaaass.bookshop.eventhandle.EventManager;
 import net.kaaass.bookshop.util.Constants;
 import net.kaaass.bookshop.util.FileUtils;

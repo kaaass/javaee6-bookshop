@@ -7,6 +7,7 @@ import java.util.List;
 
 /**
  * 物品评论请求返回
+ *
  * @author kaaass
  */
 @Data

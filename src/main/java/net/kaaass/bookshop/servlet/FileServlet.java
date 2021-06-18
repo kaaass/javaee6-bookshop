@@ -1,7 +1,6 @@
 package net.kaaass.bookshop.servlet;
 
 import lombok.extern.slf4j.Slf4j;
-import net.kaaass.bookshop.exception.NotFoundException;
 import net.kaaass.bookshop.util.Constants;
 
 import javax.servlet.ServletException;

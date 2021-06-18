@@ -15,7 +15,6 @@ import net.kaaass.bookshop.exception.NotFoundException;
 import net.kaaass.bookshop.mapper.OrderMapper;
 import net.kaaass.bookshop.mapper.ProductMapper;
 import net.kaaass.bookshop.promote.*;
-import net.kaaass.bookshop.service.ProductService;
 import net.kaaass.bookshop.service.PromoteService;
 import net.kaaass.bookshop.util.TimeUtils;
 

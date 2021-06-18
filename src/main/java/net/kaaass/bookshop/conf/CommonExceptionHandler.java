@@ -10,6 +10,7 @@ import javax.ws.rs.ext.Provider;
 
 /**
  * 其他异常响应处理
+ *
  * @author kaaass
  */
 @Provider

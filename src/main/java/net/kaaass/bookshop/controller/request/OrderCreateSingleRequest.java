@@ -6,6 +6,7 @@ import net.kaaass.bookshop.constraints.Uuid;
 
 /**
  * 创建单商品订单请求
+ *
  * @author kaaass
  */
 @EqualsAndHashCode(callSuper = true)

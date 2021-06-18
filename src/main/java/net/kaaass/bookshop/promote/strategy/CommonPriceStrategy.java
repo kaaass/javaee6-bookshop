@@ -7,7 +7,7 @@ import net.kaaass.bookshop.vo.PromoteStrategyInfoVo;
 
 /**
  * 普通价格计算
- *
+ * <p>
  * 价格相加，邮费取最大值
  */
 public class CommonPriceStrategy implements IPromoteStrategy<OrderPromoteContext, OrderPromoteContext> {
@@ -32,6 +32,7 @@ public class CommonPriceStrategy implements IPromoteStrategy<OrderPromoteContext
 
     /**
      * 不应该执行到
+     *
      * @return
      */
     @Override

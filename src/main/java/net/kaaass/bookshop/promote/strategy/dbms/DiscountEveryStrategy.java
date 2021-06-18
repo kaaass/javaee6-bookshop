@@ -4,14 +4,11 @@ import java8.util.function.BiFunction;
 import java8.util.function.BinaryOperator;
 import java8.util.function.Function;
 import java8.util.function.Predicate;
+import java8.util.stream.Collectors;
 import java8.util.stream.StreamSupport;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.List;
-import java8.util.stream.Collectors;
 import lombok.val;
-import lombok.var;
 import net.kaaass.bookshop.dao.entity.CategoryEntity;
 import net.kaaass.bookshop.dto.PromoteStrategyDto;
 import net.kaaass.bookshop.exception.BaseException;
@@ -20,6 +17,8 @@ import net.kaaass.bookshop.promote.OrderPromoteContext;
 import net.kaaass.bookshop.promote.PromoteItem;
 import net.kaaass.bookshop.promote.ServiceAdapter;
 import net.kaaass.bookshop.util.NumericUtils;
+
+import java.util.List;
 
 /**
  * 满减策略
@@ -35,7 +34,7 @@ public class DiscountEveryStrategy extends BaseDbmsPromoteStrategy<OrderPromoteC
 
         /**
          * 作用对象品类
-         *
+         * <p>
          * 若为null则为通配
          */
         private String categoryId;
@@ -52,7 +51,7 @@ public class DiscountEveryStrategy extends BaseDbmsPromoteStrategy<OrderPromoteC
 
         /**
          * 最大打折次数
-         *
+         * <p>
          * 若小于零则无限制
          */
         private int maxCount;
@@ -85,24 +84,24 @@ public class DiscountEveryStrategy extends BaseDbmsPromoteStrategy<OrderPromoteC
     public Result<OrderPromoteContext> doPromote(OrderPromoteContext context) {
         float allPrice = context.getPrice();
         float filteredPrice = StreamSupport.stream(context.getProducts())
-                        .filter(new Predicate<PromoteItem>() {
-                            @Override
-                            public boolean test(PromoteItem promoteItem) {
-                                return categories == null
-                                        || categories.contains(promoteItem.getProduct().getCategory().getId());
-                            }
-                        })
-                        .reduce(0F, new BiFunction<Float, PromoteItem, Float>() {
-                            @Override
-                            public Float apply(Float acc, PromoteItem el) {
-                                return acc + el.getPrice();
-                            }
-                        }, new BinaryOperator<Float>() {
-                            @Override
-                            public Float apply(Float aFloat, Float aFloat2) {
-                                return aFloat + aFloat2;
-                            }
-                        });
+                .filter(new Predicate<PromoteItem>() {
+                    @Override
+                    public boolean test(PromoteItem promoteItem) {
+                        return categories == null
+                                || categories.contains(promoteItem.getProduct().getCategory().getId());
+                    }
+                })
+                .reduce(0F, new BiFunction<Float, PromoteItem, Float>() {
+                    @Override
+                    public Float apply(Float acc, PromoteItem el) {
+                        return acc + el.getPrice();
+                    }
+                }, new BinaryOperator<Float>() {
+                    @Override
+                    public Float apply(Float aFloat, Float aFloat2) {
+                        return aFloat + aFloat2;
+                    }
+                });
         log.info("筛选可打折价格 {}，品类 {}", filteredPrice, this.categories);
         if (filteredPrice <= 0) {
             return new Result<>(ResultType.NOT_MATCH);

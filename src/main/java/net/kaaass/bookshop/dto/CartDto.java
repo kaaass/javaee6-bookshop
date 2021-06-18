@@ -10,6 +10,7 @@ import java.util.Date;
 
 /**
  * 购物车项目 DTO
+ *
  * @author kaaass
  */
 @Data

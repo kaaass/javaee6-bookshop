@@ -8,6 +8,7 @@ import java.util.List;
 
 /**
  * 插件 DAO
+ *
  * @author kaaass
  */
 public class PluginRepository extends BaseRepository<PluginEntity, String> {

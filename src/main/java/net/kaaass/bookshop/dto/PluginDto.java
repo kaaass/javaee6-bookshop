@@ -8,6 +8,7 @@ import java.util.Date;
 
 /**
  * 插件 DTO
+ *
  * @author kaaass
  */
 @Data

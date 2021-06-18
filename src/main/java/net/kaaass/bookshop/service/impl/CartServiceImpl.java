@@ -1,10 +1,7 @@
 package net.kaaass.bookshop.service.impl;
 
 import java8.util.Optional;
-import java8.util.function.Function;
 import java8.util.function.Supplier;
-import java8.util.stream.Collectors;
-import java8.util.stream.StreamSupport;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import net.kaaass.bookshop.controller.request.CartAddRequest;
@@ -38,6 +35,9 @@ public class CartServiceImpl implements CartService, Serializable {
     @Inject
     private ProductService productService;
 
+    @Inject
+    private ProductMapper productMapper;
+
     @Override
     public CartDto getById(String id) throws NotFoundException {
         return findById(id)
@@ -52,7 +52,7 @@ public class CartServiceImpl implements CartService, Serializable {
                     @Override
                     public CartDto get() {
                         val newEntity = new CartDto();
-                        newEntity.setProduct(ProductMapper.INSTANCE.productEntityToDto(product));
+                        newEntity.setProduct(productMapper.productEntityToDto(product));
                         newEntity.setCount(0);
                         return newEntity;
                     }

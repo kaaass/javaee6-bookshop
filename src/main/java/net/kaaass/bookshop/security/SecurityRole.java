@@ -32,7 +32,7 @@ public enum SecurityRole {
      */
     ANONYMOUS(0);
 
-    private int level;
+    private final int level;
 
     SecurityRole(int level) {
         this.level = level;

@@ -4,6 +4,7 @@ import lombok.Data;
 
 /**
  * 订单检查响应
+ *
  * @author kaaass
  */
 @Data

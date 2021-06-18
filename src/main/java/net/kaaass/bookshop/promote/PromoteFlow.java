@@ -11,7 +11,7 @@ public class PromoteFlow<T extends OrderPromoteContext> {
     /**
      * 打折策略
      */
-    private List<IPromoteStrategy> strategies;
+    private final List<IPromoteStrategy> strategies;
 
     PromoteFlow() {
         this.strategies = new ArrayList<>();

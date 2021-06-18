@@ -9,6 +9,7 @@ import java.util.List;
 
 /**
  * 插件服务
+ *
  * @author kaaass
  */
 @Local

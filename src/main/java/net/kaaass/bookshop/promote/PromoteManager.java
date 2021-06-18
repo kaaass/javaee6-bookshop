@@ -39,8 +39,9 @@ public class PromoteManager {
 
     /**
      * 从数据库构建打折流执行器
-     * @return 打折流执行器
+     *
      * @param forView
+     * @return 打折流执行器
      */
     private PromoteExecutor buildExecutorFromDbms(boolean forView) {
         PromoteFlow<OrderPromoteContext> flow = PromoteFlow.start()
@@ -60,6 +61,7 @@ public class PromoteManager {
 
     /**
      * 对某个订单进行处理
+     *
      * @param context 订单上下文
      * @return 折扣结果
      */

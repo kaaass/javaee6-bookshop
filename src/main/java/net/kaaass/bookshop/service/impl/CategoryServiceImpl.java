@@ -1,16 +1,11 @@
 package net.kaaass.bookshop.service.impl;
 
+import java8.util.Optional;
 import java8.util.function.Function;
+import java8.util.stream.Collectors;
 import java8.util.stream.StreamSupport;
 import lombok.extern.slf4j.Slf4j;
-
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java8.util.Optional;
-import java8.util.stream.Collectors;
 import lombok.val;
-import lombok.var;
 import net.kaaass.bookshop.controller.request.CategoryAddRequest;
 import net.kaaass.bookshop.dao.Pageable;
 import net.kaaass.bookshop.dao.entity.CategoryEntity;
@@ -23,6 +18,9 @@ import net.kaaass.bookshop.service.CategoryService;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Stateless
 @Slf4j
@@ -30,6 +28,9 @@ public class CategoryServiceImpl implements CategoryService, Serializable {
 
     @Inject
     private CategoryRepository categoryRepository;
+
+    @Inject
+    private ProductMapper productMapper;
 
     @Override
     public Optional<CategoryDto> add(CategoryAddRequest categoryDto) {
@@ -49,7 +50,7 @@ public class CategoryServiceImpl implements CategoryService, Serializable {
                     .map(new Function<CategoryEntity, CategoryDto>() {
                         @Override
                         public CategoryDto apply(CategoryEntity categoryEntity) {
-                            return ProductMapper.INSTANCE.categoryEntityToDto(categoryEntity);
+                            return productMapper.categoryEntityToDto(categoryEntity);
                         }
                     });
         } catch (Exception e) {
@@ -64,7 +65,7 @@ public class CategoryServiceImpl implements CategoryService, Serializable {
                 .map(new Function<CategoryEntity, CategoryDto>() {
                     @Override
                     public CategoryDto apply(CategoryEntity categoryEntity) {
-                        return ProductMapper.INSTANCE.categoryEntityToDto(categoryEntity);
+                        return productMapper.categoryEntityToDto(categoryEntity);
                     }
                 })
                 .orElseThrow(BaseException.supplier(NotFoundException.class, "未找到此分类！"));
@@ -82,7 +83,7 @@ public class CategoryServiceImpl implements CategoryService, Serializable {
                 .map(new Function<CategoryEntity, CategoryDto>() {
                     @Override
                     public CategoryDto apply(CategoryEntity categoryEntity) {
-                        return ProductMapper.INSTANCE.categoryEntityToDto(categoryEntity);
+                        return productMapper.categoryEntityToDto(categoryEntity);
                     }
                 })
                 .collect(Collectors.<CategoryDto>toList());
@@ -90,7 +91,7 @@ public class CategoryServiceImpl implements CategoryService, Serializable {
 
     @Override
     public List<CategoryEntity> getAllSubs(final CategoryEntity root) {
-        val result = new ArrayList<CategoryEntity>(){{
+        val result = new ArrayList<CategoryEntity>() {{
             add(root);
         }};
         // 找到一层子节点

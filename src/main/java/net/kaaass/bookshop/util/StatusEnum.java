@@ -6,13 +6,11 @@ import java8.util.stream.StreamSupport;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import java8.util.stream.Stream;
-
 import java.util.Arrays;
-import java.util.Collections;
 
 /**
  * 错误号
+ *
  * @author kaaass
  */
 @Getter
@@ -30,8 +28,8 @@ public enum StatusEnum {
     INTERNAL_ERROR(500, "服务器内部错误"),
     SERVICE_UNAVAILIBLE(503, "服务器暂不可用");
 
-    private int code;
-    private String description;
+    private final int code;
+    private final String description;
 
     public boolean isSuccess() {
         return code == StatusEnum.SUCCESS.code;

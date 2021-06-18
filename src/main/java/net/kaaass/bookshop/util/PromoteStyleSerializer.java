@@ -9,6 +9,7 @@ import java.io.IOException;
 
 /**
  * 打折样式序列化
+ *
  * @author kaaass
  */
 public class PromoteStyleSerializer extends JsonSerializer<PromoteStyle> {

@@ -1,7 +1,6 @@
 package net.kaaass.bookshop.vo;
 
 import lombok.Data;
-import net.kaaass.bookshop.dto.MediaDto;
 import net.kaaass.bookshop.util.DateToLongSerializer;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 

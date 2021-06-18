@@ -5,7 +5,6 @@ import java8.util.function.Predicate;
 import java8.util.stream.Collectors;
 import java8.util.stream.StreamSupport;
 import lombok.val;
-import lombok.var;
 import net.kaaass.bookshop.controller.request.UserAddressRequest;
 import net.kaaass.bookshop.controller.request.UserInfoModifyRequest;
 import net.kaaass.bookshop.controller.response.UserProfileResponse;
@@ -84,7 +83,7 @@ public class UserProfileController extends BaseController {
         val entity = userInfoRepository.findByAuth(auth);
         entity.setAuth(auth);
         val avatar = resourceManager.getEntity(request.getAvatar())
-                        .orElseThrow(BaseException.supplier(BadRequestException.class, "头像资源不存在！"));
+                .orElseThrow(BaseException.supplier(BadRequestException.class, "头像资源不存在！"));
         entity.setAvatar(avatar);
         entity.setWechat(request.getWechat());
         entity.setLastUpdateTime(TimeUtils.nowTimestamp());

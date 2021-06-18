@@ -3,12 +3,9 @@ package net.kaaass.bookshop.controller.request;
 import lombok.Data;
 import net.kaaass.bookshop.constraints.Isbn;
 import net.kaaass.bookshop.constraints.Uuid;
-import net.kaaass.bookshop.util.DateToLongSerializer;
 import net.kaaass.bookshop.util.LongToDateDeserializer;
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
 
-import javax.validation.constraints.Digits;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 import java.util.Date;

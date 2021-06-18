@@ -7,6 +7,7 @@ import java.util.List;
 
 /**
  * 分类 DAO
+ *
  * @author kaaass
  */
 public class CategoryRepository extends BaseRepository<CategoryEntity, String> {

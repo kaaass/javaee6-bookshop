@@ -2,6 +2,7 @@ package net.kaaass.bookshop.eventhandle;
 
 /**
  * Modified from forge
+ *
  * @author cpw
  */
 public interface IEventExceptionHandler {

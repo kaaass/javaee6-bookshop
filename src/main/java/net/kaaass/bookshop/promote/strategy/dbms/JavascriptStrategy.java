@@ -9,7 +9,6 @@ import net.kaaass.bookshop.eventhandle.EventManager;
 import net.kaaass.bookshop.exception.BadRequestException;
 import net.kaaass.bookshop.exception.BaseException;
 import net.kaaass.bookshop.promote.BaseDbmsPromoteStrategy;
-import net.kaaass.bookshop.promote.IPromoteStrategy;
 import net.kaaass.bookshop.promote.OrderPromoteContext;
 import net.kaaass.bookshop.promote.ServiceAdapter;
 import net.kaaass.bookshop.script.ScriptSource;

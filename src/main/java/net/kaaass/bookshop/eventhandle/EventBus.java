@@ -2,7 +2,6 @@ package net.kaaass.bookshop.eventhandle;
 
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import lombok.var;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -23,12 +22,12 @@ public class EventBus implements IEventExceptionHandler {
     /**
      * 维护处理类与若干子事件的映射
      */
-    private ConcurrentHashMap<Object, ArrayList<IEventListener>> listeners = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<Object, ArrayList<IEventListener>> listeners = new ConcurrentHashMap<>();
 
     /**
      * 维护插件事件监听映射
      */
-    private ConcurrentHashMap<Object, ArrayList<IEventListener>> pluginListeners = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<Object, ArrayList<IEventListener>> pluginListeners = new ConcurrentHashMap<>();
     private final int busID = maxID++;
     private IEventExceptionHandler exceptionHandler;
 
@@ -72,7 +71,6 @@ public class EventBus implements IEventExceptionHandler {
                         break;
                     }
                 } catch (NoSuchMethodException ignored) {
-                    ;
                 }
             }
         }

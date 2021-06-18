@@ -8,6 +8,7 @@ import java.util.List;
 
 /**
  * 订单额外信息 VO
+ *
  * @author kaaass
  */
 @Data
