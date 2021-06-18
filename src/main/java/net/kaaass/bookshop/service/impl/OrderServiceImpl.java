@@ -33,10 +33,7 @@ import net.kaaass.bookshop.promote.OrderPromoteResult;
 import net.kaaass.bookshop.promote.PromoteManager;
 import net.kaaass.bookshop.service.*;
 import net.kaaass.bookshop.service.mq.OrderMessageProducer;
-import net.kaaass.bookshop.util.Constants;
-import net.kaaass.bookshop.util.FileUtils;
-import net.kaaass.bookshop.util.StringUtils;
-import net.kaaass.bookshop.util.TimeUtils;
+import net.kaaass.bookshop.util.*;
 import net.kaaass.bookshop.vo.UserOrderCountVo;
 import org.codehaus.jackson.map.ObjectMapper;
 
@@ -288,13 +285,15 @@ public class OrderServiceImpl implements OrderService, Serializable {
                 throw new BadRequestException("订单处理被取消！");
             }
             // 处理返回
-            entity.setPrice(promoteResult.getPrice());
-            entity.setMailPrice(promoteResult.getMailPrice());
+            entity.setPrice(NumericUtils.moneyRound(promoteResult.getPrice()));
+            entity.setMailPrice(NumericUtils.moneyRound(promoteResult.getMailPrice()));
             entity.setProducts(StreamSupport.stream(promoteResult.getProducts())
                     .map(new Function<OrderItemDto, OrderItemEntity>() {
                         @Override
                         public OrderItemEntity apply(OrderItemDto dto) {
                             val itemEntity = entityCreator.createOrderItemEntity(dto);
+                            val product = productRepository.getOne(dto.getProduct().getId());
+                            itemEntity.setProduct(product);
                             itemEntity.setUser(user);
                             itemEntity.setOrder(entity);
                             return itemEntity;

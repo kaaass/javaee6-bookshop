@@ -11,4 +11,13 @@ public class PromoteItem {
     private float price;
 
     private int count;
+
+    @Override
+    public String toString() {
+        return "PromoteItem{" +
+                "product=" + product.getName() +
+                ", price=" + price +
+                ", count=" + count +
+                '}';
+    }
 }

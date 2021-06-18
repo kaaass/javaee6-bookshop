@@ -23,9 +23,7 @@ public interface EntityCreator {
     EntityCreator INSTANCE = Mappers.getMapper(EntityCreator.class);
 
     @Mappings({
-            @Mapping(target = "product.storage", expression = "java(null)"),
-            @Mapping(target = "product.createTime", expression = "java(null)"),
-            @Mapping(target = "product.lastUpdateTime", expression = "java(null)"),
+            @Mapping(target = "product", expression = "java(null)"),
             @Mapping(target = "user", expression = "java(null)"),
             @Mapping(target = "order", expression = "java(null)"),
             @Mapping(target = "createTime", expression = "java(null)"),

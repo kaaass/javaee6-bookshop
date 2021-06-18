@@ -2,6 +2,7 @@ package net.kaaass.bookshop.promote;
 
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+import net.kaaass.bookshop.util.NumericUtils;
 
 import java.util.List;
 
@@ -29,10 +30,14 @@ public class PromoteExecutor {
         val acceptType = collector.getInfoType();
         for (val strategy : strategies) {
             val result = strategy.doPromote(currentContext);
-            log.info("打折结果: {}", result);
             if (acceptType.lessEq(result.resultType)) {
                 currentContext = result.getContext();
+                currentContext.setPrice(NumericUtils.moneyRound(currentContext.getPrice()));
+                currentContext.setMailPrice(NumericUtils.moneyRound(currentContext.getMailPrice()));
                 currentContext.getPromotes().add(strategy.getPromoteInfo()); // 添加打折信息
+            }
+            if (IPromoteStrategy.ResultType.NOT_MATCH.lessEq(result.resultType)) {
+                log.info("打折策略：{}；打折结果: {}", strategy.getPromoteInfo().getName(), result);
             }
         }
         return collector.collect(currentContext);

@@ -44,8 +44,12 @@ public class PromoteManager {
      * @return 打折流执行器
      */
     private PromoteExecutor buildExecutorFromDbms(boolean forView) {
-        PromoteFlow<OrderPromoteContext> flow = PromoteFlow.start()
-                .on(CommonPriceStrategy.INSTANCE); // 必须最前
+        PromoteFlow<OrderPromoteContext> flow = PromoteFlow.start();
+        // 基础打折策略最先
+        flow = flow
+                .on(CommonPriceStrategy.INSTANCE) // 必须最前
+                .on(new CommonDiscountStrategy(metadataManager))
+                .on(CommonMailFreeStrategy.INSTANCE);
         // 从数据库读取策略
         try {
             flow = packWithDbms(flow);
@@ -53,10 +57,7 @@ public class PromoteManager {
             log.warn("从数据库构建策略失败！", e);
         }
         // Pipeline Valve
-        return flow
-                .on(new CommonDiscountStrategy(metadataManager))
-                .on(CommonMailFreeStrategy.INSTANCE)
-                .collect(forView ? ViewCollector.INSTANCE : CommonCollector.INSTANCE);
+        return flow.collect(forView ? ViewCollector.INSTANCE : CommonCollector.INSTANCE);
     }
 
     /**

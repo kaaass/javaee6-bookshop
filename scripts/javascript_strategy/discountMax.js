@@ -2,11 +2,6 @@ function make_result(st, ctx) { return result_mtd.invoke(null, st, ctx); };
 
 var result = null;
 
-println(OK);
-println(OK.class);
-println(promoteContext);
-println(promoteContext.class);
-
 // 总价格满 100 参与折扣
 if (promoteContext.price > 100) {
     // 商品打 8 折，保留两位小数
