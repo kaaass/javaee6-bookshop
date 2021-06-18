@@ -13,7 +13,6 @@ import bookshop.security.Secured;
 import bookshop.security.SecurityIdentity;
 import bookshop.security.SecurityRole;
 import bookshop.service.ProductService;
-import bookshop.service.metadata.MetadataManager;
 import bookshop.vo.ProductExtraVo;
 
 import javax.inject.Inject;
@@ -31,9 +30,6 @@ public class ProductController extends BaseController {
 
     @Inject
     private ProductService productService;
-
-    @Inject
-    private MetadataManager metadataManager;
 
     @Inject
     private Validator validator;
@@ -198,29 +194,5 @@ public class ProductController extends BaseController {
     public ProductCommentResponse getComments(@PathParam("id") String id) {
         // TODO 评论用户头像
         return productService.getComments(id, pageInfo.getPageable());
-    }
-
-    @GET
-    @Path("/{id}/metadata/")
-    @Secured(SecurityRole.ADMIN)
-    public Map<String, String> getAllForProduct(@PathParam("id") String productId) {
-        return metadataManager.getAllForProduct(productId);
-    }
-
-    @POST
-    @Path("/{id}/metadata/")
-    @Secured(SecurityRole.ADMIN)
-    public boolean setForProduct(@PathParam("id") String productId, MetadataRequest request) throws BadRequestException {
-        validateBean(validator, request);
-        metadataManager.setForProduct(productId, request.getKey(), request.getValue());
-        return true;
-    }
-
-    @DELETE
-    @Path("/{id}/metadata/{key}/")
-    @Secured(SecurityRole.ADMIN)
-    public boolean deleteForProduct(@PathParam("id") String productId, @PathParam("key") String key) {
-        metadataManager.deleteForProduct(productId, key);
-        return true;
     }
 }

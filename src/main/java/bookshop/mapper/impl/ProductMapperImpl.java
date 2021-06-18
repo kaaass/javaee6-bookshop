@@ -87,22 +87,6 @@ public class ProductMapperImpl implements ProductMapper {
     }
 
     @Override
-    public ProductMetadataDto productMetadataEntityToDto(ProductMetadataEntity productMetadataEntity) {
-        if (productMetadataEntity == null) {
-            return null;
-        }
-
-        ProductMetadataDto productMetadataDto = new ProductMetadataDto();
-
-        productMetadataDto.setId(productMetadataEntity.getId());
-        productMetadataDto.setProductId(productMetadataEntity.getProductId());
-        productMetadataDto.setKey(productMetadataEntity.getKey());
-        productMetadataDto.setValue(productMetadataEntity.getValue());
-
-        return productMetadataDto;
-    }
-
-    @Override
     public ProductStorageDto productStorageEntityToDto(ProductStorageEntity productStorageEntity) {
         if (productStorageEntity == null) {
             return null;

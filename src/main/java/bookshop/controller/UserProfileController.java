@@ -24,7 +24,7 @@ import bookshop.security.SecurityIdentity;
 import bookshop.security.SecurityRole;
 import bookshop.service.OrderService;
 import bookshop.service.UserService;
-import bookshop.service.metadata.ResourceManager;
+import bookshop.service.ResourceService;
 import bookshop.util.TimeUtils;
 
 import javax.ejb.Stateless;
@@ -56,7 +56,7 @@ public class UserProfileController extends BaseController {
     private UserService userService;
 
     @Inject
-    private ResourceManager resourceManager;
+    private ResourceService resourceService;
 
     @Inject
     private OrderService orderService;
@@ -84,7 +84,7 @@ public class UserProfileController extends BaseController {
         UserAuthEntity auth = userService.getAuthEntityById(getUid(identity));
         UserInfoEntity entity = userInfoRepository.findByAuth(auth);
         entity.setAuth(auth);
-        MediaEntity avatar = resourceManager.getEntity(request.getAvatar())
+        MediaEntity avatar = resourceService.getEntity(request.getAvatar())
                 .orElseThrow(BaseException.supplier(BadRequestException.class, "头像资源不存在！"));
         entity.setAvatar(avatar);
         entity.setWechat(request.getWechat());

@@ -24,8 +24,7 @@ import bookshop.mapper.UserMapper;
 import bookshop.service.CategoryService;
 import bookshop.service.ProductService;
 import bookshop.service.UserService;
-import bookshop.service.metadata.MetadataManager;
-import bookshop.service.metadata.ResourceManager;
+import bookshop.service.ResourceService;
 import bookshop.util.Constants;
 import bookshop.util.NumericUtils;
 import bookshop.util.StringUtils;
@@ -50,16 +49,13 @@ public class ProductServiceImpl implements ProductService, Serializable {
     private ProductRepository productRepository;
 
     @Inject
-    private ResourceManager resourceManager;
+    private ResourceService resourceService;
 
     @Inject
     private CategoryRepository categoryRepository;
 
     @Inject
     private CategoryService categoryService;
-
-    @Inject
-    private MetadataManager metadataManager;
 
     @Inject
     private UserService userService;
@@ -114,7 +110,7 @@ public class ProductServiceImpl implements ProductService, Serializable {
         entity.getStorage().setRest(productToAdd.getRest());
         // 图、分类
         if (entity.getThumbnail() == null || !productToAdd.getThumbnailId().equals(entity.getThumbnail().getId())) {
-            final MediaEntity thumbnail = resourceManager.getEntity(productToAdd.getThumbnailId())
+            final MediaEntity thumbnail = resourceService.getEntity(productToAdd.getThumbnailId())
                     .orElseThrow(BaseException.supplier(NotFoundException.class, "略缩图不存在！"));
             entity.setThumbnail(thumbnail);
         }
@@ -235,18 +231,11 @@ public class ProductServiceImpl implements ProductService, Serializable {
     @Override
     public ProductExtraVo getExtraById(String id, int count, String uid) throws NotFoundException {
         final ProductExtraVo extra = new ProductExtraVo();
-        extra.setDetail(metadataManager.getForProduct(id, Constants.METAKEY_DETAIL));
-        String defaultAddress = null;
-        try {
-            if (uid != null) {
-                defaultAddress = userService.getDefaultAddressEntityById(uid).getId();
-            }
-        } catch (NotFoundException ignored) {
-        }
+        extra.setDetail("");
         final ProductEntity entity = getEntityById(id);
         extra.setMonthPurchase(getMonthPurchaseById(entity));
         // 获得商品图片
-        extra.setImages(getProductImagesById(id));
+        extra.setImages(new ArrayList<MediaDto>());
         return extra;
     }
 
@@ -416,32 +405,5 @@ public class ProductServiceImpl implements ProductService, Serializable {
         log.info("查询与日期 {} 与 {} 之间", start, end);
         return orderItemRepository.sumCountByIdBetween(productEntity, start, end)
                 .orElse(0L).intValue();
-    }
-
-    /**
-     * 获得商品图片
-     */
-    private List<MediaDto> getProductImagesById(String id) {
-        final String imgStr = metadataManager.getForProduct(id, Constants.METAKEY_IMAGES);
-        return StreamSupport.stream(Arrays.asList(imgStr.split(",")))
-                .map(new Function<String, String>() {
-                    @Override
-                    public String apply(String s) {
-                        return s.trim();
-                    }
-                })
-                .map(new Function<String, Optional<MediaDto>>() {
-                    @Override
-                    public Optional<MediaDto> apply(String s) {
-                        return resourceManager.getResource(s);
-                    }
-                })
-                .flatMap(new Function<Optional<MediaDto>, Stream<MediaDto>>() {
-                    @Override
-                    public Stream<MediaDto> apply(Optional<MediaDto> mediaDtoOptional) {
-                        return mediaDtoOptional.stream();
-                    }
-                })
-                .collect(Collectors.<MediaDto>toList());
     }
 }

@@ -1,4 +1,4 @@
-package bookshop.service.metadata;
+package bookshop.service;
 
 import java8.util.Optional;
 import java8.util.function.Function;
@@ -12,7 +12,7 @@ import javax.inject.Inject;
 import java.io.Serializable;
 
 @Stateless
-public class ResourceManager implements Serializable {
+public class ResourceService implements Serializable {
 
     @Inject
     private MediaRepository mediaRepository;
