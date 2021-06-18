@@ -1,6 +1,7 @@
 package net.kaaass.bookshop.dao.entity;
 
 import lombok.Data;
+import lombok.ToString;
 import net.kaaass.bookshop.dao.IEntity;
 import net.kaaass.bookshop.util.Constants;
 import org.hibernate.annotations.Generated;
@@ -14,6 +15,7 @@ import java.util.List;
 
 @Entity
 @Data
+@ToString(exclude = "addresses")
 @Table(name = "user_auth")
 public class UserAuthEntity implements IEntity<String> {
     @Id
