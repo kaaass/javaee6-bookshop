@@ -15,8 +15,7 @@ require([
 
     const TEMPLATE_LIST = 'category_list';
 
-    // 加载图标
-    feather.replace();
+
 
     let loadParam = (category) => {
         $('#name').val(category ? category.name : "");
@@ -32,8 +31,7 @@ require([
         };
     };
 
-    // 加载图标
-    feather.replace();
+
 
     // 渲染插件列表
     let render = async () => {

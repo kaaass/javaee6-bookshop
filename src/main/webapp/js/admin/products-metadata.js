@@ -29,8 +29,7 @@ require([
         };
     };
 
-    // 加载图标
-    feather.replace();
+
 
     // 分析url参数
     let requestParams = new URL(document.location.href).searchParams;

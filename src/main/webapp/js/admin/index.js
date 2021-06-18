@@ -10,8 +10,7 @@ require([
 
     let request = auth.getAxiosInstance(true);
 
-    // 加载图标
-    feather.replace();
+
 });
 
 // TODO 更换图表为销售数据

@@ -14,8 +14,7 @@ require([
 
     const TEMPLATE_LIST = 'resource_list';
 
-    // 加载图标
-    feather.replace();
+
 
     let loadParam = (resource) => {
         $('#url').val(resource ? resource.url : "");
@@ -30,8 +29,7 @@ require([
         };
     };
 
-    // 加载图标
-    feather.replace();
+
 
     // 渲染插件列表
     let render = async () => {

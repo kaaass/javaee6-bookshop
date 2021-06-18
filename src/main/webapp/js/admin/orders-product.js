@@ -12,8 +12,7 @@ require([
 
     let request = auth.getAxiosInstance(true);
 
-    // 加载图标
-    feather.replace();
+
 
     const TEMPLATE_ORDER_LIST = "admin_order_list";
 

@@ -3,8 +3,7 @@
  */
 define([], function () {
 
-    const BASE_URL = "/web";
-    const API_BASE_URL = BASE_URL + "/api";
+    const API_BASE_URL = window.BASE_URL + "/api";
 
     return {
         KEY_AUTH: 'AUTH',

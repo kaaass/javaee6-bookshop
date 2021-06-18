@@ -12,8 +12,7 @@ require([
 
     let $list = $('.table-responsive');
 
-    // 加载图标
-    feather.replace();
+
 
     // 渲染插件列表
     let render = () => {

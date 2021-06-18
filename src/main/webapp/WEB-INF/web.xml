@@ -13,8 +13,8 @@
     <context-param>
         <param-name>resteasy.providers</param-name>
         <param-value>
-            net.kaaass.bookshop.security.SecurityPreProcessInterceptor,
-            net.kaaass.bookshop.controller.page.PagePreProcessInterceptor
+            bookshop.security.SecurityPreProcessInterceptor,
+            bookshop.controller.page.PagePreProcessInterceptor
         </param-value>
     </context-param>
 </web-app>

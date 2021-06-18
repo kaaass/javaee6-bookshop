@@ -60,8 +60,7 @@ require([
         };
     };
 
-    // 加载图标
-    feather.replace();
+
 
     // 渲染商品列表
     let render = async () => {
