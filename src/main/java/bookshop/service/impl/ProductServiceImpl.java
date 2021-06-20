@@ -1,7 +1,9 @@
 package bookshop.service.impl;
 
 import bookshop.controller.request.ProductAddRequest;
-import bookshop.dao.entity.*;
+import bookshop.dao.entity.CategoryEntity;
+import bookshop.dao.entity.ProductEntity;
+import bookshop.dao.entity.ProductStorageEntity;
 import bookshop.dao.repository.CategoryRepository;
 import bookshop.dao.repository.OrderItemRepository;
 import bookshop.dao.repository.ProductRepository;
@@ -15,10 +17,8 @@ import bookshop.mapper.UserMapper;
 import bookshop.service.CategoryService;
 import bookshop.service.ProductService;
 import bookshop.service.UserService;
-import bookshop.util.NumericUtils;
 import bookshop.util.StringUtils;
 import bookshop.util.TimeUtils;
-import bookshop.vo.CommentVo;
 import bookshop.vo.ProductExtraVo;
 import java8.util.function.Function;
 import java8.util.stream.Collectors;

@@ -139,8 +139,7 @@ public class ProductDto {
             return false;
         final Object this$storage = this.getStorage();
         final Object other$storage = other.getStorage();
-        if (this$storage == null ? other$storage != null : !this$storage.equals(other$storage)) return false;
-        return true;
+        return this$storage == null ? other$storage == null : this$storage.equals(other$storage);
     }
 
     protected boolean canEqual(final Object other) {

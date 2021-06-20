@@ -39,8 +39,7 @@ public class ProductExtraVo {
         if (this.getMonthPurchase() != other.getMonthPurchase()) return false;
         final Object this$detail = this.getDetail();
         final Object other$detail = other.getDetail();
-        if (this$detail == null ? other$detail != null : !this$detail.equals(other$detail)) return false;
-        return true;
+        return this$detail == null ? other$detail == null : this$detail.equals(other$detail);
     }
 
     protected boolean canEqual(final Object other) {

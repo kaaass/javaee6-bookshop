@@ -1,9 +1,5 @@
 package bookshop.service.impl;
 
-import java8.util.Optional;
-import java8.util.function.Function;
-import java8.util.stream.Collectors;
-import java8.util.stream.StreamSupport;
 import bookshop.controller.request.CategoryAddRequest;
 import bookshop.dao.entity.CategoryEntity;
 import bookshop.dao.repository.CategoryRepository;
@@ -12,6 +8,10 @@ import bookshop.exception.BaseException;
 import bookshop.exception.NotFoundException;
 import bookshop.mapper.ProductMapper;
 import bookshop.service.CategoryService;
+import java8.util.Optional;
+import java8.util.function.Function;
+import java8.util.stream.Collectors;
+import java8.util.stream.StreamSupport;
 import org.slf4j.Logger;
 
 import javax.ejb.EJB;

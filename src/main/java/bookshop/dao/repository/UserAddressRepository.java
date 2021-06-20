@@ -1,8 +1,8 @@
 package bookshop.dao.repository;
 
-import java8.util.Optional;
 import bookshop.dao.BaseRepository;
 import bookshop.dao.entity.UserAddressEntity;
+import java8.util.Optional;
 
 import javax.ejb.Stateless;
 import java.util.List;

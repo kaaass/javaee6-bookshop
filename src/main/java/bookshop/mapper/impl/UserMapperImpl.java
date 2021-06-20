@@ -1,16 +1,16 @@
 package bookshop.mapper.impl;
 
 import bookshop.controller.request.UserAddressRequest;
-import bookshop.dao.entity.*;
-import bookshop.dto.*;
+import bookshop.dao.entity.UserAddressEntity;
+import bookshop.dao.entity.UserAuthEntity;
+import bookshop.dto.UserAddressDto;
+import bookshop.dto.UserAuthDto;
 import bookshop.mapper.UserMapper;
 import bookshop.security.SecurityRole;
-import bookshop.vo.CommentVo;
 import bookshop.vo.UserAuthVo;
 
 import javax.ejb.Singleton;
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 
 @Singleton
 @ApplicationScoped

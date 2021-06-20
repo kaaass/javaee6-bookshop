@@ -1,6 +1,5 @@
 package bookshop.controller;
 
-import java8.util.function.Function;
 import bookshop.controller.request.RegisterRequest;
 import bookshop.controller.response.LoginResponse;
 import bookshop.dto.UserAuthDto;
@@ -10,6 +9,7 @@ import bookshop.exception.ForbiddenException;
 import bookshop.mapper.UserMapper;
 import bookshop.service.AuthService;
 import bookshop.vo.UserAuthVo;
+import java8.util.function.Function;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;

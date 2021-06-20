@@ -4,7 +4,6 @@ import bookshop.dao.entity.*;
 import bookshop.dto.*;
 import bookshop.mapper.OrderMapper;
 
-import javax.annotation.Generated;
 import javax.ejb.Singleton;
 import javax.enterprise.context.ApplicationScoped;
 import java.sql.Timestamp;

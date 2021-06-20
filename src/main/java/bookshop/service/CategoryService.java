@@ -1,10 +1,10 @@
 package bookshop.service;
 
-import java8.util.Optional;
 import bookshop.controller.request.CategoryAddRequest;
 import bookshop.dao.entity.CategoryEntity;
 import bookshop.dto.CategoryDto;
 import bookshop.exception.NotFoundException;
+import java8.util.Optional;
 
 import javax.ejb.Local;
 import java.util.List;

@@ -1,7 +1,7 @@
 package bookshop.dao;
 
-import java8.util.Optional;
 import bookshop.util.GenericUtils;
+import java8.util.Optional;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;

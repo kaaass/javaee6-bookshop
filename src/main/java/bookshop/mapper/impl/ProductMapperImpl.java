@@ -1,10 +1,13 @@
 package bookshop.mapper.impl;
 
-import bookshop.dao.entity.*;
-import bookshop.dto.*;
+import bookshop.dao.entity.CategoryEntity;
+import bookshop.dao.entity.ProductEntity;
+import bookshop.dao.entity.ProductStorageEntity;
+import bookshop.dto.CategoryDto;
+import bookshop.dto.ProductDto;
+import bookshop.dto.ProductStorageDto;
 import bookshop.mapper.ProductMapper;
 
-import javax.annotation.Generated;
 import javax.ejb.Singleton;
 import javax.enterprise.context.ApplicationScoped;
 import java.sql.Timestamp;

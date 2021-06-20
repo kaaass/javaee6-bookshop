@@ -1,11 +1,11 @@
 package bookshop.service;
 
-import java8.util.Optional;
 import bookshop.controller.request.RegisterRequest;
 import bookshop.controller.response.LoginResponse;
 import bookshop.dto.UserAuthDto;
 import bookshop.exception.ForbiddenException;
 import bookshop.exception.NotFoundException;
+import java8.util.Optional;
 
 import javax.ejb.Local;
 

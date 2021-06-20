@@ -5,7 +5,6 @@ import bookshop.dao.entity.UserAddressEntity;
 import bookshop.dao.entity.UserAuthEntity;
 import bookshop.dto.UserAddressDto;
 import bookshop.dto.UserAuthDto;
-import bookshop.vo.CommentVo;
 import bookshop.vo.UserAuthVo;
 
 /**

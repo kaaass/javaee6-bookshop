@@ -1,11 +1,11 @@
 package bookshop.dao.repository;
 
-import java8.util.Optional;
-import java8.util.function.Function;
 import bookshop.dao.BaseRepository;
 import bookshop.dao.entity.OrderEntity;
 import bookshop.dao.entity.ProductEntity;
 import bookshop.dto.OrderType;
+import java8.util.Optional;
+import java8.util.function.Function;
 
 import javax.ejb.Stateless;
 import java.sql.Timestamp;
