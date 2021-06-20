@@ -1,9 +1,7 @@
 package bookshop.controller;
 
-import bookshop.controller.page.PageInfo;
 import bookshop.controller.request.ProductAddRequest;
 import bookshop.controller.response.ProductCommentResponse;
-import bookshop.dao.Pageable;
 import bookshop.dto.ProductDto;
 import bookshop.exception.BadRequestException;
 import bookshop.exception.InternalErrorExeption;
@@ -34,9 +32,6 @@ public class ProductController extends BaseController {
 
     @Inject
     private Validator validator;
-
-    @Inject
-    private PageInfo pageInfo;
 
     @Inject
     private SecurityIdentity identity;
@@ -131,7 +126,7 @@ public class ProductController extends BaseController {
     @GET
     @Path("/")
     public List<ProductDto> getAllProducts() {
-        return productService.getAll(pageInfo.getPageable());
+        return productService.getAll();
     }
 
     @GET
@@ -150,50 +145,50 @@ public class ProductController extends BaseController {
     @Path("/search/")
     @Secured(SecurityRole.LOGGED)
     public List<ProductDto> search(@QueryParam("keyword") String keyword) {
-        return productService.search(keyword, pageInfo.getPageable());
+        return productService.search(keyword);
     }
 
     @GET
     @Path("/search/isbn/")
     @Secured(SecurityRole.LOGGED)
-    public List<ProductDto> searchByIsbn(@QueryParam("isbn") String isbn, Pageable pageable) {
-        return productService.searchByIsbn(isbn, pageInfo.getPageable());
+    public List<ProductDto> searchByIsbn(@QueryParam("isbn") String isbn) {
+        return productService.searchByIsbn(isbn);
     }
 
     @GET
     @Path("/search/author/")
     @Secured(SecurityRole.LOGGED)
-    public List<ProductDto> searchByAuthor(@QueryParam("author") String author, Pageable pageable) {
-        return productService.searchByAuthor(author, pageInfo.getPageable());
+    public List<ProductDto> searchByAuthor(@QueryParam("author") String author) {
+        return productService.searchByAuthor(author);
     }
 
     @GET
     @Path("/search/date/")
     @Secured(SecurityRole.LOGGED)
     public List<ProductDto> searchByPublishDate(@QueryParam("start") long start,
-                                                @QueryParam("end") long end, Pageable pageable) {
-        return productService.searchByPublishDate(new Date(start * 1000), new Date(end * 1000), pageInfo.getPageable());
+                                                @QueryParam("end") long end) {
+        return productService.searchByPublishDate(new Date(start * 1000), new Date(end * 1000));
     }
 
     @GET
     @Path("/search/price/")
     @Secured(SecurityRole.LOGGED)
     public List<ProductDto> searchByPrice(@QueryParam("low") float low,
-                                          @QueryParam("high") float high, Pageable pageable) {
-        return productService.searchByPrice(low, high, pageInfo.getPageable());
+                                          @QueryParam("high") float high) {
+        return productService.searchByPrice(low, high);
     }
 
     @GET
     @Path("/category/{categoryId}/")
     @Secured(SecurityRole.LOGGED)
     public List<ProductDto> getAllProductsByCategory(@PathParam("categoryId") String categoryId) throws NotFoundException {
-        return productService.getAllByCategory(categoryId, pageInfo.getPageable());
+        return productService.getAllByCategory(categoryId);
     }
 
     @GET
     @Path("/{id}/comments/")
     public ProductCommentResponse getComments(@PathParam("id") String id) {
         // TODO 评论用户头像
-        return productService.getComments(id, pageInfo.getPageable());
+        return productService.getComments(id);
     }
 }

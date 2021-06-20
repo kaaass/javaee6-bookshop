@@ -1,13 +1,11 @@
 package bookshop.controller;
 
-import bookshop.controller.page.PageInfo;
 import bookshop.controller.request.CartAddRequest;
 import bookshop.dto.CartDto;
 import bookshop.exception.BadRequestException;
 import bookshop.exception.ForbiddenException;
 import bookshop.exception.NotFoundException;
 import bookshop.security.Secured;
-import bookshop.security.SecurityIdentity;
 import bookshop.security.SecurityRole;
 import bookshop.service.CartService;
 
@@ -30,9 +28,6 @@ public class UserCartController extends BaseController {
 
     @Inject
     private Validator validator;
-
-    @Inject
-    private PageInfo pageInfo;
 
     @POST
     @Path("/")
@@ -65,6 +60,6 @@ public class UserCartController extends BaseController {
     @Path("/")
     @Secured(SecurityRole.USER)
     public List<CartDto> getAllPerUser() {
-        return cartService.getAllPerUser(pageInfo.getPageable());
+        return cartService.getAllPerUser();
     }
 }

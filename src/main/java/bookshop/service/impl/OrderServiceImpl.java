@@ -6,7 +6,6 @@ import bookshop.controller.request.OrderCreateRequest;
 import bookshop.controller.request.OrderCreateSingleRequest;
 import bookshop.controller.response.OrderCheckResponse;
 import bookshop.controller.response.OrderRequestResponse;
-import bookshop.dao.Pageable;
 import bookshop.dao.entity.*;
 import bookshop.dao.repository.CommentRepository;
 import bookshop.dao.repository.OrderRepository;
@@ -32,7 +31,6 @@ import org.slf4j.Logger;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.inject.Inject;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -116,8 +114,8 @@ public class OrderServiceImpl implements OrderService, Serializable {
     }
 
     @Override
-    public List<OrderDto> getAll(Pageable pageable) {
-        return StreamSupport.stream(orderRepository.findAllByTypeIsNotOrderByCreateTimeDesc(OrderType.ERROR, pageable))
+    public List<OrderDto> getAll() {
+        return StreamSupport.stream(orderRepository.findAllByTypeIsNotOrderByCreateTimeDesc(OrderType.ERROR))
                 .map(new Function<OrderEntity, OrderDto>() {
                     @Override
                     public OrderDto apply(OrderEntity orderEntity) {
@@ -128,8 +126,8 @@ public class OrderServiceImpl implements OrderService, Serializable {
     }
 
     @Override
-    public List<OrderDto> getAllByUid(String uid, Pageable pageable) {
-        return StreamSupport.stream(orderRepository.findAllByUidAndTypeIsNotOrderByCreateTimeDesc(uid, OrderType.ERROR, pageable))
+    public List<OrderDto> getAllByUid(String uid) {
+        return StreamSupport.stream(orderRepository.findAllByUidAndTypeIsNotOrderByCreateTimeDesc(uid, OrderType.ERROR))
                 .map(new Function<OrderEntity, OrderDto>() {
                     @Override
                     public OrderDto apply(OrderEntity orderEntity) {
@@ -152,8 +150,8 @@ public class OrderServiceImpl implements OrderService, Serializable {
     }
 
     @Override
-    public List<OrderDto> getAllByUidAndType(String uid, OrderType type, Pageable pageable) {
-        return StreamSupport.stream(orderRepository.findAllByUidAndTypeOrderByCreateTimeDesc(uid, type, pageable))
+    public List<OrderDto> getAllByUidAndType(String uid, OrderType type) {
+        return StreamSupport.stream(orderRepository.findAllByUidAndTypeOrderByCreateTimeDesc(uid, type))
                 .map(new Function<OrderEntity, OrderDto>() {
                     @Override
                     public OrderDto apply(OrderEntity orderEntity) {
@@ -164,8 +162,8 @@ public class OrderServiceImpl implements OrderService, Serializable {
     }
 
     @Override
-    public List<OrderDto> getAllByType(OrderType type, Pageable pageable) {
-        return StreamSupport.stream(orderRepository.findAllByTypeOrderByCreateTimeDesc(type, pageable))
+    public List<OrderDto> getAllByType(OrderType type) {
+        return StreamSupport.stream(orderRepository.findAllByTypeOrderByCreateTimeDesc(type))
                 .map(new Function<OrderEntity, OrderDto>() {
                     @Override
                     public OrderDto apply(OrderEntity orderEntity) {
@@ -176,9 +174,9 @@ public class OrderServiceImpl implements OrderService, Serializable {
     }
 
     @Override
-    public List<OrderDto> getAllByProduct(String pid, Pageable pageable) throws NotFoundException {
+    public List<OrderDto> getAllByProduct(String pid) throws NotFoundException {
         final ProductEntity product = productService.getEntityById(pid);
-        return StreamSupport.stream(orderRepository.findAllByProduct(product, pageable))
+        return StreamSupport.stream(orderRepository.findAllByProduct(product))
                 .map(new Function<OrderEntity, OrderDto>() {
                     @Override
                     public OrderDto apply(OrderEntity orderEntity) {

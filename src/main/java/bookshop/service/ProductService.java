@@ -2,7 +2,6 @@ package bookshop.service;
 
 import bookshop.controller.request.ProductAddRequest;
 import bookshop.controller.response.ProductCommentResponse;
-import bookshop.dao.Pageable;
 import bookshop.dao.entity.ProductEntity;
 import bookshop.dto.ProductDto;
 import bookshop.exception.BadRequestException;
@@ -49,23 +48,23 @@ public interface ProductService {
 
     ProductExtraVo getExtraById(String id, int count, String uid) throws NotFoundException;
 
-    List<ProductDto> getAll(Pageable pageable);
+    List<ProductDto> getAll();
 
     List<ProductDto> getIndexItems();
 
     List<ProductDto> getQuickBuyItems();
 
-    List<ProductDto> getAllByCategory(String categoryId, Pageable pageable) throws NotFoundException;
+    List<ProductDto> getAllByCategory(String categoryId) throws NotFoundException;
 
-    ProductCommentResponse getComments(String id, Pageable pageable);
+    ProductCommentResponse getComments(String id);
 
-    List<ProductDto> search(String keyword, Pageable pageable);
+    List<ProductDto> search(String keyword);
 
-    List<ProductDto> searchByIsbn(String isbn, Pageable pageable);
+    List<ProductDto> searchByIsbn(String isbn);
 
-    List<ProductDto> searchByAuthor(String author, Pageable pageable);
+    List<ProductDto> searchByAuthor(String author);
 
-    List<ProductDto> searchByPublishDate(Date start, Date end, Pageable pageable);
+    List<ProductDto> searchByPublishDate(Date start, Date end);
 
-    List<ProductDto> searchByPrice(float low, float high, Pageable pageable);
+    List<ProductDto> searchByPrice(float low, float high);
 }

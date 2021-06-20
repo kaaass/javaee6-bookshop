@@ -30,7 +30,7 @@ public class AuthController extends BaseController {
     @Inject
     private Validator validator;
 
-    @Inject
+    @EJB
     private UserMapper userMapper;
 
     @POST

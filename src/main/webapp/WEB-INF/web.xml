@@ -14,7 +14,6 @@
         <param-name>resteasy.providers</param-name>
         <param-value>
             bookshop.security.SecurityPreProcessInterceptor,
-            bookshop.controller.page.PagePreProcessInterceptor
         </param-value>
     </context-param>
 </web-app>

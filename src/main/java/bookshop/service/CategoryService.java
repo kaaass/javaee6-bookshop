@@ -2,7 +2,6 @@ package bookshop.service;
 
 import java8.util.Optional;
 import bookshop.controller.request.CategoryAddRequest;
-import bookshop.dao.Pageable;
 import bookshop.dao.entity.CategoryEntity;
 import bookshop.dto.CategoryDto;
 import bookshop.exception.NotFoundException;
@@ -27,7 +26,7 @@ public interface CategoryService {
      */
     CategoryEntity getEntityById(String id) throws NotFoundException;
 
-    List<CategoryDto> getAll(Pageable pageable);
+    List<CategoryDto> getAll();
 
     /**
      * 寻找某个分类的所有子结点

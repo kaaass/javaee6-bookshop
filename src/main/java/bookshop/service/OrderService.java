@@ -4,7 +4,6 @@ import bookshop.controller.request.CommentRequest;
 import bookshop.controller.request.OrderCreateRequest;
 import bookshop.controller.response.OrderCheckResponse;
 import bookshop.controller.response.OrderRequestResponse;
-import bookshop.dao.Pageable;
 import bookshop.dao.entity.OrderEntity;
 import bookshop.dto.OrderDto;
 import bookshop.dto.OrderType;
@@ -41,17 +40,17 @@ public interface OrderService {
 
     OrderDto getByIdAndCheck(String id, String uid) throws NotFoundException, ForbiddenException;
 
-    List<OrderDto> getAll(Pageable pageable);
+    List<OrderDto> getAll();
 
-    List<OrderDto> getAllByUid(String uid, Pageable pageable);
+    List<OrderDto> getAllByUid(String uid);
 
     UserOrderCountVo getUserOrderCount(String uid);
 
-    List<OrderDto> getAllByUidAndType(String uid, OrderType type, Pageable pageable);
+    List<OrderDto> getAllByUidAndType(String uid, OrderType type);
 
-    List<OrderDto> getAllByType(OrderType type, Pageable pageable);
+    List<OrderDto> getAllByType(OrderType type);
 
-    List<OrderDto> getAllByProduct(String pid, Pageable pageable) throws NotFoundException;
+    List<OrderDto> getAllByProduct(String pid) throws NotFoundException;
 
     OrderRequestResponse createToQueue(String uid, OrderCreateRequest request) throws InternalErrorExeption, NotFoundException;
 

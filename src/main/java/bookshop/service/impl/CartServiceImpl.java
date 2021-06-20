@@ -1,7 +1,6 @@
 package bookshop.service.impl;
 
 import bookshop.controller.request.CartAddRequest;
-import bookshop.dao.Pageable;
 import bookshop.dao.entity.ProductEntity;
 import bookshop.dto.CartDto;
 import bookshop.dto.ProductDto;
@@ -14,7 +13,6 @@ import bookshop.service.ProductService;
 import bookshop.util.StringUtils;
 import java8.util.Optional;
 import java8.util.function.Supplier;
-import org.slf4j.Logger;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
@@ -78,7 +76,7 @@ public class CartServiceImpl implements CartService, Serializable {
     }
 
     @Override
-    public List<CartDto> getAllPerUser(Pageable pageable) {
+    public List<CartDto> getAllPerUser() {
         return new ArrayList<>(findAll());
     }
 

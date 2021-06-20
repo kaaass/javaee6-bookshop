@@ -3,7 +3,6 @@ package bookshop.dao.repository;
 import java8.util.Optional;
 import java8.util.function.Function;
 import bookshop.dao.BaseRepository;
-import bookshop.dao.Pageable;
 import bookshop.dao.entity.OrderEntity;
 import bookshop.dao.entity.ProductEntity;
 import bookshop.dto.OrderType;
@@ -30,14 +29,14 @@ public class OrderRepository extends BaseRepository<OrderEntity, String> {
         return findOneBySql(sql, OrderEntity.class, requestId);
     }
 
-    public List<OrderEntity> findAllByTypeIsNotOrderByCreateTimeDesc(OrderType type, Pageable page) {
+    public List<OrderEntity> findAllByTypeIsNotOrderByCreateTimeDesc(OrderType type) {
         String sql = "SELECT u FROM OrderEntity u where u.type != ?1 order by u.createTime desc";
-        return findAllBySql(sql, page, OrderEntity.class, type);
+        return findAllBySql(sql, OrderEntity.class, type);
     }
 
-    public List<OrderEntity> findAllByUidAndTypeIsNotOrderByCreateTimeDesc(String uid, OrderType type, Pageable page) {
+    public List<OrderEntity> findAllByUidAndTypeIsNotOrderByCreateTimeDesc(String uid, OrderType type) {
         String sql = "SELECT u FROM OrderEntity u where u.uid = ?1 and u.type != ?2 order by u.createTime desc";
-        return findAllBySql(sql, page, OrderEntity.class, uid, type);
+        return findAllBySql(sql, OrderEntity.class, uid, type);
     }
 
     public Optional<OrderEntity> findFirstByCreateTimeBetweenOrderByCreateTimeDesc(Timestamp start, Timestamp end) {
@@ -56,18 +55,18 @@ public class OrderRepository extends BaseRepository<OrderEntity, String> {
                 });
     }
 
-    public List<OrderEntity> findAllByTypeOrderByCreateTimeDesc(OrderType type, Pageable page) {
+    public List<OrderEntity> findAllByTypeOrderByCreateTimeDesc(OrderType type) {
         String sql = "SELECT u FROM OrderEntity u where u.type = ?1 order by u.createTime desc";
-        return findAllBySql(sql, page, OrderEntity.class, type);
+        return findAllBySql(sql, OrderEntity.class, type);
     }
 
-    public List<OrderEntity> findAllByUidAndTypeOrderByCreateTimeDesc(String uid, OrderType type, Pageable page) {
+    public List<OrderEntity> findAllByUidAndTypeOrderByCreateTimeDesc(String uid, OrderType type) {
         String sql = "SELECT u FROM OrderEntity u where u.uid = ?1 and u.type = ?2 order by u.createTime desc";
-        return findAllBySql(sql, page, OrderEntity.class, uid, type);
+        return findAllBySql(sql, OrderEntity.class, uid, type);
     }
 
-    public List<OrderEntity> findAllByProduct(ProductEntity productEntity, Pageable page) {
+    public List<OrderEntity> findAllByProduct(ProductEntity productEntity) {
         String sql = "SELECT distinct(c) FROM OrderItemEntity u JOIN u.order c where u.product = ?1 order by c.createTime desc";
-        return findAllBySql(sql, page, OrderEntity.class, productEntity);
+        return findAllBySql(sql, OrderEntity.class, productEntity);
     }
 }

@@ -1,7 +1,6 @@
 package bookshop.service;
 
 import bookshop.controller.request.CartAddRequest;
-import bookshop.dao.Pageable;
 import bookshop.dto.CartDto;
 import bookshop.exception.BadRequestException;
 import bookshop.exception.ForbiddenException;
@@ -26,7 +25,7 @@ public interface CartService {
 
     CartDto modifyItemCount(String id, int count) throws NotFoundException, ForbiddenException, BadRequestException;
 
-    List<CartDto> getAllPerUser(Pageable pageable);
+    List<CartDto> getAllPerUser();
 
     void deleteById(String id);
 }

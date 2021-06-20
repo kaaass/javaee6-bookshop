@@ -1,6 +1,5 @@
 package bookshop.controller;
 
-import bookshop.controller.page.PageInfo;
 import bookshop.controller.request.CategoryAddRequest;
 import bookshop.dto.CategoryDto;
 import bookshop.exception.BadRequestException;
@@ -29,9 +28,6 @@ public class CategoryController extends BaseController {
     @Inject
     private Validator validator;
 
-    @Inject
-    private PageInfo pageInfo;
-
     @POST
     @Path("/")
     @Secured(SecurityRole.ADMIN)
@@ -57,6 +53,6 @@ public class CategoryController extends BaseController {
     @GET
     @Path("/")
     public List<CategoryDto> getAll() {
-        return categoryService.getAll(pageInfo.getPageable());
+        return categoryService.getAll();
     }
 }

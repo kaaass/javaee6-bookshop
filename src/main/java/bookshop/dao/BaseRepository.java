@@ -81,19 +81,6 @@ public class BaseRepository<T extends IEntity<ID>, ID> implements IRepository<T,
     }
 
     /**
-     * TODO 分页获得所有对象
-     */
-    public List<T> findAll(Pageable page) {
-        CriteriaBuilder criteriaBuilder = this.entityManager.getCriteriaBuilder();
-        CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(this.entityClass);
-        Root<T> root = criteriaQuery.from(this.entityClass);
-        criteriaQuery.select(root);
-
-        TypedQuery<T> query = this.entityManager.createQuery(criteriaQuery);
-        return query.getResultList();
-    }
-
-    /**
      * 保存对象
      */
     public <S extends T> S save(S object) {
@@ -209,22 +196,6 @@ public class BaseRepository<T extends IEntity<ID>, ID> implements IRepository<T,
         TypedQuery<R> query = manager.createQuery(sql, resultClz);
         for (int i = 0; i < args.length; i++) {
             query.setParameter(i + 1, args[i]);
-        }
-        return query.getResultList();
-    }
-
-    /**
-     * 通过 SQL 查询全部
-     */
-    protected <R> List<R> findAllBySql(String sql, Pageable page, Class<R> resultClz, Object... args) {
-        EntityManager manager = getEntityManager();
-        TypedQuery<R> query = manager.createQuery(sql, resultClz);
-        for (int i = 0; i < args.length; i++) {
-            query.setParameter(i + 1, args[i]);
-        }
-        if (page != null) {
-            query.setFirstResult(page.getOffset());
-            query.setMaxResults(page.getPageSize());
         }
         return query.getResultList();
     }

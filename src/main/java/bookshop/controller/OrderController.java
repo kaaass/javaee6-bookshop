@@ -1,6 +1,5 @@
 package bookshop.controller;
 
-import bookshop.controller.page.PageInfo;
 import bookshop.controller.request.CommentRequest;
 import bookshop.controller.request.OrderCreateRequest;
 import bookshop.controller.response.OrderCheckResponse;
@@ -12,7 +11,6 @@ import bookshop.security.Secured;
 import bookshop.security.SecurityIdentity;
 import bookshop.security.SecurityRole;
 import bookshop.service.OrderService;
-import org.slf4j.Logger;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -36,9 +34,6 @@ public class OrderController extends BaseController {
 
     @Inject
     private SecurityIdentity identity;
-
-    @Inject
-    private PageInfo pageInfo;
 
     @GET
     @Path("/request/{requestId}/")
@@ -65,14 +60,14 @@ public class OrderController extends BaseController {
     @Path("/")
     @Secured(SecurityRole.USER)
     public List<OrderDto> getAllByUid() {
-        return orderService.getAllByUid(identity.getUserAuthDto().getId(), pageInfo.getPageable());
+        return orderService.getAllByUid(identity.getUserAuthDto().getId());
     }
 
     @GET
     @Path("/admin/")
     @Secured(SecurityRole.ADMIN)
     public List<OrderDto> getAll() {
-        return orderService.getAll(pageInfo.getPageable());
+        return orderService.getAll();
     }
 
     @POST
@@ -94,7 +89,7 @@ public class OrderController extends BaseController {
         } catch (NumberFormatException e) {
             throw new NotFoundException("订单类型错误！");
         }
-        return orderService.getAllByUidAndType(identity.getUserAuthDto().getId(), type, pageInfo.getPageable());
+        return orderService.getAllByUidAndType(identity.getUserAuthDto().getId(), type);
     }
 
     @GET
@@ -108,14 +103,14 @@ public class OrderController extends BaseController {
         } catch (NumberFormatException e) {
             throw new NotFoundException("订单类型错误！");
         }
-        return orderService.getAllByType(type, pageInfo.getPageable());
+        return orderService.getAllByType(type);
     }
 
     @GET
     @Path("/admin/product/{productId}/")
     @Secured(SecurityRole.ADMIN)
     public List<OrderDto> getAllByProduct(@PathParam("productId") String pid) throws NotFoundException {
-        return orderService.getAllByProduct(pid, pageInfo.getPageable());
+        return orderService.getAllByProduct(pid);
     }
 
     /**

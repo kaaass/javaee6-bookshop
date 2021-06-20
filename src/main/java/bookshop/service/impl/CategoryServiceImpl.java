@@ -5,7 +5,6 @@ import java8.util.function.Function;
 import java8.util.stream.Collectors;
 import java8.util.stream.StreamSupport;
 import bookshop.controller.request.CategoryAddRequest;
-import bookshop.dao.Pageable;
 import bookshop.dao.entity.CategoryEntity;
 import bookshop.dao.repository.CategoryRepository;
 import bookshop.dto.CategoryDto;
@@ -17,7 +16,6 @@ import org.slf4j.Logger;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -79,8 +77,8 @@ public class CategoryServiceImpl implements CategoryService, Serializable {
     }
 
     @Override
-    public List<CategoryDto> getAll(Pageable pageable) {
-        return StreamSupport.stream(categoryRepository.findAll(pageable))
+    public List<CategoryDto> getAll() {
+        return StreamSupport.stream(categoryRepository.findAll())
                 .map(new Function<CategoryEntity, CategoryDto>() {
                     @Override
                     public CategoryDto apply(CategoryEntity categoryEntity) {

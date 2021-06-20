@@ -2,7 +2,6 @@ package bookshop.service.impl;
 
 import bookshop.controller.request.ProductAddRequest;
 import bookshop.controller.response.ProductCommentResponse;
-import bookshop.dao.Pageable;
 import bookshop.dao.entity.*;
 import bookshop.dao.repository.CategoryRepository;
 import bookshop.dao.repository.CommentRepository;
@@ -226,8 +225,8 @@ public class ProductServiceImpl implements ProductService, Serializable {
      * 获取全部商品
      */
     @Override
-    public List<ProductDto> getAll(Pageable pageable) {
-        return StreamSupport.stream(productRepository.findAll(pageable))
+    public List<ProductDto> getAll() {
+        return StreamSupport.stream(productRepository.findAll())
                 .map(new Function<ProductEntity, ProductDto>() {
                     @Override
                     public ProductDto apply(ProductEntity productEntity) {
@@ -269,11 +268,11 @@ public class ProductServiceImpl implements ProductService, Serializable {
      * 通过分类获得商品
      */
     @Override
-    public List<ProductDto> getAllByCategory(String categoryId, Pageable pageable) throws NotFoundException {
+    public List<ProductDto> getAllByCategory(String categoryId) throws NotFoundException {
         final CategoryEntity root = categoryService.getEntityById(categoryId);
         final List<CategoryEntity> categories = categoryService.getAllSubs(root);
         log.info("子分类：{}", categories);
-        return StreamSupport.stream(productRepository.findAllByCategoryIn(categories, pageable))
+        return StreamSupport.stream(productRepository.findAllByCategoryIn(categories))
                 .map(new Function<ProductEntity, ProductDto>() {
                     @Override
                     public ProductDto apply(ProductEntity productEntity) {
@@ -284,9 +283,9 @@ public class ProductServiceImpl implements ProductService, Serializable {
     }
 
     @Override
-    public ProductCommentResponse getComments(String id, Pageable pageable) {
+    public ProductCommentResponse getComments(String id) {
         final ProductCommentResponse result = new ProductCommentResponse();
-        final List<CommentVo> comments = StreamSupport.stream(commentRepository.findAllByProductIdOrderByRateDescCommentTimeDesc(id, pageable))
+        final List<CommentVo> comments = StreamSupport.stream(commentRepository.findAllByProductIdOrderByRateDescCommentTimeDesc(id))
                 .map(new Function<CommentEntity, CommentVo>() {
                     @Override
                     public CommentVo apply(CommentEntity commentEntity) {
@@ -308,7 +307,7 @@ public class ProductServiceImpl implements ProductService, Serializable {
     }
 
     @Override
-    public List<ProductDto> search(String keyword, Pageable pageable) {
+    public List<ProductDto> search(String keyword) {
         final String searchStr = StreamSupport.stream(Arrays.asList(keyword.split(" ")))
                 .map(new Function<String, String>() {
                     @Override
@@ -318,7 +317,7 @@ public class ProductServiceImpl implements ProductService, Serializable {
                 })
                 .collect(Collectors.joining(" "));
         log.info("字符串查找关键词 {}", searchStr);
-        return StreamSupport.stream(productRepository.findAllByNameIsLikeOrderByIndexOrderAscCreateTimeDesc(searchStr, pageable))
+        return StreamSupport.stream(productRepository.findAllByNameIsLikeOrderByIndexOrderAscCreateTimeDesc(searchStr))
                 .map(new Function<ProductEntity, ProductDto>() {
                     @Override
                     public ProductDto apply(ProductEntity productEntity) {
@@ -329,8 +328,8 @@ public class ProductServiceImpl implements ProductService, Serializable {
     }
 
     @Override
-    public List<ProductDto> searchByIsbn(String isbn, Pageable pageable) {
-        return StreamSupport.stream(productRepository.searchByIsbn(isbn, pageable))
+    public List<ProductDto> searchByIsbn(String isbn) {
+        return StreamSupport.stream(productRepository.searchByIsbn(isbn))
                 .map(new Function<ProductEntity, ProductDto>() {
                     @Override
                     public ProductDto apply(ProductEntity productEntity) {
@@ -341,8 +340,8 @@ public class ProductServiceImpl implements ProductService, Serializable {
     }
 
     @Override
-    public List<ProductDto> searchByAuthor(String author, Pageable pageable) {
-        return StreamSupport.stream(productRepository.searchByAuthor("%" + author + "%", pageable))
+    public List<ProductDto> searchByAuthor(String author) {
+        return StreamSupport.stream(productRepository.searchByAuthor("%" + author + "%"))
                 .map(new Function<ProductEntity, ProductDto>() {
                     @Override
                     public ProductDto apply(ProductEntity productEntity) {
@@ -353,11 +352,11 @@ public class ProductServiceImpl implements ProductService, Serializable {
     }
 
     @Override
-    public List<ProductDto> searchByPublishDate(Date start, Date end, Pageable pageable) {
+    public List<ProductDto> searchByPublishDate(Date start, Date end) {
         return StreamSupport.stream(productRepository.searchByPublishDate(
                 TimeUtils.dateToTimestamp(start),
-                TimeUtils.dateToTimestamp(end),
-                pageable))
+                TimeUtils.dateToTimestamp(end)
+        ))
                 .map(new Function<ProductEntity, ProductDto>() {
                     @Override
                     public ProductDto apply(ProductEntity productEntity) {
@@ -368,8 +367,8 @@ public class ProductServiceImpl implements ProductService, Serializable {
     }
 
     @Override
-    public List<ProductDto> searchByPrice(float low, float high, Pageable pageable) {
-        return StreamSupport.stream(productRepository.searchByPrice(low, high, pageable))
+    public List<ProductDto> searchByPrice(float low, float high) {
+        return StreamSupport.stream(productRepository.searchByPrice(low, high))
                 .map(new Function<ProductEntity, ProductDto>() {
                     @Override
                     public ProductDto apply(ProductEntity productEntity) {

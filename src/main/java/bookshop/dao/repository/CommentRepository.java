@@ -2,7 +2,6 @@ package bookshop.dao.repository;
 
 import java8.util.Optional;
 import bookshop.dao.BaseRepository;
-import bookshop.dao.Pageable;
 import bookshop.dao.entity.CommentEntity;
 
 import javax.ejb.Stateless;
@@ -17,17 +16,17 @@ public class CommentRepository extends BaseRepository<CommentEntity, String> {
     /**
      * 按评论时间倒序查所有评论
      */
-    public List<CommentEntity> findAllByOrderByCommentTimeDesc(Pageable page) {
+    public List<CommentEntity> findAllByOrderByCommentTimeDesc() {
         String sql = "SELECT u FROM CommentEntity u order by u.commentTime desc";
-        return findAllBySql(sql, page, CommentEntity.class);
+        return findAllBySql(sql, CommentEntity.class);
     }
 
     /**
      * 查找商品评论
      */
-    public List<CommentEntity> findAllByProductIdOrderByRateDescCommentTimeDesc(String productId, Pageable page) {
+    public List<CommentEntity> findAllByProductIdOrderByRateDescCommentTimeDesc(String productId) {
         String sql = "SELECT u FROM CommentEntity u where u.productId = ?1 order by u.rate desc, u.commentTime desc";
-        return findAllBySql(sql, page, CommentEntity.class, productId);
+        return findAllBySql(sql, CommentEntity.class, productId);
     }
 
     /**
