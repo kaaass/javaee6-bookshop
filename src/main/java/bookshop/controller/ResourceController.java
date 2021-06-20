@@ -19,6 +19,7 @@ import bookshop.util.StringUtils;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -35,7 +36,7 @@ import java.util.Map;
 @Produces(MediaType.APPLICATION_JSON)
 public class ResourceController extends BaseController {
 
-    @Inject
+    @EJB
     private MediaRepository mediaRepository;
 
     @Inject

@@ -1,10 +1,5 @@
 package bookshop.service.impl;
 
-import java8.util.Optional;
-import java8.util.function.Function;
-import java8.util.stream.Collectors;
-import java8.util.stream.Stream;
-import java8.util.stream.StreamSupport;
 import bookshop.controller.request.ProductAddRequest;
 import bookshop.controller.response.ProductCommentResponse;
 import bookshop.dao.Pageable;
@@ -23,19 +18,21 @@ import bookshop.mapper.ProductMapper;
 import bookshop.mapper.UserMapper;
 import bookshop.service.CategoryService;
 import bookshop.service.ProductService;
-import bookshop.service.UserService;
 import bookshop.service.ResourceService;
-import bookshop.util.Constants;
+import bookshop.service.UserService;
 import bookshop.util.NumericUtils;
 import bookshop.util.StringUtils;
 import bookshop.util.TimeUtils;
 import bookshop.vo.CommentVo;
 import bookshop.vo.ProductExtraVo;
+import java8.util.function.Function;
+import java8.util.stream.Collectors;
+import java8.util.stream.StreamSupport;
 import org.slf4j.Logger;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateful;
 import javax.enterprise.context.SessionScoped;
-import javax.inject.Inject;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.*;
@@ -45,31 +42,32 @@ import java.util.*;
 public class ProductServiceImpl implements ProductService, Serializable {
 
     private static final Logger log = org.slf4j.LoggerFactory.getLogger(ProductServiceImpl.class);
-    @Inject
+
+    @EJB
     private ProductRepository productRepository;
 
-    @Inject
+    @EJB
     private ResourceService resourceService;
 
-    @Inject
+    @EJB
     private CategoryRepository categoryRepository;
 
-    @Inject
+    @EJB
     private CategoryService categoryService;
 
-    @Inject
+    @EJB
     private UserService userService;
 
-    @Inject
+    @EJB
     private OrderItemRepository orderItemRepository;
 
-    @Inject
+    @EJB
     private CommentRepository commentRepository;
 
-    @Inject
+    @EJB
     private ProductMapper productMapper;
 
-    @Inject
+    @EJB
     private UserMapper userMapper;
 
     /**

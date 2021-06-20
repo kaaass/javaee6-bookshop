@@ -5,6 +5,7 @@ import bookshop.dao.BaseRepository;
 import bookshop.dao.entity.OrderItemEntity;
 import bookshop.dao.entity.ProductEntity;
 
+import javax.ejb.Stateless;
 import java.sql.Timestamp;
 
 /**
@@ -12,6 +13,7 @@ import java.sql.Timestamp;
  *
  * @author kaaass
  */
+@Stateless
 public class OrderItemRepository extends BaseRepository<OrderItemEntity, String> {
 
     /**

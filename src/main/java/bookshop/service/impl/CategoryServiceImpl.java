@@ -15,6 +15,7 @@ import bookshop.mapper.ProductMapper;
 import bookshop.service.CategoryService;
 import org.slf4j.Logger;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.io.Serializable;
@@ -25,10 +26,11 @@ import java.util.List;
 public class CategoryServiceImpl implements CategoryService, Serializable {
 
     private static final Logger log = org.slf4j.LoggerFactory.getLogger(CategoryServiceImpl.class);
-    @Inject
+
+    @EJB
     private CategoryRepository categoryRepository;
 
-    @Inject
+    @EJB
     private ProductMapper productMapper;
 
     @Override

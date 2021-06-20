@@ -8,6 +8,7 @@ import bookshop.dao.entity.OrderEntity;
 import bookshop.dao.entity.ProductEntity;
 import bookshop.dto.OrderType;
 
+import javax.ejb.Stateless;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -16,6 +17,7 @@ import java.util.List;
  *
  * @author kaaass
  */
+@Stateless
 public class OrderRepository extends BaseRepository<OrderEntity, String> {
 
     public boolean existsByRequestId(String requestId) {

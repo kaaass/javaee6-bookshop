@@ -14,6 +14,7 @@ import bookshop.security.SecurityRole;
 import bookshop.service.OrderService;
 import org.slf4j.Logger;
 
+import javax.ejb.EJB;
 import javax.inject.Inject;
 import javax.validation.Validator;
 import javax.ws.rs.*;
@@ -25,8 +26,7 @@ import java.util.List;
 @Produces(MediaType.APPLICATION_JSON)
 public class OrderController extends BaseController {
 
-    private static final Logger log = org.slf4j.LoggerFactory.getLogger(OrderController.class);
-    @Inject
+    @EJB
     private OrderService orderService;
 
     @Inject

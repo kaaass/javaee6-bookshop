@@ -5,6 +5,7 @@ import bookshop.dao.Pageable;
 import bookshop.dao.entity.CategoryEntity;
 import bookshop.dao.entity.ProductEntity;
 
+import javax.ejb.Stateless;
 import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.List;
  *
  * @author kaaass
  */
+@Stateless
 public class ProductRepository extends BaseRepository<ProductEntity, String> {
 
     public List<ProductEntity> findAllByCategoryIn(Collection<CategoryEntity> category, Pageable page) {

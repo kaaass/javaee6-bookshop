@@ -11,6 +11,7 @@ import bookshop.mapper.UserMapper;
 import bookshop.service.AuthService;
 import bookshop.vo.UserAuthVo;
 
+import javax.ejb.EJB;
 import javax.inject.Inject;
 import javax.validation.Validator;
 import javax.ws.rs.*;
@@ -21,7 +22,7 @@ import javax.ws.rs.core.MediaType;
 @Produces(MediaType.APPLICATION_JSON)
 public class AuthController extends BaseController {
 
-    @Inject
+    @EJB
     private AuthService service;
 
     @Inject

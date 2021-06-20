@@ -4,6 +4,7 @@ import java8.util.Optional;
 import bookshop.dao.BaseRepository;
 import bookshop.dao.entity.UserAddressEntity;
 
+import javax.ejb.Stateless;
 import java.util.List;
 
 /**
@@ -11,6 +12,7 @@ import java.util.List;
  *
  * @author kaaass
  */
+@Stateless
 public class UserAddressRepository extends BaseRepository<UserAddressEntity, String> {
 
     public List<UserAddressEntity> findAllByUid(String uid) {

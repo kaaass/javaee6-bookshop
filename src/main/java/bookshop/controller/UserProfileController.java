@@ -27,6 +27,7 @@ import bookshop.service.UserService;
 import bookshop.service.ResourceService;
 import bookshop.util.TimeUtils;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.validation.Validator;
@@ -46,19 +47,19 @@ public class UserProfileController extends BaseController {
     @Inject
     private SecurityIdentity identity;
 
-    @Inject
+    @EJB
     private UserAddressRepository addressRepository;
 
-    @Inject
+    @EJB
     private UserInfoRepository userInfoRepository;
 
-    @Inject
+    @EJB
     private UserService userService;
 
-    @Inject
+    @EJB
     private ResourceService resourceService;
 
-    @Inject
+    @EJB
     private OrderService orderService;
 
     @Inject

@@ -9,6 +9,7 @@ import bookshop.security.Secured;
 import bookshop.security.SecurityRole;
 import bookshop.service.CategoryService;
 
+import javax.ejb.EJB;
 import javax.inject.Inject;
 import javax.validation.Validator;
 import javax.ws.rs.*;
@@ -20,7 +21,7 @@ import java.util.List;
 @Produces(MediaType.APPLICATION_JSON)
 public class CategoryController extends BaseController {
 
-    @Inject
+    @EJB
     private CategoryService categoryService;
 
     @Inject

@@ -5,8 +5,10 @@ import bookshop.dto.MediaDto;
 import bookshop.mapper.CommenMapper;
 
 import javax.annotation.Generated;
+import javax.ejb.Singleton;
 import javax.enterprise.context.ApplicationScoped;
 
+@Singleton
 @Generated(
         value = "org.mapstruct.ap.MappingProcessor",
         date = "2021-06-18T00:00:27+0800",

@@ -1,9 +1,5 @@
 package bookshop.service.impl;
 
-import java8.util.function.Function;
-import java8.util.function.Predicate;
-import java8.util.stream.Collectors;
-import java8.util.stream.StreamSupport;
 import bookshop.dao.entity.UserAddressEntity;
 import bookshop.dao.entity.UserAuthEntity;
 import bookshop.dao.entity.UserInfoEntity;
@@ -16,10 +12,14 @@ import bookshop.exception.BaseException;
 import bookshop.exception.NotFoundException;
 import bookshop.mapper.UserMapper;
 import bookshop.service.UserService;
+import java8.util.function.Function;
+import java8.util.function.Predicate;
+import java8.util.stream.Collectors;
+import java8.util.stream.StreamSupport;
 import org.slf4j.Logger;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.List;
 
@@ -27,16 +27,17 @@ import java.util.List;
 public class UserServiceImpl implements UserService, Serializable {
 
     private static final Logger log = org.slf4j.LoggerFactory.getLogger(UserServiceImpl.class);
-    @Inject
+
+    @EJB
     private UserAddressRepository userAddressRepository;
 
-    @Inject
+    @EJB
     private UserInfoRepository userInfoRepository;
 
-    @Inject
+    @EJB
     private UserAuthRepository userAuthRepository;
 
-    @Inject
+    @EJB
     private UserMapper userMapper;
 
     @Override

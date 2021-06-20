@@ -1,7 +1,6 @@
 package bookshop.controller;
 
 import bookshop.controller.page.PageInfo;
-import bookshop.controller.request.MetadataRequest;
 import bookshop.controller.request.ProductAddRequest;
 import bookshop.controller.response.ProductCommentResponse;
 import bookshop.dao.Pageable;
@@ -15,20 +14,20 @@ import bookshop.security.SecurityRole;
 import bookshop.service.ProductService;
 import bookshop.vo.ProductExtraVo;
 
+import javax.ejb.EJB;
 import javax.inject.Inject;
 import javax.validation.Validator;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 @Path("/product")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class ProductController extends BaseController {
 
-    @Inject
+    @EJB
     private ProductService productService;
 
     @Inject

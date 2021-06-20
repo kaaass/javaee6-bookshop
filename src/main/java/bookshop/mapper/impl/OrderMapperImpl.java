@@ -5,11 +5,13 @@ import bookshop.dto.*;
 import bookshop.mapper.OrderMapper;
 
 import javax.annotation.Generated;
+import javax.ejb.Singleton;
 import javax.enterprise.context.ApplicationScoped;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+@Singleton
 @Generated(
         value = "org.mapstruct.ap.MappingProcessor",
         date = "2021-06-18T00:00:27+0800",

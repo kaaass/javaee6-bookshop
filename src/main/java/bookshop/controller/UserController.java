@@ -5,6 +5,7 @@ import bookshop.security.Secured;
 import bookshop.security.SecurityRole;
 import bookshop.service.UserService;
 
+import javax.ejb.EJB;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -18,7 +19,7 @@ import java.util.List;
 @Produces(MediaType.APPLICATION_JSON)
 public class UserController extends BaseController {
 
-    @Inject
+    @EJB
     private UserService userService;
 
     @GET

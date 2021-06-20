@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 
 import javax.annotation.Resource;
 import javax.ejb.ActivationConfigProperty;
+import javax.ejb.EJB;
 import javax.ejb.MessageDriven;
 import javax.ejb.MessageDrivenContext;
 import javax.inject.Inject;
@@ -26,11 +27,11 @@ import java.io.IOException;
 public class OrderMessageListener implements MessageListener {
 
     private static final Logger log = org.slf4j.LoggerFactory.getLogger(OrderMessageListener.class);
-    @Inject
+
+    @EJB
     private OrderService orderService;
 
-    @Inject
-    private ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Resource
     private MessageDrivenContext mdc;

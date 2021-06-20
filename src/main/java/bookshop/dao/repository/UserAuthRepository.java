@@ -4,11 +4,14 @@ import java8.util.Optional;
 import bookshop.dao.BaseRepository;
 import bookshop.dao.entity.UserAuthEntity;
 
+import javax.ejb.Stateless;
+
 /**
  * 用户鉴权 DAO
  *
  * @author kaaass
  */
+@Stateless
 public class UserAuthRepository extends BaseRepository<UserAuthEntity, String> {
 
     /**

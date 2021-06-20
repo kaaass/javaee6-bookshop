@@ -5,11 +5,13 @@ import bookshop.dao.BaseRepository;
 import bookshop.dao.Pageable;
 import bookshop.dao.entity.CommentEntity;
 
+import javax.ejb.Stateless;
 import java.util.List;
 
 /**
  * 评论 DAO
  */
+@Stateless
 public class CommentRepository extends BaseRepository<CommentEntity, String> {
 
     /**

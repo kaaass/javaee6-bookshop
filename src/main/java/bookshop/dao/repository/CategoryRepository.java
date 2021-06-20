@@ -3,6 +3,7 @@ package bookshop.dao.repository;
 import bookshop.dao.BaseRepository;
 import bookshop.dao.entity.CategoryEntity;
 
+import javax.ejb.Stateless;
 import java.util.List;
 
 /**
@@ -10,6 +11,7 @@ import java.util.List;
  *
  * @author kaaass
  */
+@Stateless
 public class CategoryRepository extends BaseRepository<CategoryEntity, String> {
 
     /**

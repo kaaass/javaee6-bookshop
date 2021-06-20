@@ -1,10 +1,5 @@
 package bookshop.service.impl;
 
-import java8.util.Optional;
-import java8.util.function.Consumer;
-import java8.util.function.Function;
-import java8.util.stream.Collectors;
-import java8.util.stream.StreamSupport;
 import bookshop.controller.request.CommentRequest;
 import bookshop.controller.request.OrderCreateMultiRequest;
 import bookshop.controller.request.OrderCreateRequest;
@@ -27,9 +22,15 @@ import bookshop.util.FileUtils;
 import bookshop.util.StringUtils;
 import bookshop.util.TimeUtils;
 import bookshop.vo.UserOrderCountVo;
+import java8.util.Optional;
+import java8.util.function.Consumer;
+import java8.util.function.Function;
+import java8.util.stream.Collectors;
+import java8.util.stream.StreamSupport;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.io.ByteArrayInputStream;
@@ -45,34 +46,34 @@ import java.util.List;
 public class OrderServiceImpl implements OrderService, Serializable {
 
     private static final Logger log = org.slf4j.LoggerFactory.getLogger(OrderServiceImpl.class);
-    @Inject
+
+    @EJB
     private OrderRepository orderRepository;
 
-    @Inject
+    @EJB
     private UserService userService;
 
-    @Inject
+    @EJB
     private CommentRepository commentRepository;
 
-    @Inject
+    @EJB
     private ProductRepository productRepository;
 
-    @Inject
+    @EJB
     private CartService cartService;
 
-    @Inject
+    @EJB
     private OrderMessageProducer orderMessageProducer;
 
-    @Inject
-    private ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
-    @Inject
+    @EJB
     private ProductService productService;
 
-    @Inject
+    @EJB
     private OrderMapper orderMapper;
 
-    @Inject
+    @EJB
     private ProductMapper productMapper;
 
     @Override

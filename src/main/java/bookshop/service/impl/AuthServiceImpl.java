@@ -1,7 +1,5 @@
 package bookshop.service.impl;
 
-import java8.util.Optional;
-import java8.util.function.Function;
 import bookshop.controller.request.RegisterRequest;
 import bookshop.controller.response.LoginResponse;
 import bookshop.dao.entity.UserAuthEntity;
@@ -16,10 +14,12 @@ import bookshop.mapper.UserMapper;
 import bookshop.security.SecurityRole;
 import bookshop.service.AuthService;
 import bookshop.vo.AuthTokenVo;
+import java8.util.Optional;
+import java8.util.function.Function;
 import org.slf4j.Logger;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.inject.Inject;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
@@ -35,13 +35,14 @@ import java.util.UUID;
 public class AuthServiceImpl implements AuthService, Serializable {
 
     private static final Logger log = org.slf4j.LoggerFactory.getLogger(AuthServiceImpl.class);
-    @Inject
+
+    @EJB
     private UserAuthRepository repository;
 
-    @Inject
+    @EJB
     private UserInfoRepository infoRepository;
 
-    @Inject
+    @EJB
     private UserMapper userMapper;
 
     @Override

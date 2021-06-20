@@ -4,6 +4,7 @@ import bookshop.dao.BaseRepository;
 import bookshop.dao.Pageable;
 import bookshop.dao.entity.MediaEntity;
 
+import javax.ejb.Stateless;
 import java.util.List;
 
 /**
@@ -11,6 +12,7 @@ import java.util.List;
  *
  * @author kaaass
  */
+@Stateless
 public class MediaRepository extends BaseRepository<MediaEntity, String> {
 
     /**

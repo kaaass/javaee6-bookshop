@@ -1,7 +1,5 @@
 package bookshop.service.impl;
 
-import java8.util.Optional;
-import java8.util.function.Supplier;
 import bookshop.controller.request.CartAddRequest;
 import bookshop.dao.Pageable;
 import bookshop.dao.entity.ProductEntity;
@@ -14,11 +12,13 @@ import bookshop.mapper.ProductMapper;
 import bookshop.service.CartService;
 import bookshop.service.ProductService;
 import bookshop.util.StringUtils;
+import java8.util.Optional;
+import java8.util.function.Supplier;
 import org.slf4j.Logger;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateful;
 import javax.enterprise.context.SessionScoped;
-import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.*;
 
@@ -32,10 +32,11 @@ import java.util.*;
 public class CartServiceImpl implements CartService, Serializable {
 
     private static final Logger log = org.slf4j.LoggerFactory.getLogger(CartServiceImpl.class);
-    @Inject
+
+    @EJB
     private ProductService productService;
 
-    @Inject
+    @EJB
     private ProductMapper productMapper;
 
     @Override

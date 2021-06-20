@@ -11,6 +11,7 @@ import bookshop.security.SecurityIdentity;
 import bookshop.security.SecurityRole;
 import bookshop.service.CartService;
 
+import javax.ejb.EJB;
 import javax.inject.Inject;
 import javax.validation.Validator;
 import javax.ws.rs.*;
@@ -22,14 +23,11 @@ import java.util.List;
 @Produces(MediaType.APPLICATION_JSON)
 public class UserCartController extends BaseController {
 
-    @Inject
+    @EJB
     private CartService cartService;
 
     @Inject
     private Validator validator;
-
-    @Inject
-    private SecurityIdentity identity;
 
     @Inject
     private PageInfo pageInfo;
