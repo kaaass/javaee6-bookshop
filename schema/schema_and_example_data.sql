@@ -51,19 +51,19 @@ DROP TABLE IF EXISTS `order_item`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `order_item` (
-  `id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` varchar(255) NOT NULL,
   `order_item_count` int(11) DEFAULT NULL,
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `price` float DEFAULT NULL,
-  `order_id` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `product_id` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `uid` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `order_id` varchar(255) DEFAULT NULL,
+  `product_id` varchar(255) DEFAULT NULL,
+  `uid` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK2D110D64AD27101D` (`order_id`),
   KEY `FK2D110D6471C53BBD` (`product_id`),
   KEY `FK2D110D6412494A86` (`uid`),
   CONSTRAINT `FK2D110D64AD27101D` FOREIGN KEY (`order_id`) REFERENCES `table_order` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -145,23 +145,23 @@ DROP TABLE IF EXISTS `table_order`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `table_order` (
-  `id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` varchar(255) NOT NULL,
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `deliver_code` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `deliver_code` varchar(255) DEFAULT NULL,
   `deliver_time` datetime DEFAULT NULL,
   `finish_time` datetime DEFAULT NULL,
   `pay_time` datetime DEFAULT NULL,
   `price` float DEFAULT NULL,
-  `reason` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `reason` varchar(255) DEFAULT NULL,
   `refund_time` datetime DEFAULT NULL,
-  `request_id` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `order_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `uid` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `address_id` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `request_id` varchar(255) DEFAULT NULL,
+  `order_type` varchar(255) DEFAULT NULL,
+  `uid` varchar(255) DEFAULT NULL,
+  `address_id` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `request_id` (`request_id`),
   KEY `FK23E9939D585B3FD2` (`address_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
