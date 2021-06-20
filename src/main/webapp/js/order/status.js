@@ -31,8 +31,8 @@ require([
                     if (orderId !== null) {
                         if (orderId !== 'error') {
                             // 请求到订单
-                            functions.modal("信息", "下单成功！正在跳转支付页面...");
-                            functions.jumpTo(`pay.html?id=${orderId}`);
+                            functions.modal("信息", "下单成功！");
+                            functions.jumpTo(`../my/order.html`);
                         }
                         created = true;
                     }

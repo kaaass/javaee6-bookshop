@@ -25,12 +25,10 @@ public class ProductMapperImpl implements ProductMapper {
         productDto.setName(productEntity.getName());
         productDto.setThumbnail(mediaEntityToMediaDto(productEntity.getThumbnail()));
         productDto.setPrice(productEntity.getPrice());
-        productDto.setMailPrice(productEntity.getMailPrice());
         productDto.setCategory(categoryEntityToDto(productEntity.getCategory()));
         productDto.setIsbn(productEntity.getIsbn());
         productDto.setAuthor(productEntity.getAuthor());
         productDto.setPublishDate(productEntity.getPublishDate());
-        productDto.setIndexOrder(productEntity.getIndexOrder());
         productDto.setStorage(productStorageEntityToDto(productEntity.getStorage()));
 
         return productDto;
@@ -48,9 +46,7 @@ public class ProductMapperImpl implements ProductMapper {
         productEntity1.setName(productEntity.getName());
         productEntity1.setThumbnail(mediaDtoToMediaEntity(productEntity.getThumbnail()));
         productEntity1.setPrice(productEntity.getPrice());
-        productEntity1.setMailPrice(productEntity.getMailPrice());
         productEntity1.setCategory(categoryDtoToCategoryEntity(productEntity.getCategory()));
-        productEntity1.setIndexOrder(productEntity.getIndexOrder());
         productEntity1.setIsbn(productEntity.getIsbn());
         productEntity1.setAuthor(productEntity.getAuthor());
         if (productEntity.getPublishDate() != null) {

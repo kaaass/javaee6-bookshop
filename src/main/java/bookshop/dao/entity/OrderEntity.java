@@ -39,9 +39,6 @@ public class OrderEntity implements IEntity<String> {
     @Column(name = "price")
     private float price;
 
-    @Column(name = "mail_price")
-    private float mailPrice;
-
     /**
      * 运单号
      */
@@ -101,10 +98,6 @@ public class OrderEntity implements IEntity<String> {
         return this.price;
     }
 
-    public float getMailPrice() {
-        return this.mailPrice;
-    }
-
     public String getDeliverCode() {
         return this.deliverCode;
     }
@@ -161,10 +154,6 @@ public class OrderEntity implements IEntity<String> {
         this.price = price;
     }
 
-    public void setMailPrice(float mailPrice) {
-        this.mailPrice = mailPrice;
-    }
-
     public void setDeliverCode(String deliverCode) {
         this.deliverCode = deliverCode;
     }
@@ -218,7 +207,6 @@ public class OrderEntity implements IEntity<String> {
         final Object other$type = other.getType();
         if (this$type == null ? other$type != null : !this$type.equals(other$type)) return false;
         if (Float.compare(this.getPrice(), other.getPrice()) != 0) return false;
-        if (Float.compare(this.getMailPrice(), other.getMailPrice()) != 0) return false;
         final Object this$deliverCode = this.getDeliverCode();
         final Object other$deliverCode = other.getDeliverCode();
         if (this$deliverCode == null ? other$deliverCode != null : !this$deliverCode.equals(other$deliverCode))
@@ -267,7 +255,6 @@ public class OrderEntity implements IEntity<String> {
         final Object $type = this.getType();
         result = result * PRIME + ($type == null ? 43 : $type.hashCode());
         result = result * PRIME + Float.floatToIntBits(this.getPrice());
-        result = result * PRIME + Float.floatToIntBits(this.getMailPrice());
         final Object $deliverCode = this.getDeliverCode();
         result = result * PRIME + ($deliverCode == null ? 43 : $deliverCode.hashCode());
         final Object $reason = this.getReason();
@@ -288,6 +275,6 @@ public class OrderEntity implements IEntity<String> {
     }
 
     public String toString() {
-        return "OrderEntity(id=" + this.getId() + ", uid=" + this.getUid() + ", address=" + this.getAddress() + ", requestId=" + this.getRequestId() + ", type=" + this.getType() + ", price=" + this.getPrice() + ", mailPrice=" + this.getMailPrice() + ", deliverCode=" + this.getDeliverCode() + ", reason=" + this.getReason() + ", products=" + this.getProducts() + ", createTime=" + this.getCreateTime() + ", payTime=" + this.getPayTime() + ", deliverTime=" + this.getDeliverTime() + ", finishTime=" + this.getFinishTime() + ", refundTime=" + this.getRefundTime() + ")";
+        return "OrderEntity(id=" + this.getId() + ", uid=" + this.getUid() + ", address=" + this.getAddress() + ", requestId=" + this.getRequestId() + ", type=" + this.getType() + ", price=" + this.getPrice() + ", deliverCode=" + this.getDeliverCode() + ", reason=" + this.getReason() + ", products=" + this.getProducts() + ", createTime=" + this.getCreateTime() + ", payTime=" + this.getPayTime() + ", deliverTime=" + this.getDeliverTime() + ", finishTime=" + this.getFinishTime() + ", refundTime=" + this.getRefundTime() + ")";
     }
 }

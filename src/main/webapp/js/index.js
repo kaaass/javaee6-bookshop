@@ -16,7 +16,7 @@ require([
         let request = auth.getAxiosInstance();
 
         // 获取首页内容
-        request.get("/product/index/")
+        request.get("/product/")
             .then((response) => {
                 let data = response.data;
                 let products = product.processData(data.data);

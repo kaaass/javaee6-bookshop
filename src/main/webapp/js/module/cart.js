@@ -41,7 +41,6 @@ define([
             result.totalPrice += cartItem.totalPrice;
             result.totalMailPrice = Math.max(result.totalMailPrice, cartItem.product.mailPrice);
         }
-        result.totalPrice += result.totalMailPrice;
         return result;
     };
 

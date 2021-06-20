@@ -29,13 +29,11 @@ require([
         $('#name').val(product ? product.name : "");
         $('#thumbnailId').val(product && product.thumbnail ? product.thumbnail.id : "");
         $('#price').val(product ? product.price : "");
-        $('#mailPrice').val(product ? product.mailPrice : "");
         $('#categoryId').val(product && product.category ? product.category.id : "");
         $('#rest').val(product && product.storage ? product.storage.rest : "");
         $('#author').val(product ? product.author : "");
         $('#isbn').val(product ? product.isbn : "");
         $('#publishDate').val(product ? product.publishDateReadable : "");
-        $('#indexOrder').val(product ? product.indexOrder : "");
     };
 
     let getParam = () => {
@@ -44,13 +42,11 @@ require([
             name: $name.val(),
             thumbnailId: $thumbnailId.val(),
             price: $price.val(),
-            mailPrice: $mailPrice.val(),
             categoryId: $categoryId.val(),
             rest: $rest.val(),
             author: $('#author').val(),
             isbn: $('#isbn').val(),
             publishDate: functions.dateToTs($('#publishDate').val()),
-            indexOrder: $('#indexOrder').val()
         };
     };
 

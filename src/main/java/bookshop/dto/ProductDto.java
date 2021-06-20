@@ -21,8 +21,6 @@ public class ProductDto {
 
     private float price;
 
-    private float mailPrice;
-
     private CategoryDto category;
 
     private String isbn;
@@ -32,8 +30,6 @@ public class ProductDto {
     @JsonDeserialize(using = LongToDateDeserializer.class)
     @JsonSerialize(using = DateToLongSerializer.class)
     private Date publishDate;
-
-    private int indexOrder;
 
     private ProductStorageDto storage;
 
@@ -56,10 +52,6 @@ public class ProductDto {
         return this.price;
     }
 
-    public float getMailPrice() {
-        return this.mailPrice;
-    }
-
     public CategoryDto getCategory() {
         return this.category;
     }
@@ -74,10 +66,6 @@ public class ProductDto {
 
     public Date getPublishDate() {
         return this.publishDate;
-    }
-
-    public int getIndexOrder() {
-        return this.indexOrder;
     }
 
     public ProductStorageDto getStorage() {
@@ -100,10 +88,6 @@ public class ProductDto {
         this.price = price;
     }
 
-    public void setMailPrice(float mailPrice) {
-        this.mailPrice = mailPrice;
-    }
-
     public void setCategory(CategoryDto category) {
         this.category = category;
     }
@@ -118,10 +102,6 @@ public class ProductDto {
 
     public void setPublishDate(Date publishDate) {
         this.publishDate = publishDate;
-    }
-
-    public void setIndexOrder(int indexOrder) {
-        this.indexOrder = indexOrder;
     }
 
     public void setStorage(ProductStorageDto storage) {
@@ -144,7 +124,6 @@ public class ProductDto {
         final Object other$thumbnail = other.getThumbnail();
         if (this$thumbnail == null ? other$thumbnail != null : !this$thumbnail.equals(other$thumbnail)) return false;
         if (Float.compare(this.getPrice(), other.getPrice()) != 0) return false;
-        if (Float.compare(this.getMailPrice(), other.getMailPrice()) != 0) return false;
         final Object this$category = this.getCategory();
         final Object other$category = other.getCategory();
         if (this$category == null ? other$category != null : !this$category.equals(other$category)) return false;
@@ -158,7 +137,6 @@ public class ProductDto {
         final Object other$publishDate = other.getPublishDate();
         if (this$publishDate == null ? other$publishDate != null : !this$publishDate.equals(other$publishDate))
             return false;
-        if (this.getIndexOrder() != other.getIndexOrder()) return false;
         final Object this$storage = this.getStorage();
         final Object other$storage = other.getStorage();
         if (this$storage == null ? other$storage != null : !this$storage.equals(other$storage)) return false;
@@ -180,7 +158,6 @@ public class ProductDto {
         final Object $thumbnail = this.getThumbnail();
         result = result * PRIME + ($thumbnail == null ? 43 : $thumbnail.hashCode());
         result = result * PRIME + Float.floatToIntBits(this.getPrice());
-        result = result * PRIME + Float.floatToIntBits(this.getMailPrice());
         final Object $category = this.getCategory();
         result = result * PRIME + ($category == null ? 43 : $category.hashCode());
         final Object $isbn = this.getIsbn();
@@ -189,7 +166,6 @@ public class ProductDto {
         result = result * PRIME + ($author == null ? 43 : $author.hashCode());
         final Object $publishDate = this.getPublishDate();
         result = result * PRIME + ($publishDate == null ? 43 : $publishDate.hashCode());
-        result = result * PRIME + this.getIndexOrder();
         final Object $storage = this.getStorage();
         result = result * PRIME + ($storage == null ? 43 : $storage.hashCode());
         return result;
@@ -197,6 +173,6 @@ public class ProductDto {
 
     @Override
     public String toString() {
-        return "ProductDto(id=" + this.getId() + ", name=" + this.getName() + ", thumbnail=" + this.getThumbnail() + ", price=" + this.getPrice() + ", mailPrice=" + this.getMailPrice() + ", category=" + this.getCategory() + ", isbn=" + this.getIsbn() + ", author=" + this.getAuthor() + ", publishDate=" + this.getPublishDate() + ", indexOrder=" + this.getIndexOrder() + ", storage=" + this.getStorage() + ")";
+        return "ProductDto(id=" + this.getId() + ", name=" + this.getName() + ", thumbnail=" + this.getThumbnail() + ", price=" + this.getPrice() + ", category=" + this.getCategory() + ", isbn=" + this.getIsbn() + ", author=" + this.getAuthor() + ", publishDate=" + this.getPublishDate() + ", storage=" + this.getStorage() + ")";
     }
 }

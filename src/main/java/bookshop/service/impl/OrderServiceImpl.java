@@ -240,14 +240,12 @@ public class OrderServiceImpl implements OrderService, Serializable {
         try {
             // 生成商品信息
             float price = 0;
-            float mailPrice = 0;
             final ArrayList<OrderItemDto> products = new ArrayList<>();
             if (request instanceof OrderCreateSingleRequest) {
                 final OrderCreateSingleRequest single = (OrderCreateSingleRequest) request;
                 final ProductEntity product = productRepository.getOne(single.getProductId());
                 final OrderItemDto item = new OrderItemDto();
                 price = product.getPrice();
-                mailPrice = product.getMailPrice();
                 item.setCount(1);
                 item.setPrice(price);
                 item.setProduct(productMapper.productEntityToDto(product));
@@ -257,20 +255,15 @@ public class OrderServiceImpl implements OrderService, Serializable {
                 for (final CartDto cartItem : multi.getCachedCartItems()) {
                     final OrderItemDto item = new OrderItemDto();
                     final float curPrice = cartItem.getCount() * cartItem.getProduct().getPrice();
-                    final float curMailPrice = cartItem.getProduct().getMailPrice();
                     item.setProduct(cartItem.getProduct());
                     item.setPrice(curPrice);
                     item.setCount(cartItem.getCount());
                     products.add(item);
                     price += curPrice;
-                    if (curMailPrice > mailPrice) {
-                        mailPrice = curMailPrice;
-                    }
                 }
             }
             // 处理返回
-            entity.setPrice(price + mailPrice);
-            entity.setMailPrice(mailPrice);
+            entity.setPrice(price);
             entity.setProducts(StreamSupport.stream(products)
                     .map(new Function<OrderItemDto, OrderItemEntity>() {
                         @Override
@@ -305,6 +298,8 @@ public class OrderServiceImpl implements OrderService, Serializable {
             for (final OrderItemEntity orderItemEntity : entity.getProducts()) {
                 productRepository.save(orderItemEntity.getProduct());
             }
+            // 默认已付款
+            entity.setType(OrderType.PAID);
         } catch (BaseException e) {
             entity.setType(OrderType.ERROR);
             entity.setReason(e.getMessage());

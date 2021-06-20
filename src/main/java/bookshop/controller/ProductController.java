@@ -15,6 +15,7 @@ import bookshop.service.ProductService;
 import bookshop.vo.ProductExtraVo;
 
 import javax.ejb.EJB;
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.validation.Validator;
 import javax.ws.rs.*;
@@ -22,6 +23,7 @@ import javax.ws.rs.core.MediaType;
 import java.util.Date;
 import java.util.List;
 
+@Stateless
 @Path("/product")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)

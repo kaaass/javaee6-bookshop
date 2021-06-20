@@ -31,8 +31,6 @@ import java.util.*;
 @Stateful
 public class CartServiceImpl implements CartService, Serializable {
 
-    private static final Logger log = org.slf4j.LoggerFactory.getLogger(CartServiceImpl.class);
-
     @EJB
     private ProductService productService;
 

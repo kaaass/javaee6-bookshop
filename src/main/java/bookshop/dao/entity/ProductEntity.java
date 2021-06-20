@@ -28,16 +28,9 @@ public class ProductEntity implements IEntity<String> {
     @Column(name = "price")
     private float price;
 
-    @Column(name = "mail_price")
-    private float mailPrice;
-
     @ManyToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "category_id")
     private CategoryEntity category;
-
-    @Column(name = "index_order",
-            columnDefinition = "INT DEFAULT -1")
-    private int indexOrder = -1;
 
     @Column(name = "isbn")
     private String isbn;
@@ -47,8 +40,6 @@ public class ProductEntity implements IEntity<String> {
 
     @Column(name = "publish_date")
     private Timestamp publishDate;
-
-    // TODO 添加belongTo字段，以实现商品选择不同颜色种类
 
     @OneToOne(targetEntity = ProductStorageEntity.class,
             cascade = {CascadeType.ALL})
@@ -86,16 +77,8 @@ public class ProductEntity implements IEntity<String> {
         return this.price;
     }
 
-    public float getMailPrice() {
-        return this.mailPrice;
-    }
-
     public CategoryEntity getCategory() {
         return this.category;
-    }
-
-    public int getIndexOrder() {
-        return this.indexOrder;
     }
 
     public String getIsbn() {
@@ -138,16 +121,8 @@ public class ProductEntity implements IEntity<String> {
         this.price = price;
     }
 
-    public void setMailPrice(float mailPrice) {
-        this.mailPrice = mailPrice;
-    }
-
     public void setCategory(CategoryEntity category) {
         this.category = category;
-    }
-
-    public void setIndexOrder(int indexOrder) {
-        this.indexOrder = indexOrder;
     }
 
     public void setIsbn(String isbn) {
@@ -190,11 +165,9 @@ public class ProductEntity implements IEntity<String> {
         final Object other$thumbnail = other.getThumbnail();
         if (this$thumbnail == null ? other$thumbnail != null : !this$thumbnail.equals(other$thumbnail)) return false;
         if (Float.compare(this.getPrice(), other.getPrice()) != 0) return false;
-        if (Float.compare(this.getMailPrice(), other.getMailPrice()) != 0) return false;
         final Object this$category = this.getCategory();
         final Object other$category = other.getCategory();
         if (this$category == null ? other$category != null : !this$category.equals(other$category)) return false;
-        if (this.getIndexOrder() != other.getIndexOrder()) return false;
         final Object this$isbn = this.getIsbn();
         final Object other$isbn = other.getIsbn();
         if (this$isbn == null ? other$isbn != null : !this$isbn.equals(other$isbn)) return false;
@@ -232,10 +205,8 @@ public class ProductEntity implements IEntity<String> {
         final Object $thumbnail = this.getThumbnail();
         result = result * PRIME + ($thumbnail == null ? 43 : $thumbnail.hashCode());
         result = result * PRIME + Float.floatToIntBits(this.getPrice());
-        result = result * PRIME + Float.floatToIntBits(this.getMailPrice());
         final Object $category = this.getCategory();
         result = result * PRIME + ($category == null ? 43 : $category.hashCode());
-        result = result * PRIME + this.getIndexOrder();
         final Object $isbn = this.getIsbn();
         result = result * PRIME + ($isbn == null ? 43 : $isbn.hashCode());
         final Object $author = this.getAuthor();
@@ -253,6 +224,6 @@ public class ProductEntity implements IEntity<String> {
 
     @Override
     public String toString() {
-        return "ProductEntity(id=" + this.getId() + ", name=" + this.getName() + ", thumbnail=" + this.getThumbnail() + ", price=" + this.getPrice() + ", mailPrice=" + this.getMailPrice() + ", category=" + this.getCategory() + ", indexOrder=" + this.getIndexOrder() + ", isbn=" + this.getIsbn() + ", author=" + this.getAuthor() + ", publishDate=" + this.getPublishDate() + ", storage=" + this.getStorage() + ", createTime=" + this.getCreateTime() + ", lastUpdateTime=" + this.getLastUpdateTime() + ")";
+        return "ProductEntity(id=" + this.getId() + ", name=" + this.getName() + ", thumbnail=" + this.getThumbnail() + ", price=" + this.getPrice() + ", category=" + this.getCategory() + ", isbn=" + this.getIsbn() + ", author=" + this.getAuthor() + ", publishDate=" + this.getPublishDate() + ", storage=" + this.getStorage() + ", createTime=" + this.getCreateTime() + ", lastUpdateTime=" + this.getLastUpdateTime() + ")";
     }
 }

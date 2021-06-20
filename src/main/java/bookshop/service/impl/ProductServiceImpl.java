@@ -94,11 +94,9 @@ public class ProductServiceImpl implements ProductService, Serializable {
         // 一般字段
         entity.setName(productToAdd.getName());
         entity.setPrice(productToAdd.getPrice());
-        entity.setMailPrice(productToAdd.getMailPrice());
         entity.setAuthor(productToAdd.getAuthor());
         entity.setIsbn(productToAdd.getIsbn());
         entity.setPublishDate(TimeUtils.dateToTimestamp(productToAdd.getPublishDate()));
-        entity.setIndexOrder(productToAdd.getIndexOrder());
         // 存储
         if (entity.getStorage() == null) {
             entity.setStorage(new ProductStorageEntity());

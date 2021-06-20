@@ -29,7 +29,6 @@ public class OrderMapperImpl implements OrderMapper {
         orderDto.setRequestId(orderEntity.getRequestId());
         orderDto.setType(orderEntity.getType());
         orderDto.setPrice(orderEntity.getPrice());
-        orderDto.setMailPrice(orderEntity.getMailPrice());
         orderDto.setDeliverCode(orderEntity.getDeliverCode());
         orderDto.setReason(orderEntity.getReason());
         orderDto.setProducts(orderItemEntityListToOrderItemDtoList(orderEntity.getProducts()));
@@ -160,12 +159,10 @@ public class OrderMapperImpl implements OrderMapper {
         productDto.setName(productEntity.getName());
         productDto.setThumbnail(mediaEntityToMediaDto(productEntity.getThumbnail()));
         productDto.setPrice(productEntity.getPrice());
-        productDto.setMailPrice(productEntity.getMailPrice());
         productDto.setCategory(categoryEntityToCategoryDto(productEntity.getCategory()));
         productDto.setIsbn(productEntity.getIsbn());
         productDto.setAuthor(productEntity.getAuthor());
         productDto.setPublishDate(productEntity.getPublishDate());
-        productDto.setIndexOrder(productEntity.getIndexOrder());
         productDto.setStorage(productStorageEntityToProductStorageDto(productEntity.getStorage()));
 
         return productDto;
@@ -230,9 +227,7 @@ public class OrderMapperImpl implements OrderMapper {
         productEntity.setName(productDto.getName());
         productEntity.setThumbnail(mediaDtoToMediaEntity(productDto.getThumbnail()));
         productEntity.setPrice(productDto.getPrice());
-        productEntity.setMailPrice(productDto.getMailPrice());
         productEntity.setCategory(categoryDtoToCategoryEntity(productDto.getCategory()));
-        productEntity.setIndexOrder(productDto.getIndexOrder());
         productEntity.setIsbn(productDto.getIsbn());
         productEntity.setAuthor(productDto.getAuthor());
         if (productDto.getPublishDate() != null) {
