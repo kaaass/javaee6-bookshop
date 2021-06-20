@@ -17,7 +17,7 @@ public class ProductDto {
 
     private String name;
 
-    private MediaDto thumbnail;
+    private String thumbnail;
 
     private float price;
 
@@ -44,7 +44,7 @@ public class ProductDto {
         return this.name;
     }
 
-    public MediaDto getThumbnail() {
+    public String getThumbnail() {
         return this.thumbnail;
     }
 
@@ -80,7 +80,7 @@ public class ProductDto {
         this.name = name;
     }
 
-    public void setThumbnail(MediaDto thumbnail) {
+    public void setThumbnail(String thumbnail) {
         this.thumbnail = thumbnail;
     }
 

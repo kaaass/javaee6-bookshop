@@ -1,7 +1,5 @@
 package bookshop.vo;
 
-import bookshop.dto.MediaDto;
-
 import java.util.List;
 
 /**
@@ -15,8 +13,6 @@ public class ProductExtraVo {
 
     private String detail;
 
-    private List<MediaDto> images;
-
     public ProductExtraVo() {
     }
 
@@ -28,10 +24,6 @@ public class ProductExtraVo {
         return this.detail;
     }
 
-    public List<MediaDto> getImages() {
-        return this.images;
-    }
-
     public void setMonthPurchase(int monthPurchase) {
         this.monthPurchase = monthPurchase;
     }
@@ -40,10 +32,7 @@ public class ProductExtraVo {
         this.detail = detail;
     }
 
-    public void setImages(List<MediaDto> images) {
-        this.images = images;
-    }
-
+    @Override
     public boolean equals(final Object o) {
         if (o == this) return true;
         if (!(o instanceof ProductExtraVo)) return false;
@@ -53,27 +42,25 @@ public class ProductExtraVo {
         final Object this$detail = this.getDetail();
         final Object other$detail = other.getDetail();
         if (this$detail == null ? other$detail != null : !this$detail.equals(other$detail)) return false;
-        final Object this$images = this.getImages();
-        final Object other$images = other.getImages();
-        return this$images == null ? other$images == null : this$images.equals(other$images);
+        return true;
     }
 
     protected boolean canEqual(final Object other) {
         return other instanceof ProductExtraVo;
     }
 
+    @Override
     public int hashCode() {
         final int PRIME = 59;
         int result = 1;
         result = result * PRIME + this.getMonthPurchase();
         final Object $detail = this.getDetail();
         result = result * PRIME + ($detail == null ? 43 : $detail.hashCode());
-        final Object $images = this.getImages();
-        result = result * PRIME + ($images == null ? 43 : $images.hashCode());
         return result;
     }
 
+    @Override
     public String toString() {
-        return "ProductExtraVo(monthPurchase=" + this.getMonthPurchase() + ", detail=" + this.getDetail() + ", images=" + this.getImages() + ")";
+        return "ProductExtraVo(monthPurchase=" + this.getMonthPurchase() + ", detail=" + this.getDetail() + ")";
     }
 }

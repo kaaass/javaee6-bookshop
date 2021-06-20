@@ -7,7 +7,6 @@
         <jta-data-source>java:jboss/datasources/sampleDS</jta-data-source>
         <class>bookshop.dao.entity.CategoryEntity</class>
         <class>bookshop.dao.entity.CommentEntity</class>
-        <class>bookshop.dao.entity.MediaEntity</class>
         <class>bookshop.dao.entity.OrderEntity</class>
         <class>bookshop.dao.entity.OrderItemEntity</class>
         <class>bookshop.dao.entity.ProductEntity</class>

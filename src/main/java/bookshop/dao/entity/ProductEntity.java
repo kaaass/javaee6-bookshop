@@ -20,10 +20,8 @@ public class ProductEntity implements IEntity<String> {
     @Column(name = "product_name")
     private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "thumbnail",
-            unique = true)
-    private MediaEntity thumbnail;
+    @Column(name = "thumbnail")
+    private String thumbnail;
 
     @Column(name = "price")
     private float price;
@@ -69,7 +67,7 @@ public class ProductEntity implements IEntity<String> {
         return this.name;
     }
 
-    public MediaEntity getThumbnail() {
+    public String getThumbnail() {
         return this.thumbnail;
     }
 
@@ -113,7 +111,7 @@ public class ProductEntity implements IEntity<String> {
         this.name = name;
     }
 
-    public void setThumbnail(MediaEntity thumbnail) {
+    public void setThumbnail(String thumbnail) {
         this.thumbnail = thumbnail;
     }
 

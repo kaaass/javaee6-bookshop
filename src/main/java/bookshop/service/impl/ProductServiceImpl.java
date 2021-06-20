@@ -8,7 +8,6 @@ import bookshop.dao.repository.CategoryRepository;
 import bookshop.dao.repository.CommentRepository;
 import bookshop.dao.repository.OrderItemRepository;
 import bookshop.dao.repository.ProductRepository;
-import bookshop.dto.MediaDto;
 import bookshop.dto.ProductDto;
 import bookshop.exception.BadRequestException;
 import bookshop.exception.BaseException;
@@ -18,7 +17,6 @@ import bookshop.mapper.ProductMapper;
 import bookshop.mapper.UserMapper;
 import bookshop.service.CategoryService;
 import bookshop.service.ProductService;
-import bookshop.service.ResourceService;
 import bookshop.service.UserService;
 import bookshop.util.NumericUtils;
 import bookshop.util.StringUtils;
@@ -45,9 +43,6 @@ public class ProductServiceImpl implements ProductService, Serializable {
 
     @EJB
     private ProductRepository productRepository;
-
-    @EJB
-    private ResourceService resourceService;
 
     @EJB
     private CategoryRepository categoryRepository;
@@ -103,11 +98,7 @@ public class ProductServiceImpl implements ProductService, Serializable {
         }
         entity.getStorage().setRest(productToAdd.getRest());
         // 图、分类
-        if (entity.getThumbnail() == null || !productToAdd.getThumbnailId().equals(entity.getThumbnail().getId())) {
-            final MediaEntity thumbnail = resourceService.getEntity(productToAdd.getThumbnailId())
-                    .orElseThrow(BaseException.supplier(NotFoundException.class, "略缩图不存在！"));
-            entity.setThumbnail(thumbnail);
-        }
+        entity.setThumbnail(productToAdd.getThumbnailId());
         if (entity.getCategory() == null || !productToAdd.getCategoryId().equals(entity.getCategory().getId())) {
             final CategoryEntity category = categoryRepository.findById(productToAdd.getCategoryId())
                     .orElseThrow(BaseException.supplier(NotFoundException.class, "分类不存在！"));
@@ -228,8 +219,6 @@ public class ProductServiceImpl implements ProductService, Serializable {
         extra.setDetail("");
         final ProductEntity entity = getEntityById(id);
         extra.setMonthPurchase(getMonthPurchaseById(entity));
-        // 获得商品图片
-        extra.setImages(new ArrayList<MediaDto>());
         return extra;
     }
 
@@ -250,7 +239,7 @@ public class ProductServiceImpl implements ProductService, Serializable {
 
     @Override
     public List<ProductDto> getIndexItems() {
-        return StreamSupport.stream(productRepository.findAllByIndexOrderGreaterThanEqualOrderByIndexOrderAscCreateTimeDesc(0))
+        return StreamSupport.stream(productRepository.findAllByIndexOrderGreaterThanEqualOrderByIndexOrderAscCreateTimeDesc())
                 .map(new Function<ProductEntity, ProductDto>() {
                     @Override
                     public ProductDto apply(ProductEntity productEntity) {

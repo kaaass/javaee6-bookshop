@@ -23,7 +23,7 @@ public class ProductMapperImpl implements ProductMapper {
 
         productDto.setId(productEntity.getId());
         productDto.setName(productEntity.getName());
-        productDto.setThumbnail(mediaEntityToMediaDto(productEntity.getThumbnail()));
+        productDto.setThumbnail(productEntity.getThumbnail());
         productDto.setPrice(productEntity.getPrice());
         productDto.setCategory(categoryEntityToDto(productEntity.getCategory()));
         productDto.setIsbn(productEntity.getIsbn());
@@ -44,7 +44,7 @@ public class ProductMapperImpl implements ProductMapper {
 
         productEntity1.setId(productEntity.getId());
         productEntity1.setName(productEntity.getName());
-        productEntity1.setThumbnail(mediaDtoToMediaEntity(productEntity.getThumbnail()));
+        productEntity1.setThumbnail(productEntity.getThumbnail());
         productEntity1.setPrice(productEntity.getPrice());
         productEntity1.setCategory(categoryDtoToCategoryEntity(productEntity.getCategory()));
         productEntity1.setIsbn(productEntity.getIsbn());
@@ -85,40 +85,6 @@ public class ProductMapperImpl implements ProductMapper {
         productStorageDto.setRest(productStorageEntity.getRest());
 
         return productStorageDto;
-    }
-
-    protected MediaDto mediaEntityToMediaDto(MediaEntity mediaEntity) {
-        if (mediaEntity == null) {
-            return null;
-        }
-
-        MediaDto mediaDto = new MediaDto();
-
-        mediaDto.setId(mediaEntity.getId());
-        mediaDto.setType(mediaEntity.getType());
-        mediaDto.setUrl(mediaEntity.getUrl());
-        mediaDto.setUploaderUid(mediaEntity.getUploaderUid());
-        mediaDto.setUploadTime(mediaEntity.getUploadTime());
-
-        return mediaDto;
-    }
-
-    protected MediaEntity mediaDtoToMediaEntity(MediaDto mediaDto) {
-        if (mediaDto == null) {
-            return null;
-        }
-
-        MediaEntity mediaEntity = new MediaEntity();
-
-        mediaEntity.setId(mediaDto.getId());
-        mediaEntity.setType(mediaDto.getType());
-        mediaEntity.setUrl(mediaDto.getUrl());
-        mediaEntity.setUploaderUid(mediaDto.getUploaderUid());
-        if (mediaDto.getUploadTime() != null) {
-            mediaEntity.setUploadTime(new Timestamp(mediaDto.getUploadTime().getTime()));
-        }
-
-        return mediaEntity;
     }
 
     protected CategoryEntity categoryDtoToCategoryEntity(CategoryDto categoryDto) {

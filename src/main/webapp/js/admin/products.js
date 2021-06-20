@@ -27,7 +27,7 @@ require([
 
     let loadParam = (product) => {
         $('#name').val(product ? product.name : "");
-        $('#thumbnailId').val(product && product.thumbnail ? product.thumbnail.id : "");
+        $('#thumbnailId').val(product && product.thumbnail ? product.thumbnail : "");
         $('#price').val(product ? product.price : "");
         $('#categoryId').val(product && product.category ? product.category.id : "");
         $('#rest').val(product && product.storage ? product.storage.rest : "");

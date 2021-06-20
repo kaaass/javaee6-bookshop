@@ -18,7 +18,6 @@ public class ProductAddRequest {
     )
     private String name;
 
-    @Uuid(message = "缩略图格式错误")
     private String thumbnailId;
 
     @Min(value = 0, message = "价格不能为负")

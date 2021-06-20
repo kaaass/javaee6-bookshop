@@ -104,22 +104,6 @@ public class OrderMapperImpl implements OrderMapper {
         return list1;
     }
 
-    protected MediaDto mediaEntityToMediaDto(MediaEntity mediaEntity) {
-        if (mediaEntity == null) {
-            return null;
-        }
-
-        MediaDto mediaDto = new MediaDto();
-
-        mediaDto.setId(mediaEntity.getId());
-        mediaDto.setType(mediaEntity.getType());
-        mediaDto.setUrl(mediaEntity.getUrl());
-        mediaDto.setUploaderUid(mediaEntity.getUploaderUid());
-        mediaDto.setUploadTime(mediaEntity.getUploadTime());
-
-        return mediaDto;
-    }
-
     protected CategoryDto categoryEntityToCategoryDto(CategoryEntity categoryEntity) {
         if (categoryEntity == null) {
             return null;
@@ -157,7 +141,7 @@ public class OrderMapperImpl implements OrderMapper {
 
         productDto.setId(productEntity.getId());
         productDto.setName(productEntity.getName());
-        productDto.setThumbnail(mediaEntityToMediaDto(productEntity.getThumbnail()));
+        productDto.setThumbnail(productEntity.getThumbnail());
         productDto.setPrice(productEntity.getPrice());
         productDto.setCategory(categoryEntityToCategoryDto(productEntity.getCategory()));
         productDto.setIsbn(productEntity.getIsbn());
@@ -166,24 +150,6 @@ public class OrderMapperImpl implements OrderMapper {
         productDto.setStorage(productStorageEntityToProductStorageDto(productEntity.getStorage()));
 
         return productDto;
-    }
-
-    protected MediaEntity mediaDtoToMediaEntity(MediaDto mediaDto) {
-        if (mediaDto == null) {
-            return null;
-        }
-
-        MediaEntity mediaEntity = new MediaEntity();
-
-        mediaEntity.setId(mediaDto.getId());
-        mediaEntity.setType(mediaDto.getType());
-        mediaEntity.setUrl(mediaDto.getUrl());
-        mediaEntity.setUploaderUid(mediaDto.getUploaderUid());
-        if (mediaDto.getUploadTime() != null) {
-            mediaEntity.setUploadTime(new Timestamp(mediaDto.getUploadTime().getTime()));
-        }
-
-        return mediaEntity;
     }
 
     protected CategoryEntity categoryDtoToCategoryEntity(CategoryDto categoryDto) {
@@ -225,7 +191,7 @@ public class OrderMapperImpl implements OrderMapper {
 
         productEntity.setId(productDto.getId());
         productEntity.setName(productDto.getName());
-        productEntity.setThumbnail(mediaDtoToMediaEntity(productDto.getThumbnail()));
+        productEntity.setThumbnail(productDto.getThumbnail());
         productEntity.setPrice(productDto.getPrice());
         productEntity.setCategory(categoryDtoToCategoryEntity(productDto.getCategory()));
         productEntity.setIsbn(productDto.getIsbn());

@@ -1,9 +1,7 @@
 package bookshop.controller;
 
 import bookshop.controller.request.UserAddressRequest;
-import bookshop.controller.request.UserInfoModifyRequest;
 import bookshop.controller.response.UserProfileResponse;
-import bookshop.dao.entity.MediaEntity;
 import bookshop.dao.entity.UserAddressEntity;
 import bookshop.dao.entity.UserAuthEntity;
 import bookshop.dao.repository.UserAddressRepository;
@@ -16,7 +14,6 @@ import bookshop.security.Secured;
 import bookshop.security.SecurityIdentity;
 import bookshop.security.SecurityRole;
 import bookshop.service.OrderService;
-import bookshop.service.ResourceService;
 import bookshop.service.UserService;
 import bookshop.util.TimeUtils;
 import java8.util.function.Function;
@@ -49,9 +46,6 @@ public class UserProfileController extends BaseController {
 
     @EJB
     private UserService userService;
-
-    @EJB
-    private ResourceService resourceService;
 
     @EJB
     private OrderService orderService;

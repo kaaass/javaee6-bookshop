@@ -139,20 +139,4 @@ public class UserMapperImpl implements UserMapper {
 
         return commentVo;
     }
-
-    protected MediaDto mediaEntityToMediaDto(MediaEntity mediaEntity) {
-        if (mediaEntity == null) {
-            return null;
-        }
-
-        MediaDto mediaDto = new MediaDto();
-
-        mediaDto.setId(mediaEntity.getId());
-        mediaDto.setType(mediaEntity.getType());
-        mediaDto.setUrl(mediaEntity.getUrl());
-        mediaDto.setUploaderUid(mediaEntity.getUploaderUid());
-        mediaDto.setUploadTime(mediaEntity.getUploadTime());
-
-        return mediaDto;
-    }
 }
