@@ -30,8 +30,6 @@ require([
                 .then(async (productData) => {
                     // 修改标题
                     $('title').text(productData.name + constants.TITLE_SUFFIX);
-                    // 获得评论数据
-                    productData.comments = await product.getComments(curProductId);
                     // 判断缓存
                     if (JSON.stringify(productDataCache) === JSON.stringify(productData)) {
                         console.log("命中缓存");

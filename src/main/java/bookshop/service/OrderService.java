@@ -1,6 +1,5 @@
 package bookshop.service;
 
-import bookshop.controller.request.CommentRequest;
 import bookshop.controller.request.OrderCreateRequest;
 import bookshop.controller.response.OrderCheckResponse;
 import bookshop.controller.response.OrderRequestResponse;
@@ -56,13 +55,7 @@ public interface OrderService {
 
     void doCreate(OrderRequestContext context) throws NotFoundException;
 
-    OrderDto setPaid(String id, String uid) throws NotFoundException, ForbiddenException, BadRequestException;
-
     OrderDto setDelivered(String id, String deliverCode) throws NotFoundException, BadRequestException;
 
     OrderDto setCanceled(String id, String uid) throws NotFoundException, ForbiddenException, BadRequestException;
-
-    OrderDto setRefunded(String id) throws NotFoundException, BadRequestException;
-
-    OrderDto setCommented(String id, String uid, CommentRequest commentRequest) throws NotFoundException, ForbiddenException, BadRequestException;
 }

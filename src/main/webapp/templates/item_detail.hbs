@@ -69,17 +69,9 @@
                 </div>
             </div>
             <div class="row no-gutters flex-md-row mb-3 h-md-250 position-relative">
-                <div class="col bg-white p-3 mr-2 d-flex flex-column border rounded overflow-hidden shadow-sm">
+                <div class="col bg-white p-3 d-flex flex-column border rounded overflow-hidden shadow-sm">
                     <h3 class="mb-0 text-center">{{extra.monthPurchase}}</h3>
                     <small class="d-inline-block text-secondary text-center">月销量</small>
-                </div>
-                <div class="col bg-white p-3 ml-2 d-flex flex-column border rounded overflow-hidden shadow-sm">
-                    {{#if comments.averageRate}}
-                        <h3 class="mb-0 text-center">{{comments.averageRate}}</h3>
-                    {{else}}
-                        <h3 class="mb-0 text-center">未知</h3>
-                    {{/if}}
-                    <small class="d-inline-block text-secondary text-center">平均评分</small>
                 </div>
             </div>
             <div class="row bg-white no-gutters border rounded overflow-hidden flex-md-row mb-3 shadow-sm h-md-250 position-relative">
@@ -91,19 +83,6 @@
             </div>
             <div class="row bg-white no-gutters border rounded overflow-hidden flex-md-row mb-3 shadow-sm h-md-250 position-relative">
                 <a href="./my/cart.html?id={{id}}" class="btn btn-outline-primary btn-lg btn-block">加入购物车</a>
-            </div>
-            <div class="row bg-white no-gutters border rounded overflow-hidden flex-md-row mb-3 shadow-sm h-md-250 position-relative">
-                <div class="col p-4 d-flex flex-column position-static">
-                    <h5 class="border-bottom border-gray pb-2">评价</h5>
-                    {{#each comments.comments}}
-                        <div class="media text-muted pt-3">
-                            <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
-                                <strong class="d-block">评分：{{rate}}</strong>
-                                {{content}}
-                            </p>
-                        </div>
-                    {{/each}}
-                </div>
             </div>
         </div>
     </div>

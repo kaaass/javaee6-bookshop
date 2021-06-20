@@ -1,7 +1,6 @@
 package bookshop.controller;
 
 import bookshop.controller.request.ProductAddRequest;
-import bookshop.controller.response.ProductCommentResponse;
 import bookshop.dto.ProductDto;
 import bookshop.exception.BadRequestException;
 import bookshop.exception.InternalErrorExeption;
@@ -183,12 +182,5 @@ public class ProductController extends BaseController {
     @Secured(SecurityRole.LOGGED)
     public List<ProductDto> getAllProductsByCategory(@PathParam("categoryId") String categoryId) throws NotFoundException {
         return productService.getAllByCategory(categoryId);
-    }
-
-    @GET
-    @Path("/{id}/comments/")
-    public ProductCommentResponse getComments(@PathParam("id") String id) {
-        // TODO 评论用户头像
-        return productService.getComments(id);
     }
 }

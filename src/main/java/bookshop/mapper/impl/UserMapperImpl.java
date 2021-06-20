@@ -105,38 +105,4 @@ public class UserMapperImpl implements UserMapper {
 
         return userAddressEntity;
     }
-
-    @Override
-    public CommentDto commentEntityToDto(CommentEntity commentEntity) {
-        if (commentEntity == null) {
-            return null;
-        }
-
-        CommentDto commentDto = new CommentDto();
-
-        commentDto.setId(commentEntity.getId());
-        commentDto.setOrderId(commentEntity.getOrderId());
-        commentDto.setProductId(commentEntity.getProductId());
-        commentDto.setRate(commentEntity.getRate());
-        commentDto.setContent(commentEntity.getContent());
-        commentDto.setCommentTime(commentEntity.getCommentTime());
-
-        return commentDto;
-    }
-
-    @Override
-    public CommentVo commentEntityToVo(CommentEntity commentEntity) {
-        if (commentEntity == null) {
-            return null;
-        }
-
-        CommentVo commentVo = new CommentVo();
-
-        commentVo.setId(commentEntity.getId());
-        commentVo.setRate(commentEntity.getRate());
-        commentVo.setContent(commentEntity.getContent());
-        commentVo.setCommentTime(commentEntity.getCommentTime());
-
-        return commentVo;
-    }
 }

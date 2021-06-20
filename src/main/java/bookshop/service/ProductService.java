@@ -1,7 +1,6 @@
 package bookshop.service;
 
 import bookshop.controller.request.ProductAddRequest;
-import bookshop.controller.response.ProductCommentResponse;
 import bookshop.dao.entity.ProductEntity;
 import bookshop.dto.ProductDto;
 import bookshop.exception.BadRequestException;
@@ -55,8 +54,6 @@ public interface ProductService {
     List<ProductDto> getQuickBuyItems();
 
     List<ProductDto> getAllByCategory(String categoryId) throws NotFoundException;
-
-    ProductCommentResponse getComments(String id);
 
     List<ProductDto> search(String keyword);
 

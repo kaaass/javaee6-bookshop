@@ -1,13 +1,11 @@
 package bookshop.service.impl;
 
-import bookshop.controller.request.CommentRequest;
 import bookshop.controller.request.OrderCreateMultiRequest;
 import bookshop.controller.request.OrderCreateRequest;
 import bookshop.controller.request.OrderCreateSingleRequest;
 import bookshop.controller.response.OrderCheckResponse;
 import bookshop.controller.response.OrderRequestResponse;
 import bookshop.dao.entity.*;
-import bookshop.dao.repository.CommentRepository;
 import bookshop.dao.repository.OrderRepository;
 import bookshop.dao.repository.ProductRepository;
 import bookshop.dto.*;
@@ -50,9 +48,6 @@ public class OrderServiceImpl implements OrderService, Serializable {
 
     @EJB
     private UserService userService;
-
-    @EJB
-    private CommentRepository commentRepository;
 
     @EJB
     private ProductRepository productRepository;
@@ -313,28 +308,12 @@ public class OrderServiceImpl implements OrderService, Serializable {
     }
 
     @Override
-    public OrderDto setPaid(String id, String uid) throws NotFoundException, ForbiddenException, BadRequestException {
-        final OrderEntity entity = uid == null ? getEntityById(id) :
-                getEntityByIdAndCheck(id, uid);
-        if (!entity.getType().less(OrderType.PAID)) {
-            throw new BadRequestException("该订单已付款或已取消！");
-        }
-        entity.setType(OrderType.PAID);
-        entity.setPayTime(TimeUtils.nowTimestamp());
-        /*
-          写订单文件
-         */
-        printOrderFile(entity);
-        return orderMapper.orderEntityToDto(orderRepository.save(entity));
-    }
-
-    @Override
     public OrderDto setDelivered(String id, String deliverCode) throws NotFoundException, BadRequestException {
         final OrderEntity entity = getEntityById(id);
         if (entity.getType() != OrderType.PAID) {
             throw new BadRequestException("只有已付款的订单可以发货！");
         }
-        entity.setType(OrderType.DELIVERED);
+        entity.setType(OrderType.COMMENTED);
         entity.setDeliverCode(deliverCode);
         entity.setDeliverTime(TimeUtils.nowTimestamp());
         /*
@@ -352,49 +331,6 @@ public class OrderServiceImpl implements OrderService, Serializable {
         }
         entity.setType(OrderType.CANCELED);
         entity.setFinishTime(TimeUtils.nowTimestamp());
-        /*
-          写订单文件
-         */
-        printOrderFile(entity);
-        return orderMapper.orderEntityToDto(orderRepository.save(entity));
-    }
-
-    @Override
-    public OrderDto setRefunded(String id) throws NotFoundException, BadRequestException {
-        final OrderEntity entity = getEntityById(id);
-        if (entity.getType().less(OrderType.PAID) || entity.getType().great(OrderType.COMMENTED)) {
-            throw new BadRequestException("只有已付款、未退款的订单可以退款！");
-        }
-        entity.setType(OrderType.REFUNDED);
-        entity.setRefundTime(TimeUtils.nowTimestamp());
-        /*
-          写订单文件
-         */
-        printOrderFile(entity);
-        return orderMapper.orderEntityToDto(orderRepository.save(entity));
-    }
-
-    @Override
-    public OrderDto setCommented(String id, String uid, CommentRequest commentRequest) throws NotFoundException, ForbiddenException, BadRequestException {
-        final OrderEntity entity = getEntityByIdAndCheck(id, uid);
-        final UserAuthEntity auth = userService.getAuthEntityById(uid);
-        if (entity.getType() != OrderType.DELIVERED) {
-            throw new BadRequestException("该订单当前不能评价！");
-        }
-        entity.setType(OrderType.COMMENTED);
-        entity.setFinishTime(TimeUtils.nowTimestamp());
-
-        for (final CommentRequest.Content comment : commentRequest.getComments()) {
-            final CommentEntity commentEntity = new CommentEntity();
-            commentEntity.setUser(auth);
-            commentEntity.setOrderId(id);
-            commentEntity.setProductId(comment.getProductId());
-            commentEntity.setRate(comment.getRate());
-            commentEntity.setContent(comment.getContent());
-            commentEntity.setCommentTime(TimeUtils.nowTimestamp());
-            commentRepository.save(commentEntity);
-        }
-
         /*
           写订单文件
          */
@@ -431,8 +367,6 @@ public class OrderServiceImpl implements OrderService, Serializable {
         sb.append("运单号：").append(dto.getDeliverCode()).append('\n');
         sb.append("创建时间：").append(formatDate(dto.getCreateTime())).append('\n');
         sb.append("发货时间：").append(formatDate(dto.getDeliverTime())).append('\n');
-        sb.append("评价时间：").append(formatDate(dto.getFinishTime())).append('\n');
-        sb.append("退款时间：").append(formatDate(dto.getRefundTime())).append('\n');
         sb.append("收货地址：\n")
                 .append("  ").append(addr.getName()).append(" ").append(addr.getPhone()).append('\n')
                 .append("  ").append(addr.getArea()).append('\n')

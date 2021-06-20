@@ -1,10 +1,8 @@
 package bookshop.service.impl;
 
 import bookshop.controller.request.ProductAddRequest;
-import bookshop.controller.response.ProductCommentResponse;
 import bookshop.dao.entity.*;
 import bookshop.dao.repository.CategoryRepository;
-import bookshop.dao.repository.CommentRepository;
 import bookshop.dao.repository.OrderItemRepository;
 import bookshop.dao.repository.ProductRepository;
 import bookshop.dto.ProductDto;
@@ -54,9 +52,6 @@ public class ProductServiceImpl implements ProductService, Serializable {
 
     @EJB
     private OrderItemRepository orderItemRepository;
-
-    @EJB
-    private CommentRepository commentRepository;
 
     @EJB
     private ProductMapper productMapper;
@@ -280,30 +275,6 @@ public class ProductServiceImpl implements ProductService, Serializable {
                     }
                 })
                 .collect(Collectors.<ProductDto>toList());
-    }
-
-    @Override
-    public ProductCommentResponse getComments(String id) {
-        final ProductCommentResponse result = new ProductCommentResponse();
-        final List<CommentVo> comments = StreamSupport.stream(commentRepository.findAllByProductIdOrderByRateDescCommentTimeDesc(id))
-                .map(new Function<CommentEntity, CommentVo>() {
-                    @Override
-                    public CommentVo apply(CommentEntity commentEntity) {
-                        return userMapper.commentEntityToVo(commentEntity);
-                    }
-                })
-                .collect(Collectors.<CommentVo>toList());
-        final Float rate = commentRepository.averageRateByProductId(id)
-                .map(new Function<Double, Float>() {
-                    @Override
-                    public Float apply(Double aFloat) {
-                        return NumericUtils.rateRound(aFloat.floatValue());
-                    }
-                })
-                .orElse(null);
-        result.setComments(comments);
-        result.setAverageRate(rate);
-        return result;
     }
 
     @Override

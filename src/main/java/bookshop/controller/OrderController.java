@@ -1,6 +1,5 @@
 package bookshop.controller;
 
-import bookshop.controller.request.CommentRequest;
 import bookshop.controller.request.OrderCreateRequest;
 import bookshop.controller.response.OrderCheckResponse;
 import bookshop.controller.response.OrderRequestResponse;
@@ -113,29 +112,10 @@ public class OrderController extends BaseController {
         return orderService.getAllByProduct(pid);
     }
 
-    /**
-     * 外部支付回调
-     */
-    @GET
-    @Path("/{id}/payCheck/")
-    @Secured(SecurityRole.USER)
-    public OrderDto payCheck(@PathParam("id") String id, @QueryParam("callback") String callback) throws NotFoundException, ForbiddenException, BadRequestException {
-        // 检查callback
-        return orderService.setPaid(id, identity.getUserAuthDto().getId());
-    }
-
-    @POST
-    @Path("/{id}/pay/")
-    @Secured(SecurityRole.ADMIN)
-    public OrderDto setPaid(@PathParam("id") String id) throws NotFoundException, ForbiddenException, BadRequestException {
-        return orderService.setPaid(id, null);
-    }
-
     @POST
     @Path("/{id}/deliver/")
     @Secured(SecurityRole.ADMIN)
     public OrderDto setDelivered(@PathParam("id") String id, @QueryParam("deliverCode") String deliverCode) throws NotFoundException, BadRequestException {
-        // TODO 检查输入
         return orderService.setDelivered(id, deliverCode);
     }
 
@@ -144,20 +124,5 @@ public class OrderController extends BaseController {
     @Secured(SecurityRole.USER)
     public OrderDto setCanceled(@PathParam("id") String id) throws BadRequestException, NotFoundException, ForbiddenException {
         return orderService.setCanceled(id, identity.getUserAuthDto().getId());
-    }
-
-    @POST
-    @Path("/{id}/refund/")
-    @Secured(SecurityRole.ADMIN)
-    public OrderDto setRefunded(@PathParam("id") String id) throws NotFoundException, BadRequestException {
-        return orderService.setRefunded(id);
-    }
-
-    @POST
-    @Path("/{id}/comment/")
-    @Secured(SecurityRole.USER)
-    public OrderDto setCommented(@PathParam("id") String id, CommentRequest commentRequest) throws NotFoundException, BadRequestException, ForbiddenException {
-        validateBean(validator, commentRequest);
-        return orderService.setCommented(id, identity.getUserAuthDto().getId(), commentRequest);
     }
 }

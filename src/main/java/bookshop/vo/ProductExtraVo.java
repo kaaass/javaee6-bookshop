@@ -1,7 +1,5 @@
 package bookshop.vo;
 
-import java.util.List;
-
 /**
  * 订单额外信息 VO
  *

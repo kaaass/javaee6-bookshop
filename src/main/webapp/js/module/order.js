@@ -66,15 +66,7 @@ define([
      * @returns {string|null}
      */
     let getTypeAction = (type) => {
-        if (type === 'CREATED') {
-            return '付款';
-        } else if (type === 'PAID') {
-            return null;
-        } else if (type === 'DELIVERED') {
-            return '评价';
-        } else {
-            return null;
-        }
+        return null;
     };
 
     /**
@@ -84,7 +76,7 @@ define([
      */
     let getAdminAction = (type) => {
         if (type === 'CREATED') {
-            return '确认付款';
+            return null;
         } else if (type === 'PAID') {
             return '发货';
         } else {
