@@ -430,7 +430,6 @@ public class OrderServiceImpl implements OrderService, Serializable {
         sb.append("订单状态：").append(dto.getType()).append('\n');
         sb.append("运单号：").append(dto.getDeliverCode()).append('\n');
         sb.append("创建时间：").append(formatDate(dto.getCreateTime())).append('\n');
-        sb.append("付款时间：").append(formatDate(dto.getPayTime())).append('\n');
         sb.append("发货时间：").append(formatDate(dto.getDeliverTime())).append('\n');
         sb.append("评价时间：").append(formatDate(dto.getFinishTime())).append('\n');
         sb.append("退款时间：").append(formatDate(dto.getRefundTime())).append('\n');

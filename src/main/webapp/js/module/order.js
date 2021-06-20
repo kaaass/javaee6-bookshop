@@ -46,7 +46,7 @@ define([
         if (type === 'CREATED') {
             return '已创建';
         } else if (type === 'PAID') {
-            return '已付款';
+            return '待发货';
         } else if (type === 'DELIVERED') {
             return '已发货';
         } else if (type === 'COMMENTED') {
@@ -87,8 +87,6 @@ define([
             return '确认付款';
         } else if (type === 'PAID') {
             return '发货';
-        } else if (type === 'COMMENTED') {
-            return '退款';
         } else {
             return null;
         }
