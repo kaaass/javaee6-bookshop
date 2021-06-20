@@ -33,9 +33,6 @@ public class UserAuthEntity implements IEntity<String> {
     @Column(name = "auth_token")
     private String authToken;
 
-    @OneToOne(mappedBy = "auth", cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
-    private UserInfoEntity userInfo;
-
     @OneToMany(mappedBy = "user", cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
     private List<UserAddressEntity> addresses = new ArrayList<>();
 
@@ -53,6 +50,7 @@ public class UserAuthEntity implements IEntity<String> {
     public UserAuthEntity() {
     }
 
+    @Override
     public String getId() {
         return this.id;
     }
@@ -71,10 +69,6 @@ public class UserAuthEntity implements IEntity<String> {
 
     public String getAuthToken() {
         return this.authToken;
-    }
-
-    public UserInfoEntity getUserInfo() {
-        return this.userInfo;
     }
 
     public List<UserAddressEntity> getAddresses() {
@@ -109,10 +103,6 @@ public class UserAuthEntity implements IEntity<String> {
         this.authToken = authToken;
     }
 
-    public void setUserInfo(UserInfoEntity userInfo) {
-        this.userInfo = userInfo;
-    }
-
     public void setAddresses(List<UserAddressEntity> addresses) {
         this.addresses = addresses;
     }
@@ -125,6 +115,7 @@ public class UserAuthEntity implements IEntity<String> {
         this.lastLoginTime = lastLoginTime;
     }
 
+    @Override
     public boolean equals(final Object o) {
         if (o == this) return true;
         if (!(o instanceof UserAuthEntity)) return false;
@@ -145,9 +136,6 @@ public class UserAuthEntity implements IEntity<String> {
         final Object this$authToken = this.getAuthToken();
         final Object other$authToken = other.getAuthToken();
         if (this$authToken == null ? other$authToken != null : !this$authToken.equals(other$authToken)) return false;
-        final Object this$userInfo = this.getUserInfo();
-        final Object other$userInfo = other.getUserInfo();
-        if (this$userInfo == null ? other$userInfo != null : !this$userInfo.equals(other$userInfo)) return false;
         final Object this$addresses = this.getAddresses();
         final Object other$addresses = other.getAddresses();
         if (this$addresses == null ? other$addresses != null : !this$addresses.equals(other$addresses)) return false;
@@ -164,6 +152,7 @@ public class UserAuthEntity implements IEntity<String> {
         return other instanceof UserAuthEntity;
     }
 
+    @Override
     public int hashCode() {
         final int PRIME = 59;
         int result = 1;
@@ -177,8 +166,6 @@ public class UserAuthEntity implements IEntity<String> {
         result = result * PRIME + ($role == null ? 43 : $role.hashCode());
         final Object $authToken = this.getAuthToken();
         result = result * PRIME + ($authToken == null ? 43 : $authToken.hashCode());
-        final Object $userInfo = this.getUserInfo();
-        result = result * PRIME + ($userInfo == null ? 43 : $userInfo.hashCode());
         final Object $addresses = this.getAddresses();
         result = result * PRIME + ($addresses == null ? 43 : $addresses.hashCode());
         final Object $registerTime = this.getRegisterTime();
@@ -188,7 +175,8 @@ public class UserAuthEntity implements IEntity<String> {
         return result;
     }
 
+    @Override
     public String toString() {
-        return "UserAuthEntity(id=" + this.getId() + ", phone=" + this.getPhone() + ", password=" + this.getPassword() + ", role=" + this.getRole() + ", authToken=" + this.getAuthToken() + ", userInfo=" + this.getUserInfo() + ", addresses=" + this.getAddresses() + ", registerTime=" + this.getRegisterTime() + ", lastLoginTime=" + this.getLastLoginTime() + ")";
+        return "UserAuthEntity(id=" + this.getId() + ", phone=" + this.getPhone() + ", password=" + this.getPassword() + ", role=" + this.getRole() + ", authToken=" + this.getAuthToken() + ", addresses=" + this.getAddresses() + ", registerTime=" + this.getRegisterTime() + ", lastLoginTime=" + this.getLastLoginTime() + ")";
     }
 }

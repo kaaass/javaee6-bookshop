@@ -1,20 +1,13 @@
 package bookshop.controller;
 
-import java8.util.function.Function;
-import java8.util.function.Predicate;
-import java8.util.stream.Collectors;
-import java8.util.stream.StreamSupport;
 import bookshop.controller.request.UserAddressRequest;
 import bookshop.controller.request.UserInfoModifyRequest;
 import bookshop.controller.response.UserProfileResponse;
 import bookshop.dao.entity.MediaEntity;
 import bookshop.dao.entity.UserAddressEntity;
 import bookshop.dao.entity.UserAuthEntity;
-import bookshop.dao.entity.UserInfoEntity;
 import bookshop.dao.repository.UserAddressRepository;
-import bookshop.dao.repository.UserInfoRepository;
 import bookshop.dto.UserAddressDto;
-import bookshop.dto.UserInfoDto;
 import bookshop.exception.BadRequestException;
 import bookshop.exception.BaseException;
 import bookshop.exception.NotFoundException;
@@ -23,9 +16,13 @@ import bookshop.security.Secured;
 import bookshop.security.SecurityIdentity;
 import bookshop.security.SecurityRole;
 import bookshop.service.OrderService;
-import bookshop.service.UserService;
 import bookshop.service.ResourceService;
+import bookshop.service.UserService;
 import bookshop.util.TimeUtils;
+import java8.util.function.Function;
+import java8.util.function.Predicate;
+import java8.util.stream.Collectors;
+import java8.util.stream.StreamSupport;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -51,9 +48,6 @@ public class UserProfileController extends BaseController {
     private UserAddressRepository addressRepository;
 
     @EJB
-    private UserInfoRepository userInfoRepository;
-
-    @EJB
     private UserService userService;
 
     @EJB
@@ -70,28 +64,8 @@ public class UserProfileController extends BaseController {
     @Secured(SecurityRole.USER)
     public UserProfileResponse getUserProfile() throws NotFoundException {
         UserProfileResponse result = new UserProfileResponse();
-        UserAuthEntity auth = userService.getAuthEntityById(getUid(identity));
-        UserInfoDto info = userMapper.userInfoEntityToDto(userInfoRepository.findByAuth(auth));
-        result.setInfo(info);
         result.setOrderCount(orderService.getUserOrderCount(getUid(identity)));
         return result;
-    }
-
-    @POST
-    @Path("/")
-    @Secured(SecurityRole.USER)
-    public UserInfoDto modifyUserProfile(UserInfoModifyRequest request) throws BadRequestException, NotFoundException {
-        validateBean(validator, request);
-        UserAuthEntity auth = userService.getAuthEntityById(getUid(identity));
-        UserInfoEntity entity = userInfoRepository.findByAuth(auth);
-        entity.setAuth(auth);
-        MediaEntity avatar = resourceService.getEntity(request.getAvatar())
-                .orElseThrow(BaseException.supplier(BadRequestException.class, "头像资源不存在！"));
-        entity.setAvatar(avatar);
-        entity.setWechat(request.getWechat());
-        entity.setLastUpdateTime(TimeUtils.nowTimestamp());
-        UserInfoEntity result = userInfoRepository.save(entity);
-        return userMapper.userInfoEntityToDto(result);
     }
 
     /*

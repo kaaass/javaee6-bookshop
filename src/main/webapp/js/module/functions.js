@@ -30,11 +30,7 @@ define([
          * @param hideAll
          */
         let modal = (title, body, hideAll = true) => {
-            if (hideAll)
-                $('.modal').modal('hide');
-            $('#msgModalTitle').html(title);
-            $('#msgModalBody').html(body);
-            $('#msgModal').modal('show');
+            alert(body);
         };
 
         /**
@@ -169,30 +165,6 @@ define([
             date = date.replace(/-/g, '/');
             return new Date(date).getTime() / 1000 + constants.TIME_AREA * 60 * 60;
         };
-
-        // 添加模态框
-        let modalSrc = `
-    <!-- 模态框 -->
-<div class="modal fade" id="msgModal" tabindex="-1" role="dialog" aria-labelledby="msgModalTitle" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="msgModalTitle">title</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body" id="msgModalBody">
-                ...
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
-            </div>
-        </div>
-    </div>
-</div>
-    `;
-        $(modalSrc).appendTo('body');
 
         return {
             requestParams: new URL(document.location.href).searchParams,

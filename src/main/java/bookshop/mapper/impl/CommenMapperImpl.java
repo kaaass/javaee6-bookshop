@@ -9,11 +9,6 @@ import javax.ejb.Singleton;
 import javax.enterprise.context.ApplicationScoped;
 
 @Singleton
-@Generated(
-        value = "org.mapstruct.ap.MappingProcessor",
-        date = "2021-06-18T00:00:27+0800",
-        comments = "version: 1.2.0.Final, compiler: javac, environment: Java 15.0.2 (N/A)"
-)
 @ApplicationScoped
 public class CommenMapperImpl implements CommenMapper {
 

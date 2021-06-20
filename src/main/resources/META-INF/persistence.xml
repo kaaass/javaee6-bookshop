@@ -14,7 +14,6 @@
         <class>bookshop.dao.entity.ProductStorageEntity</class>
         <class>bookshop.dao.entity.UserAddressEntity</class>
         <class>bookshop.dao.entity.UserAuthEntity</class>
-        <class>bookshop.dao.entity.UserInfoEntity</class>
 
         <properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5Dialect"/>

@@ -3,28 +3,18 @@ package bookshop.mapper.impl;
 import bookshop.controller.request.UserAddressRequest;
 import bookshop.dao.entity.*;
 import bookshop.dto.*;
-import bookshop.mapper.CommonTransform;
 import bookshop.mapper.UserMapper;
 import bookshop.security.SecurityRole;
 import bookshop.vo.CommentVo;
 import bookshop.vo.UserAuthVo;
 
-import javax.annotation.Generated;
 import javax.ejb.Singleton;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 @Singleton
-@Generated(
-        value = "org.mapstruct.ap.MappingProcessor",
-        date = "2021-06-18T00:00:27+0800",
-        comments = "version: 1.2.0.Final, compiler: javac, environment: Java 15.0.2 (N/A)"
-)
 @ApplicationScoped
 public class UserMapperImpl implements UserMapper {
-
-    @Inject
-    private CommonTransform commonTransform;
 
     @Override
     public UserAuthDto userAuthEntityToDto(UserAuthEntity authEntity) {
@@ -117,21 +107,6 @@ public class UserMapperImpl implements UserMapper {
     }
 
     @Override
-    public UserInfoDto userInfoEntityToDto(UserInfoEntity userInfoEntity) {
-        if (userInfoEntity == null) {
-            return null;
-        }
-
-        UserInfoDto userInfoDto = new UserInfoDto();
-
-        userInfoDto.setAuth(userAuthEntityToDto(userInfoEntity.getAuth()));
-        userInfoDto.setWechat(userInfoEntity.getWechat());
-        userInfoDto.setAvatar(mediaEntityToMediaDto(userInfoEntity.getAvatar()));
-
-        return userInfoDto;
-    }
-
-    @Override
     public CommentDto commentEntityToDto(CommentEntity commentEntity) {
         if (commentEntity == null) {
             return null;
@@ -157,7 +132,6 @@ public class UserMapperImpl implements UserMapper {
 
         CommentVo commentVo = new CommentVo();
 
-        commentVo.setAvatar(commonTransform.getAvatarFromAuth(commentEntity.getUser()));
         commentVo.setId(commentEntity.getId());
         commentVo.setRate(commentEntity.getRate());
         commentVo.setContent(commentEntity.getContent());

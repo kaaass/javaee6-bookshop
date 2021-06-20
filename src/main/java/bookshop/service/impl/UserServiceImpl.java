@@ -2,16 +2,14 @@ package bookshop.service.impl;
 
 import bookshop.dao.entity.UserAddressEntity;
 import bookshop.dao.entity.UserAuthEntity;
-import bookshop.dao.entity.UserInfoEntity;
 import bookshop.dao.repository.UserAddressRepository;
 import bookshop.dao.repository.UserAuthRepository;
-import bookshop.dao.repository.UserInfoRepository;
 import bookshop.dto.UserAddressDto;
-import bookshop.dto.UserInfoDto;
 import bookshop.exception.BaseException;
 import bookshop.exception.NotFoundException;
 import bookshop.mapper.UserMapper;
 import bookshop.service.UserService;
+import bookshop.vo.UserAuthVo;
 import java8.util.function.Function;
 import java8.util.function.Predicate;
 import java8.util.stream.Collectors;
@@ -30,9 +28,6 @@ public class UserServiceImpl implements UserService, Serializable {
 
     @EJB
     private UserAddressRepository userAddressRepository;
-
-    @EJB
-    private UserInfoRepository userInfoRepository;
 
     @EJB
     private UserAuthRepository userAuthRepository;
@@ -76,14 +71,14 @@ public class UserServiceImpl implements UserService, Serializable {
     }
 
     @Override
-    public List<UserInfoDto> getAllUser() {
-        return StreamSupport.stream(userInfoRepository.findAll())
-                .map(new Function<UserInfoEntity, UserInfoDto>() {
+    public List<UserAuthVo> getAllUser() {
+        return StreamSupport.stream(userAuthRepository.findAll())
+                .map(new Function<UserAuthEntity, UserAuthVo>() {
                     @Override
-                    public UserInfoDto apply(UserInfoEntity userInfoEntity) {
-                        return userMapper.userInfoEntityToDto(userInfoEntity);
+                    public UserAuthVo apply(UserAuthEntity userInfoEntity) {
+                        return userMapper.userAuthDtoToVo(userMapper.userAuthEntityToDto(userInfoEntity));
                     }
                 })
-                .collect(Collectors.<UserInfoDto>toList());
+                .collect(Collectors.<UserAuthVo>toList());
     }
 }

@@ -3,8 +3,8 @@ package bookshop.service;
 import bookshop.dao.entity.UserAddressEntity;
 import bookshop.dao.entity.UserAuthEntity;
 import bookshop.dto.UserAddressDto;
-import bookshop.dto.UserInfoDto;
 import bookshop.exception.NotFoundException;
+import bookshop.vo.UserAuthVo;
 
 import javax.ejb.Local;
 import java.util.List;
@@ -36,5 +36,5 @@ public interface UserService {
 
     UserAddressEntity getDefaultAddressEntityById(String id) throws NotFoundException;
 
-    List<UserInfoDto> getAllUser();
+    List<UserAuthVo> getAllUser();
 }

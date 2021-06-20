@@ -3,9 +3,7 @@ package bookshop.service.impl;
 import bookshop.controller.request.RegisterRequest;
 import bookshop.controller.response.LoginResponse;
 import bookshop.dao.entity.UserAuthEntity;
-import bookshop.dao.entity.UserInfoEntity;
 import bookshop.dao.repository.UserAuthRepository;
-import bookshop.dao.repository.UserInfoRepository;
 import bookshop.dto.UserAuthDto;
 import bookshop.exception.BaseException;
 import bookshop.exception.ForbiddenException;
@@ -40,9 +38,6 @@ public class AuthServiceImpl implements AuthService, Serializable {
     private UserAuthRepository repository;
 
     @EJB
-    private UserInfoRepository infoRepository;
-
-    @EJB
     private UserMapper userMapper;
 
     @Override
@@ -64,10 +59,6 @@ public class AuthServiceImpl implements AuthService, Serializable {
         } catch (Exception e) {
             return Optional.empty();
         }
-        // 用户信息
-        UserInfoEntity infoEntity = new UserInfoEntity();
-        infoEntity.setAuth(authEntity);
-        infoRepository.save(infoEntity);
         // 拼接结果
         return Optional.of(userMapper.userAuthEntityToDto(authEntity));
     }
@@ -121,7 +112,6 @@ public class AuthServiceImpl implements AuthService, Serializable {
     public void remove(String id) throws NotFoundException {
         final UserAuthEntity entity = repository.findById(id)
                 .orElseThrow(BaseException.supplier(NotFoundException.class, "未找到该用户！"));
-        infoRepository.deleteAllByAuth(entity);
         repository.delete(entity);
     }
 }
