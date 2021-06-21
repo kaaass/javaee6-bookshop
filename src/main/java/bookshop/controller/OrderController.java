@@ -25,7 +25,7 @@ import java.util.List;
 @Produces(MediaType.APPLICATION_JSON)
 public class OrderController extends BaseController {
 
-    @EJB
+    @Inject
     private OrderService orderService;
 
     @Inject

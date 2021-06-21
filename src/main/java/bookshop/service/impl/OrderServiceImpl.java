@@ -29,6 +29,7 @@ import org.slf4j.Logger;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -52,7 +53,7 @@ public class OrderServiceImpl implements OrderService, Serializable {
     @EJB
     private ProductRepository productRepository;
 
-    @EJB
+    @Inject
     private CartService cartService;
 
     @EJB

@@ -9,7 +9,6 @@ import bookshop.security.Secured;
 import bookshop.security.SecurityRole;
 import bookshop.service.CartService;
 
-import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.validation.Validator;
@@ -23,7 +22,7 @@ import java.util.List;
 @Produces(MediaType.APPLICATION_JSON)
 public class UserCartController extends BaseController {
 
-    @EJB
+    @Inject
     private CartService cartService;
 
     @Inject
