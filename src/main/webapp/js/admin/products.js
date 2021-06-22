@@ -135,9 +135,7 @@ require([
         $('#productModal').modal('show');
         loadParam({
             ...createCache,
-            thumbnail: {
-                id: createCache ? createCache.thumbnailId : ""
-            },
+            thumbnail: createCache ? createCache.thumbnailId : "",
             category: {
                 id: createCache ? createCache.categoryId : ""
             },
