@@ -61,6 +61,9 @@ public class SecurityPreProcessInterceptor implements PreProcessInterceptor {
         UserAuthDto authDto;
         try {
             authDto = service.validate(authToken);
+            if (!authDto.getRole().canPermitRole(requiredRole)) {
+                throw new ForbiddenException("权限不足！");
+            }
         } catch (ForbiddenException e) {
             log.info("鉴权失败！AT = {}", authToken);
             return ServerResponse.copyIfNotServerResponse(GlobalResponse.fail(e).toResponse());
