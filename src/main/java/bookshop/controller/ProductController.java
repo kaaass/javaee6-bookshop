@@ -26,7 +26,7 @@ import java.util.List;
 @Produces(MediaType.APPLICATION_JSON)
 public class ProductController extends BaseController {
 
-    @EJB
+    @Inject
     private ProductService productService;
 
     @Inject
