@@ -11,9 +11,6 @@ import javax.jms.*;
 @Slf4j
 public class OrderMessageProducer {
 
-    private static final String DEFAULT_USERNAME = "testJNDI";
-    private static final String DEFAULT_PASSWORD = "123456";
-
     @Resource(mappedName = "java:/ConnectionFactory")
     ConnectionFactory connectionFactory;
 
@@ -25,7 +22,7 @@ public class OrderMessageProducer {
 
         Connection connection;
         try {
-            connection = connectionFactory.createConnection(DEFAULT_USERNAME, DEFAULT_PASSWORD);
+            connection = connectionFactory.createConnection();
             Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
             MessageProducer producer = session.createProducer(destination);
             producer.setDeliveryMode(DeliveryMode.PERSISTENT);
